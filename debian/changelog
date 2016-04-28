@@ -1,3 +1,9 @@
+upstart (1.13.2-0ubuntu22) yakkety; urgency=medium
+
+  * No-change rebuild against libjson-c3.
+
+ -- Graham Inggs <ginggs@ubuntu.com>  Thu, 28 Apr 2016 10:37:38 +0200
+
 upstart (1.13.2-0ubuntu21) xenial; urgency=medium
 
   * init/tests/test_job_process.c: Relax assertion about output format of
