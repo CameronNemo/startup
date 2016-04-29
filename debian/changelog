@@ -1,3 +1,10 @@
+upstart (1.13.2-0ubuntu23) UNRELEASED; urgency=medium
+
+  * Cherry-pick upstream fix to publish global session variable changes to
+    the dbus environment.  LP: #1433013.
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Fri, 29 Apr 2016 14:37:35 -0700
+
 upstart (1.13.2-0ubuntu22) yakkety; urgency=medium
 
   * No-change rebuild against libjson-c3.
