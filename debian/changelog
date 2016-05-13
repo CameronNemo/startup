@@ -1,3 +1,10 @@
+upstart (1.13.2-0ubuntu24) yakkety; urgency=medium
+
+  * Merge a fix-up for the dbus global session variable propagation.
+  * Merge a test-suite anti-flaky fix.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Fri, 13 May 2016 09:52:19 +0100
+
 upstart (1.13.2-0ubuntu23) yakkety; urgency=medium
 
   * Cherry-pick upstream fix to publish global session variable changes to
