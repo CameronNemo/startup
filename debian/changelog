@@ -1,3 +1,10 @@
+upstart (1.13.2-0ubuntu25) UNRELEASED; urgency=medium
+
+  * Move sysvinit-utils, initscripts, mountall, ifupdown dependencies from
+    upstart to upstart-sysv, as they are not required for session upstart.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Fri, 20 May 2016 17:20:27 +0200
+
 upstart (1.13.2-0ubuntu24) yakkety; urgency=medium
 
   * Merge a fix-up for the dbus global session variable propagation.
