@@ -1,4 +1,4 @@
-upstart (1.13.2-0ubuntu25) UNRELEASED; urgency=medium
+upstart (1.13.2-0ubuntu25) yakkety; urgency=medium
 
   * Move sysvinit-utils, initscripts, mountall, ifupdown dependencies from
     upstart to upstart-sysv, as they are not required for session upstart.
@@ -6,7 +6,7 @@ upstart (1.13.2-0ubuntu25) UNRELEASED; urgency=medium
   * Drop the no-op debian/tests/{force,test_setup}, and just do a simple
     "Test-Command: true" instead.
 
- -- Martin Pitt <martin.pitt@ubuntu.com>  Fri, 20 May 2016 17:20:27 +0200
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Wed, 25 May 2016 10:33:44 +0200
 
 upstart (1.13.2-0ubuntu24) yakkety; urgency=medium
 
