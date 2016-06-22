@@ -1,8 +1,8 @@
-upstart (1.13.2-0ubuntu26) UNRELEASED; urgency=medium
+upstart (1.13.2-0ubuntu26) yakkety; urgency=medium
 
   * Disable upstart-sysv package. (LP: #1585589)
 
- -- Martin Pitt <martin.pitt@ubuntu.com>  Wed, 22 Jun 2016 15:48:34 +0200
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Wed, 22 Jun 2016 15:51:51 +0200
 
 upstart (1.13.2-0ubuntu25) yakkety; urgency=medium
 
