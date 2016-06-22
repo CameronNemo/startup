@@ -30,23 +30,23 @@ Description: event-based init daemon - essential binaries
  This package provides all essential upstart components, sufficient
  for running user sessions managed by upstart.
 
-Package: upstart-sysv
-Architecture: linux-any
-Multi-Arch: foreign
-Section: admin
-Priority: extra
-Conflicts: sysvinit-core, systemd-sysv
-Replaces: sysvinit (<< 2.88dsf-44~), sysvinit-core, upstart (<< 1.13.2-0ubuntu10~)
-Pre-Depends: upstart,
-Depends: ${shlibs:Depends}, ${misc:Depends}, upstart (= ${binary:Version}), sysvinit-utils, initscripts, mountall, ifupdown (>= 0.6.10ubuntu5)
-Description: event-based init daemon - SysV links
- upstart is a replacement for the /sbin/init daemon which handles
- starting of tasks and services during boot, stopping them during
- shutdown and supervising them while the system is running.
- .
- This package provides the manual pages and links needed for upstart
- to replace sysvinit. Installing systemd-sysv will overwrite /sbin/init with a
- link to upstart.
+# Package: upstart-sysv
+# Architecture: linux-any
+# Multi-Arch: foreign
+# Section: admin
+# Priority: extra
+# Conflicts: sysvinit-core, systemd-sysv
+# Replaces: sysvinit (<< 2.88dsf-44~), sysvinit-core, upstart (<< 1.13.2-0ubuntu10~)
+# Pre-Depends: upstart,
+# Depends: ${shlibs:Depends}, ${misc:Depends}, upstart (= ${binary:Version}), sysvinit-utils, initscripts, mountall, ifupdown (>= 0.6.10ubuntu5)
+# Description: event-based init daemon - SysV links
+#  upstart is a replacement for the /sbin/init daemon which handles
+#  starting of tasks and services during boot, stopping them during
+#  shutdown and supervising them while the system is running.
+#  .
+#  This package provides the manual pages and links needed for upstart
+#  to replace sysvinit. Installing systemd-sysv will overwrite /sbin/init with a
+#  link to upstart.
 
 Package: upstart-monitor
 Architecture: all
