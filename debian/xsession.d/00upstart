@@ -2,9 +2,8 @@
 if grep -q "^$DESKTOP_SESSION\$" /etc/upstart-xsessions; then
     export XDG_CONFIG_DIRS="/usr/share/upstart/xdg:/etc/xdg"
 
-    BASESESSION=${1% *}
-    BASESESSION=${BASESESSION##*/}
-    if [ "$BASESESSION" = x-session-manager ]; then
+    BASESESSION="$1"
+    if [ "${BASESESSION#*x-session-manager}" != "$BASESESSION" ]; then
         BASESESSION=$(basename $(readlink /etc/alternatives/x-session-manager))
     fi
 

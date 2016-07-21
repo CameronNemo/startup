@@ -2,6 +2,9 @@ upstart (1.13.2-0ubuntu27) UNRELEASED; urgency=medium
 
   * debian/user-conf/xsession-init.conf: Add $GNOME_DESKTOP_SESSION_ID to
     systemd user instance as well.
+  * debian/xsession.d/{00,99}upstart: Be more liberal in parsing the original
+    $STARTUP, to recognize .../gnome-session/run-systemd-session and similar
+    paths as well.
 
  -- Martin Pitt <martin.pitt@ubuntu.com>  Thu, 21 Jul 2016 15:49:11 +0200
 
