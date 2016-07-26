@@ -1,3 +1,10 @@
+upstart (1.13.2-0ubuntu28) UNRELEASED; urgency=medium
+
+  * debian/xsession.d/00upstart: Check if upstart is actually installed, to
+    avoid breakage if upstart gets removed but not purged.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Tue, 26 Jul 2016 07:56:04 +0200
+
 upstart (1.13.2-0ubuntu27) yakkety; urgency=medium
 
   * debian/user-conf/xsession-init.conf: Add $GNOME_DESKTOP_SESSION_ID to

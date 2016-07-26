@@ -1,5 +1,5 @@
 # Make ubuntu-upstart an alias for ubuntu
-if grep -q "^$DESKTOP_SESSION\$" /etc/upstart-xsessions; then
+if [ -x /sbin/upstart ] && grep -q "^$DESKTOP_SESSION\$" /etc/upstart-xsessions; then
     export XDG_CONFIG_DIRS="/usr/share/upstart/xdg:/etc/xdg"
 
     BASESESSION="$1"
