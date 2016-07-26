@@ -2,6 +2,13 @@
 if [ -x /sbin/upstart ] && grep -q "^$DESKTOP_SESSION\$" /etc/upstart-xsessions; then
     export XDG_CONFIG_DIRS="/usr/share/upstart/xdg:/etc/xdg"
 
+    # If the session is run through a systemd user target, apply upstart
+    # overrides. This provides a step-by-step migration to systemd unit
+    # counterparts.
+    if [ "${1#*.target}" != "$1" ]; then
+        export XDG_CONFIG_DIRS="/usr/share/upstart/systemd-session:$XDG_CONFIG_DIRS"
+    fi
+
     BASESESSION="$1"
     if [ "${BASESESSION#*x-session-manager}" != "$BASESESSION" ]; then
         BASESESSION=$(basename $(readlink /etc/alternatives/x-session-manager))

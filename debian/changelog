@@ -5,6 +5,10 @@ upstart (1.13.2-0ubuntu28) UNRELEASED; urgency=medium
   * init/tests/test_job_process.c: Disable test case that has failed in
     autopkgtest for a long time. This is better than ignoring the entire test
     suite.
+  * debian/xsession.d/00upstart: If the session is run through a systemd user
+    target, add another XDG config dir for overrides which apply only to
+    systemd sessions. This provides a step-by-step migration to systemd unit
+    counterparts.
 
  -- Martin Pitt <martin.pitt@ubuntu.com>  Tue, 26 Jul 2016 07:56:04 +0200
 
