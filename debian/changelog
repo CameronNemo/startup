@@ -9,6 +9,11 @@ upstart (1.13.2-0ubuntu28) UNRELEASED; urgency=medium
     target, add another XDG config dir for overrides which apply only to
     systemd sessions. This provides a step-by-step migration to systemd unit
     counterparts.
+  * Add debian/systemd-graphical-session.conf and install it into the above
+    override upstart session job dir. This runs the systemd graphical user
+    session in an upstart job. This is normally done by the
+    /usr/share/xsessions/*.desktop's Exec= line, but as Xsession.d/99upstart
+    completely replaces/ignores $STARTUP, we need to replicate the logic here.
 
  -- Martin Pitt <martin.pitt@ubuntu.com>  Tue, 26 Jul 2016 07:56:04 +0200
 

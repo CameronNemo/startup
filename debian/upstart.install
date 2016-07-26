@@ -6,6 +6,7 @@ debian/migrate-inittab.pl usr/lib/upstart/
 debian/upstart-job lib/init/
 debian/upstart-xsessions etc/
 debian/user-conf/*.conf usr/share/upstart/sessions/
+debian/systemd-graphical-session.conf usr/share/upstart/systemd-session/upstart/
 debian/xsession.d/* etc/X11/Xsession.d/
 etc/init/*.conf
 etc/dbus-1/system.d/Upstart.conf
