@@ -1,4 +1,4 @@
-upstart (1.13.2-0ubuntu28) UNRELEASED; urgency=medium
+upstart (1.13.2-0ubuntu28) yakkety; urgency=medium
 
   * debian/xsession.d/00upstart: Check if upstart is actually installed, to
     avoid breakage if upstart gets removed but not purged.
@@ -15,7 +15,7 @@ upstart (1.13.2-0ubuntu28) UNRELEASED; urgency=medium
     /usr/share/xsessions/*.desktop's Exec= line, but as Xsession.d/99upstart
     completely replaces/ignores $STARTUP, we need to replicate the logic here.
 
- -- Martin Pitt <martin.pitt@ubuntu.com>  Tue, 26 Jul 2016 07:56:04 +0200
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Tue, 26 Jul 2016 08:43:27 +0200
 
 upstart (1.13.2-0ubuntu27) yakkety; urgency=medium
 
