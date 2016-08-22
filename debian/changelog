@@ -1,3 +1,10 @@
+upstart (1.13.2-0ubuntu29) UNRELEASED; urgency=medium
+
+  * debian/systemd-graphical-session.conf: Drop workaround for killing
+    gnome-keyring, this was fixed properly now.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Mon, 22 Aug 2016 14:38:49 +0200
+
 upstart (1.13.2-0ubuntu28) yakkety; urgency=medium
 
   * debian/xsession.d/00upstart: Check if upstart is actually installed, to
