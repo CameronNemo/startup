@@ -1,11 +1,11 @@
-upstart (1.13.2-0ubuntu29) UNRELEASED; urgency=medium
+upstart (1.13.2-0ubuntu29) yakkety; urgency=medium
 
   * debian/systemd-graphical-session.conf: Drop workaround for killing
     gnome-keyring, this was fixed properly now.
   * debian/systemd-graphical-session.conf: Add missing $unit to systemctl show
     call, so that the cleanup of failed units actually works. (LP: #1618886)
 
- -- Martin Pitt <martin.pitt@ubuntu.com>  Mon, 22 Aug 2016 14:38:49 +0200
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Fri, 16 Sep 2016 15:28:33 +0200
 
 upstart (1.13.2-0ubuntu28) yakkety; urgency=medium
 
