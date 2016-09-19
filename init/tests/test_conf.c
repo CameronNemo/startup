@@ -4549,10 +4549,10 @@ no_inotify:
 	json = conf_file_serialise (file);
 #ifndef __powerpc__
 	TEST_NE_P (json, NULL);
+#endif
 
 	/* Test there is no JobClass in the JSON */
 	TEST_EQ (json_object_object_get_ex (json, "job_class", NULL), FALSE);
-#endif
 
 	TEST_FEATURE ("ConfFile with no JobClass can be deserialised");
 
@@ -4563,8 +4563,10 @@ no_inotify:
 	TEST_LIST_NOT_EMPTY (conf_sources);
 	TEST_HASH_EMPTY (source->files);
 
+#ifndef __powerpc__
 	file = conf_file_deserialise (source, json);
 	TEST_NE_P (file, NULL);
+#endif
 
 	nih_free (source);
 
