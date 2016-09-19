@@ -1,3 +1,11 @@
+upstart (1.13.2-0ubuntu30) UNRELEASED; urgency=medium
+
+  * init/tests/test_conf.c: Disable check in "Invalid .conf file does not stop
+    ConfFile being serialised" test on powerpc, there is just no pleasing it
+    and the numerous build retries are unnerving.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Mon, 19 Sep 2016 08:47:58 +0200
+
 upstart (1.13.2-0ubuntu29) yakkety; urgency=medium
 
   * debian/systemd-graphical-session.conf: Drop workaround for killing
