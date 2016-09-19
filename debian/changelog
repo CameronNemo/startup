@@ -1,8 +1,8 @@
-upstart (1.13.2-0ubuntu31) UNRELEASED; urgency=medium
+upstart (1.13.2-0ubuntu31) yakkety; urgency=medium
 
   * init/tests/test_conf.c: Disable previous check harder (on powerpc).
 
- -- Martin Pitt <martin.pitt@ubuntu.com>  Mon, 19 Sep 2016 12:25:34 +0200
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Mon, 19 Sep 2016 12:26:08 +0200
 
 upstart (1.13.2-0ubuntu30) yakkety; urgency=medium
 
