@@ -1,4 +1,4 @@
-upstart (1.13.2-0ubuntu32) UNRELEASED; urgency=medium
+upstart (1.13.2-0ubuntu32) yakkety; urgency=medium
 
   * debian/systemd-graphical-session.conf: Stop any lingering active units
     when logging in. (LP: #1618886)
