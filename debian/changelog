@@ -1,3 +1,12 @@
+upstart (1.13.2-0ubuntu32) UNRELEASED; urgency=medium
+
+  * debian/systemd-graphical-session.conf: Stop any lingering active units
+    when logging in. (LP: #1618886)
+  * debian/control: Break old versions of gnome-session, which take the
+    session down when stopped in the above way.
+
+ -- Iain Lane <iain.lane@canonical.com>  Tue, 27 Sep 2016 17:47:27 +0100
+
 upstart (1.13.2-0ubuntu31) yakkety; urgency=medium
 
   * init/tests/test_conf.c: Disable previous check harder (on powerpc).
