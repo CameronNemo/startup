@@ -1,3 +1,11 @@
+upstart (1.13.2-0ubuntu33) UNRELEASED; urgency=medium
+
+  [ Vicamo Yang ]
+  * upstart-local-bridge: apply systemd-escape to the generated instance
+    names.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Wed, 05 Oct 2016 11:09:09 +0100
+
 upstart (1.13.2-0ubuntu32) yakkety; urgency=medium
 
   * debian/systemd-graphical-session.conf: Stop any lingering active units
