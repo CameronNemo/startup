@@ -14,7 +14,7 @@ Homepage: http://upstart.ubuntu.com/
 XS-Testsuite: autopkgtest
 
 Package: upstart
-Architecture: any
+Architecture: amd64 arm64 armhf i386 powerpc ppc64el
 Depends: ${shlibs:Depends}, ${misc:Depends}, debianutils (>= 4)
 Suggests: python3, graphviz, bash-completion, upstart-monitor
 Replaces: upstart-job, sysvinit, startup-tasks, system-services, init-system-helpers (<< 1.24ubuntu1)
@@ -61,7 +61,7 @@ Description: event monitor for upstart
  changes and for determining appropriate events for new jobs.
 
 Package: upstart-dconf-bridge
-Architecture: any
+Architecture: amd64 arm64 armhf i386 powerpc ppc64el
 Section: utils
 Priority: optional
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, upstart (>= 1.10)
@@ -71,7 +71,7 @@ Description: DConf bridge for upstart
 
 Package: libupstart1
 Priority: optional
-Architecture: any
+Architecture: amd64 arm64 armhf i386 powerpc ppc64el
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Multi-Arch: same
@@ -84,7 +84,7 @@ Description: Upstart Client Library
 Package: libupstart-dev
 Priority: optional
 Section: libdevel
-Architecture: any
+Architecture: amd64 arm64 armhf i386 powerpc ppc64el
 Multi-Arch: same
 Depends: libupstart1 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
 Description: Upstart Client Library (development files)
