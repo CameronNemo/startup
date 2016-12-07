@@ -1,10 +1,10 @@
-upstart (1.13.2-0ubuntu35) UNRELEASED; urgency=medium
+upstart (1.13.2-0ubuntu35) zesty; urgency=medium
 
   * debian/upstart-xsessions: remove all but unity8 sessions, thus
     migrating all sessions to systemd and/or pre-upstart session
     management.
 
- -- Dimitri John Ledkov <xnox@ubuntu.com>  Wed, 07 Dec 2016 15:36:42 +0100
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Wed, 07 Dec 2016 15:41:49 +0100
 
 upstart (1.13.2-0ubuntu34) yakkety; urgency=medium
 
