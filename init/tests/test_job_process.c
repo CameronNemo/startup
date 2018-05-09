@@ -8265,7 +8265,7 @@ test_handler (void)
 		}
 
 		TEST_CHILD (pid) {
-			raise (SIGTSTP);
+			raise (SIGSTOP); // SIGTSTP WILL NOT WORK on terminal-less sessions (after setsid())
 			exit (0);
 		}
 

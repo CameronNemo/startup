@@ -1750,6 +1750,10 @@ job_process_terminated (Job         *job,
 					 */
 					if (! state)
 						job_change_goal (job, JOB_RESPAWN);
+					else {
+						job_change_state (job, JOB_STOPPING);
+						state = FALSE;
+					}
 					break;
 				}
 			}
