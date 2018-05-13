@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-UPSTART_BINARY = $(abs_top_builddir)/init/init
+UPSTART_BINARY = $(abs_top_builddir)/init/upstart
 INITCTL_BINARY = $(abs_top_builddir)/util/initctl
 FILE_BRIDGE_BINARY = $(abs_top_builddir)/extra/upstart-file-bridge
 
