@@ -37,9 +37,9 @@ dist_man_MANS = \
 	man/session-end.7
 
 
-sbin_PROGRAMS = init
+sbin_PROGRAMS = upstart
 
-init_SOURCES = \
+upstart_SOURCES = \
 	main.c \
 	paths.h \
 	events.h \
@@ -63,13 +63,13 @@ init_SOURCES = \
 	quiesce.c quiesce.h \
 	errors.h \
 	apparmor.c apparmor.h
-nodist_init_SOURCES = \
+nodist_upstart_SOURCES = \
 	$(org_freedesktop_DBus_OUTPUTS) \
 	$(com_ubuntu_Upstart_OUTPUTS) \
 	$(com_ubuntu_Upstart_Job_OUTPUTS) \
 	$(com_ubuntu_Upstart_Instance_OUTPUTS)
 
-init_LDADD = \
+upstart_LDADD = \
 	$(LTLIBINTL) \
 	$(NIH_LIBS) \
 	$(NIH_DBUS_LIBS) \
@@ -79,7 +79,7 @@ init_LDADD = \
 	-lrt
 
 if ENABLE_CGROUPS
-init_SOURCES +=	cgroup.c cgroup.h
+upstart_SOURCES +=	cgroup.c cgroup.h
 endif
 
 com_ubuntu_Upstart_OUTPUTS = \
@@ -217,7 +217,7 @@ TESTS = \
 	$(upstart_test_programs) \
 	test_conf_preload.sh$(EXEEXT)
 
-EXTRA_DIST = init.supp $(TEST_DATA_FILES) tests/test_conf_preload.sh.in
+EXTRA_DIST = upstart.supp $(TEST_DATA_FILES) tests/test_conf_preload.sh.in
 
 test_conf_preload.sh$(EXEEXT): tests/test_conf_preload.sh.in Makefile test_conf
 	sed -e 's|[@]abs_builddir[@]|$(abs_builddir)|g' \
