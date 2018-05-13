@@ -7790,6 +7790,8 @@ static NihOption options[] = {
 	NIH_OPTION_LAST
 };
 
+#ifdef ENABLE_CGROUPS
+
 void
 test_job_last_process (void)
 {
@@ -7943,6 +7945,8 @@ test_job_last_process (void)
 	job_class_init ();
 }
 
+#endif /* ENABLE_CGROUPS */
+
 
 int
 main (int   argc,
@@ -7994,7 +7998,9 @@ main (int   argc,
 	test_deserialise_ptrace ();
 
 	test_job_find ();
+#ifdef ENABLE_CGROUPS
 	test_job_last_process ();
+#endif /* ENABLE_CGROUPS */
 
 	return 0;
 }

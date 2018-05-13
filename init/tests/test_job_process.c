@@ -26,6 +26,7 @@
 #endif /* HAVE_VALGRIND_VALGRIND_H */
 
 #include <sys/types.h>
+#include <sys/sysmacros.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/ptrace.h>

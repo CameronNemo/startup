@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
 INITCTL_BINARY = $(abs_top_builddir)/util/initctl
-UPSTART_BINARY = $(abs_top_builddir)/init/init
+UPSTART_BINARY = $(abs_top_builddir)/init/upstart
 
 AM_CFLAGS = \
 	$(NIH_CFLAGS) \
