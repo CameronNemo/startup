@@ -221,6 +221,7 @@ EXTRA_DIST = upstart.supp $(TEST_DATA_FILES) tests/test_conf_preload.sh.in
 
 test_conf_preload.sh$(EXEEXT): tests/test_conf_preload.sh.in Makefile test_conf
 	sed -e 's|[@]abs_builddir[@]|$(abs_builddir)|g' \
+	    -e 's|[@]top_builddir[@]|$(top_builddir)|g' \
 	    -e 's|[@]inotify_preload_library[@]|$(check_LTLIBRARIES)|g' \
 	    $< > $@
 	chmod +x $@
