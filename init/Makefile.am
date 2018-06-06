@@ -23,8 +23,8 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/test -iquote$(top_srcdir)/test
 
 dist_man_MANS = \
-	man/init.8 \
-	man/init.5 \
+	man/upstart.8 \
+	man/upstart.5 \
 	man/startup.7 \
 	man/starting.7 \
 	man/started.7 \
