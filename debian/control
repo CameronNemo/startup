@@ -1,15 +1,13 @@
 Source: upstart
 Section: admin
 Priority: optional
-Maintainer: James Hunt <james.hunt@ubuntu.com>
-XSBC-Orig-Maintainer: Steve Langasek <vorlon@debian.org>
+Maintainer: Cameron Nemo <cnemo@protonmail.com>
 Uploaders: Scott James Remnant <scott@netsplit.com>, James Hunt <james.hunt@ubuntu.com>
-Standards-Version: 3.9.6
-Build-Depends: debhelper (>= 9), pkg-config (>= 0.22), libnih-dev (>= 1.0.3), libnih-dbus-dev (>= 1.0.3), nih-dbus-tool (>= 1.0.3), libdbus-1-dev (>= 1.2.16), libexpat1-dev (>= 2.0.0), libudev-dev (>= 151-5), libjson-c-dev (>= 0.10), dbus, bash-completion, dh-autoreconf, autopoint, python3:any, automake (>= 1.12), libdconf-dev, libselinux1-dev [linux-any], libcgmanager-dev [linux-any]
+Standards-Version: 4.1.4
+Build-Depends: debhelper (>= 9), pkg-config (>= 0.22), libnih-dev (>= 1.0.3), libnih-dbus-dev (>= 1.0.3), nih-dbus-tool (>= 1.0.3), libdbus-1-dev (>= 1.2.16), libexpat1-dev (>= 2.0.0), libudev-dev (>= 151-5), libjson-c-dev (>= 0.10), dbus, bash-completion, dh-autoreconf, autopoint, dh-python, python3:any, automake (>= 1.12), libdconf-dev, libselinux1-dev [linux-any]
 X-Python3-Version: >= 3.2
-Vcs-Bzr: lp:~ubuntu-core-dev/upstart/ubuntu
-XS-Debian-Vcs-Bzr: nosmart+http://bzr.debian.org/bzr/collab-maint/upstart/trunk/
-XS-Debian-Vcs-Browser: http://anonscm.debian.org/loggerhead/collab-maint/upstart/trunk/
+Vcs-Git: https://gitlab.freedesktop.org/CameronNemo/upstart.git
+Vcs-Browser: https://gitlab.freedesktop.org/CameronNemo/upstart/tree/debian
 Homepage: http://upstart.ubuntu.com/
 XS-Testsuite: autopkgtest
 
@@ -34,7 +32,6 @@ Package: upstart-sysv
 Architecture: linux-any
 Multi-Arch: foreign
 Section: admin
-Priority: extra
 Conflicts: sysvinit-core, systemd-sysv
 Replaces: sysvinit (<< 2.88dsf-44~), sysvinit-core, upstart (<< 1.13.2-0ubuntu10~)
 Pre-Depends: upstart,
@@ -51,9 +48,7 @@ Description: event-based init daemon - SysV links
 Package: upstart-monitor
 Architecture: all
 Section: utils
-Priority: optional
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, upstart (>= 1.7), python3-dbus
-Recommends: python3-gi
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, upstart (>= 1.7), python3-dbus, python3-gi
 Description: event monitor for upstart
  This package contains a utility that may be run both as a
  command-line tool or as a graphical one that displays upstart
@@ -63,15 +58,14 @@ Description: event monitor for upstart
 Package: upstart-dconf-bridge
 Architecture: amd64 arm64 armhf i386 powerpc ppc64el
 Section: utils
-Priority: optional
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, upstart (>= 1.10)
 Description: DConf bridge for upstart
  This package contains a bridge that allows upstart jobs to react when
  DConf/gsettings keys are changed.
 
 Package: libupstart1
-Priority: optional
 Architecture: amd64 arm64 armhf i386 powerpc ppc64el
+Section: libs
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Multi-Arch: same
@@ -82,9 +76,8 @@ Description: Upstart Client Library
  This package contains the shared library.
 
 Package: libupstart-dev
-Priority: optional
-Section: libdevel
 Architecture: amd64 arm64 armhf i386 powerpc ppc64el
+Section: libdevel
 Multi-Arch: same
 Depends: libupstart1 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
 Description: Upstart Client Library (development files)

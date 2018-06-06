@@ -1,3 +1,9 @@
+upstart (1.13.3-1~alpha1) unstable; urgency=medium
+
+  * NMU Upload
+
+ -- Cameron Nemo <cnemo@protonmail.com> Wed, 06 Jun 2018 06:38:19 +0000
+
 upstart (1.13.2-0ubuntu35) zesty; urgency=medium
 
   * debian/upstart-xsessions: remove all but unity8 sessions, thus
