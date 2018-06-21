@@ -190,6 +190,7 @@ job_process_start (Job                    *job,
 	Process            *proc;
 	nih_local char    **argv = NULL;
 	nih_local char    **env = NULL;
+	nih_local char    **eenv = NULL;
 	nih_local char     *script = NULL;
 	char              **e;
 	size_t              argc, envc;
@@ -285,9 +286,8 @@ job_process_start (Job                    *job,
 
 	if (job->env) {
 	        /* expand vars in the env table */
-		nih_local char **eenv = NIH_MUST (nih_str_array_new (NULL));
-	        for (char **e = job->env; *e; e++) {
-			/* TODO: split on '=' */
+		eenv = NIH_MUST (nih_str_array_new (NULL));
+	        for (e = job->env; *e; e++) {
 			nih_local char *var = NIH_SHOULD (
 					        environ_expand (NULL, *e, eenv));
 			if (!var) {
@@ -295,12 +295,12 @@ job_process_start (Job                    *job,
 				err = nih_error_get ();
 				nih_warn ("failed to expand env var %s: %s",
 						*e, err->message);
-				nih_debug ("falling back to unexpanded");
-				var = NIH_MUST (nih_strdup (NULL, *e));
 				nih_free (err);
+				nih_debug ("falling back to unexpanded");
+				var = *e;
 			}
 			NIH_MUST (environ_add (&eenv, NULL, NULL, TRUE, var));
-	        }
+		}
 		NIH_MUST (environ_append (&env, NULL, &envc, TRUE, eenv));
 	}
 
