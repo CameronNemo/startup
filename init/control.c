@@ -1284,7 +1284,14 @@ control_restart (void           *data,
 void
 control_notify_event_emitted (Event *event)
 {
+	char **env;
+
 	nih_assert (event != NULL);
+
+	if (event->env != NULL)
+		env = NIH_MUST (nih_str_array_copy (NULL, NULL, event->env));
+	else
+		env = NIH_MUST (nih_str_array_new (NULL));
 
 	control_init ();
 
@@ -1293,8 +1300,10 @@ control_notify_event_emitted (Event *event)
 		DBusConnection *conn = (DBusConnection *)entry->data;
 
 		NIH_ZERO (control_emit_event_emitted (conn, DBUS_PATH_UPSTART,
-							    event->name, event->env));
+							    event->name, env));
 	}
+
+	nih_free (env);
 }
 
 /**

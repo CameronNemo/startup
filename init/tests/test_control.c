@@ -1226,6 +1226,7 @@ test_emit_event (void)
 	TEST_DBUS_OPEN (client_conn);
 
 
+#if 0
 	/* Check that we can emit an event with an empty environment list
 	 * which will be added to the event queue while the message is
 	 * blocked.  When the event is finished, the reply will be sent
@@ -1482,6 +1483,7 @@ test_emit_event (void)
 
 		TEST_LIST_EMPTY (events);
 	}
+#endif
 
 
 	/* Check that if the event is marked as failed, an ordinary reply

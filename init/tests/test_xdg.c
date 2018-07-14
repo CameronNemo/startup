@@ -91,6 +91,9 @@ _test_get_home (char * env_var_name, char * dir_name, char * (*function)(void))
 	char   onemore[PATH_MAX];
 	char * outname;
 	char * expected;
+	char * env_var_value;
+
+	env_var_value = getenv (env_var_name);
 
 	TEST_FEATURE ("with HOME set and without environment override");
 	TEST_FILENAME (dirname);
@@ -222,6 +225,9 @@ _test_get_home (char * env_var_name, char * dir_name, char * (*function)(void))
 		outname = function ();
 		TEST_EQ_P (outname, NULL);
 	}
+
+	if (env_var_value)
+		setenv(env_var_name, env_var_value, 0);
 }
 
 void
@@ -316,11 +322,14 @@ test_get_user_upstart_dirs (void)
 	char      ** dirs = NULL;
 	char       * path = NULL;
 	char  ** expected = NULL;
+	char   * old_home = NULL;
 
 	/* Currently only one test for "typical" output.
          * Not sure what else to test here.
          */
 	TEST_FUNCTION ("get_user_upstart_dirs");
+
+	old_home = getenv ("XDG_CONFIG_HOME");
 
 	TEST_FEATURE ("with HOME set");
 	TEST_FILENAME (dirname);
@@ -401,6 +410,8 @@ test_get_user_upstart_dirs (void)
 		}
 	}
 	TEST_EQ (rmdir (dirname), 0);
+
+	assert0 (setenv ("XDG_CONFIG_HOME", old_home, 0));
 }
 
 void
