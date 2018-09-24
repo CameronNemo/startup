@@ -21,8 +21,16 @@
 # include <config.h>
 #endif /* HAVE_CONFIG_H */
 
-
+#include <paths.h>
+#include <utmp.h>
 #include <utmpx.h>
+#if defined _PATH_UTMP && !defined _PATH_UTMPX
+# define _PATH_UTMPX _PATH_UTMP
+#endif
+#if defined _PATH_WTMP && !defined _PATH_WTMPX
+# define _PATH_WTMPX _PATH_WTMP
+#endif
+
 #include <errno.h>
 #include <unistd.h>
 
