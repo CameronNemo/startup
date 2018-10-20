@@ -1750,6 +1750,14 @@ job_process_terminated (Job         *job,
 					 */
 					if (! state)
 						job_change_goal (job, JOB_RESPAWN);
+
+					/* job_next_state will return post-starting,
+					 * but we want stopping so it will respawn
+					 */
+					if (job->state == JOB_SPAWNED) {
+						job_change_state (job, JOB_STOPPING);
+						state = FALSE;
+					}
 					break;
 				}
 			}
