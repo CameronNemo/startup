@@ -86,6 +86,7 @@ static void upstart_job_added    (void *data, NihDBusMessage *message,
 static void upstart_job_removed  (void *data, NihDBusMessage *message,
 				  const char *job);
 static void job_add_socket       (Job *job, char **socket_info);
+static void cleanup              (void);
 static void socket_destroy       (Socket *socket);
 static void upstart_disconnected (DBusConnection *connection);
 static void emit_event_reply     (Socket *sock, NihDBusMessage *message);
@@ -271,7 +272,25 @@ main (int   argc,
 
 	ret = nih_main_loop ();
 
+	cleanup ();
+
 	return ret;
+}
+
+
+/* We can't guarantee sun_path was 0-terminated */
+static int unlink_sun_path (const struct sockaddr_un *sun_addr)
+{
+	size_t max_len = sizeof (sun_addr->sun_path);
+	char sun_path[max_len + 1];
+
+	if (!sun_addr->sun_path[0])
+		return 0;
+
+	memcpy (sun_path, sun_addr->sun_path, max_len);
+	sun_path[max_len] = '\0';
+
+	return unlink (sun_path);
 }
 
 
@@ -609,6 +628,12 @@ job_add_socket (Job *  job,
 		goto error;
 	}
 
+	/* Unlink before binding, just in case. Ignore failures (e.g.,
+	 * -ENOENT).
+	 */
+	if (sock->addr.sa_family == AF_UNIX)
+		unlink_sun_path (&sock->sun_addr);
+
 	if (bind (sock->sock, &sock->addr, sock->addrlen) < 0) {
 		nih_warn ("Failed to bind socket in %s: %s",
 			  job->path, strerror (errno));
@@ -650,10 +675,32 @@ error:
 }
 
 static void
+cleanup (void)
+{
+	Job *job;
+
+	nih_debug ("Performing cleanup");
+
+	/*
+	 * Free each job, so it gets to clean up its resources (e.g., unlinking
+	 * local domain sockets).
+	 */
+	NIH_HASH_FOREACH_SAFE (jobs, job) {
+		nih_free (job);
+	}
+}
+
+static void
 socket_destroy (Socket *sock)
 {
 	epoll_ctl (epoll_fd, EPOLL_CTL_DEL, sock->sock, NULL);
 	close (sock->sock);
+
+	if (sock->addr.sa_family == AF_UNIX) {
+		nih_debug ("Removing socket at path: %s",
+			   sock->sun_addr.sun_path);
+		unlink_sun_path (&sock->sun_addr);
+	}
 
 	nih_list_destroy (&sock->entry);
 }
