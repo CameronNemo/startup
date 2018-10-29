@@ -1,15 +1,15 @@
-.TH upstart\-monitor 8 2013-03-13 upstart
+.TH startup\-monitor 8 2013-03-13 "startup"
 .\"
 .SH NAME
-upstart\-monitor \- Display system and session Upstart events
+startup\-monitor \- Display system and session startup events
 .\"
 .SH SYNOPSIS
-.B upstart\-monitor
+.B startup\-monitor
 .RI [ OPTIONS ]...
 .\"
 .SH DESCRIPTION
-.B upstart\-monitor
-displays Upstart system events or Upstart session events using either a
+.B startup\-monitor
+displays startup system or session events using either a
 command-line or graphical interface.
 .\"
 .SH OPTIONS
@@ -39,7 +39,7 @@ Specify alternate field separator to use for command-line output
 .\"
 .IP \(bu 4
 By default,
-.B upstart\-monitor
+.B startup\-monitor
 will attempt to start in a graphical mode unless
 .B \-\-no\-gui
 is specified. However, if it is unable to display a graphical interface,
@@ -48,18 +48,20 @@ command-line interface.
 .\"
 .IP \(bu 4
 When no command-line option (that affects the destination) is specified,
-.B upstart\-monitor
+.B startup\-monitor
 will attempt to connect to the Session Init (destination
 \fIsession\-socket\fR) and display session events. In this mode, it
 will display both session events
 .I and
 system events, assuming the
-.BR upstart-event-bridge (8)
+.BR startup-event-bridge (8)
 is running.
 
-If invoked with no arguments from within a non-Upstart session
-environment it will attempt to connect to Upstart running as process ID
-1 (destination \fIsystem\-bus\fR) and will only display system events.
+If invoked with no arguments from within a session lacking a
+.BR startup (8)
+daemon
+it will attempt to connect to the system daemon and will only display
+system events.
 .\"
 .SH AUTHOR
 Written by James Hunt
@@ -75,7 +77,7 @@ Copyright \(co 2013 Canonical Ltd.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 .SH SEE ALSO
-.BR init (5)
-.BR init (8)
-.BR upstart-events (7)
-.BR upstart-event-bridge (8)
+.BR startup (5)
+.BR startup (8)
+.BR startup-events (7)
+.BR startup-event-bridge (8)

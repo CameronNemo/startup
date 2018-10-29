@@ -1,0 +1,11 @@
+description "bridge/socket: emit socket events"
+
+emits socket
+
+start on net-device-up IFACE=lo
+stop on runlevel [!2345]
+
+expect daemon
+respawn
+
+exec @startupbridgedir@/socket --daemon

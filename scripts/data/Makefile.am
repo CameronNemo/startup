@@ -1,8 +1,8 @@
 desktopdir = $(datadir)/applications
-desktop_DATA = upstart-monitor.desktop
+desktop_DATA = startup-monitor.desktop
 
 icondir = $(datadir)/icons/hicolor/scalable/apps
-icon = upstart-monitor.svg
+icon = startup-monitor.svg
 icon_DATA = $(icon)
 
 $(icon): $(top_srcdir)/doc/upstart-logo.svg

@@ -1,4 +1,4 @@
-.TH runlevel 7 2009-07-09 "Upstart"
+.TH runlevel 7 2009-07-09 "startup"
 .\"
 .SH NAME
 runlevel \- event signalling change of system runlevel
@@ -44,7 +44,7 @@ respectively.
 .SS Runlevels
 .\"
 Runlevels are a concept from UNIX\*R System V used by the
-.BR init (8)
+.BR startup (8)
 daemon or other system initialisation system to define modes of system
 operation.
 
@@ -99,7 +99,7 @@ The compatible implementation of runlevels permits Upstart jobs to be run
 on the
 .B runlevel
 event that perform the same functionality as the original System V
-.BR init (8)
+.BR startup (8)
 daemon.
 
 The
@@ -142,7 +142,7 @@ job to re-enter the default runlevel.
 .\"
 .SS Implementation of runlevels in Upstart
 The Upstart
-.BR init (8)
+.BR startup (8)
 daemon has no native concepts of runlevel, and unlike the System V daemon,
 makes no attempt to keep track of the current runlevel.
 
@@ -244,7 +244,7 @@ stop on runlevel [!2345]
 .\"
 .SH SEE ALSO
 .BR runlevel (8)
-.BR init (8)
+.BR startup (8)
 .BR telinit (8)
 .BR shutdown (8)
 .BR who (1)

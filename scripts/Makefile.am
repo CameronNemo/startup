@@ -1,15 +1,15 @@
 ## Process this file with automake to produce Makefile.in
 
-UPSTART_BINARY = $(abs_top_builddir)/init/init
+UPSTART_BINARY = $(abs_top_builddir)/init/startup
 INITCTL_BINARY = $(abs_top_builddir)/util/initctl
-FILE_BRIDGE_BINARY = $(abs_top_builddir)/extra/upstart-file-bridge
+FILE_BRIDGE_BINARY = $(abs_top_builddir)/extra/file
 
 SUBDIRS = data
 
 install_scripts = \
 	initctl2dot.py \
 	init-checkconf.sh \
-	upstart-monitor.py
+	startup-monitor.py
 
 noinst_SCRIPTS = \
 	pyupstart.py \
@@ -34,7 +34,7 @@ pyupstartvars.py: Makefile
 dist_man_MANS = \
   man/initctl2dot.8 \
   man/init-checkconf.8 \
-  man/upstart-monitor.8
+  man/startup-monitor.8
 
 install-exec-hook: $(install_scripts)
 	[ ! -d "$(DESTDIR)/$(bindir)" ] && mkdir -p "$(DESTDIR)/$(bindir)"; \

@@ -15,169 +15,176 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/intl
 
 
-initdir = $(sysconfdir)/init
+initdir = $(sysconfdir)/init/bridge
 
-sessionsdir = $(datadir)/upstart/sessions
+sessionsdir = $(datadir)/upstart/sessions/bridge
+
+bridgedir = $(startupbridgedir)
 
 dist_sessions_DATA = \
-	conf-session/upstart-event-bridge.conf \
-	conf-session/upstart-file-bridge.conf \
+	conf-session/event.conf \
+	conf-session/file.conf \
 	conf-session/re-exec.conf \
-	conf-session/upstart-dbus-session-bridge.conf \
-	conf-session/upstart-dbus-system-bridge.conf
+	conf-session/dbus-session.conf \
+	conf-session/dbus-system.conf
 
-sbin_PROGRAMS = \
-	upstart-event-bridge \
-	upstart-file-bridge \
-	upstart-dbus-bridge
+bridge_PROGRAMS = \
+	event \
+	file \
+	dbus
 
 dist_init_DATA = \
-	conf/upstart-socket-bridge.conf \
-	conf/upstart-event-bridge.conf \
-	conf/upstart-file-bridge.conf \
-	conf/upstart-dbus-bridge.conf
+	conf/file.conf \
+	conf/dbus.conf
 
 dist_man_MANS = \
-	man/upstart-socket-bridge.8 \
-	man/upstart-event-bridge.8 \
-	man/upstart-file-bridge.8 \
-	man/upstart-dbus-bridge.8 \
-	man/upstart-local-bridge.8 \
-	man/socket-event.7 \
+	man/startup-event-bridge.8 \
+	man/startup-file-bridge.8 \
+	man/startup-dbus-bridge.8 \
 	man/file-event.7 \
 	man/dbus-event.7
 
 if ENABLE_SOCKET_BRIDGE
-sbin_PROGRAMS += \
-	upstart-socket-bridge
+bridge_PROGRAMS += \
+	socket
 
-upstart_socket_bridge_SOURCES = \
-	upstart-socket-bridge.c
-nodist_upstart_socket_bridge_SOURCES = \
+dist_init_DATA += \
+	conf/socket.conf
+
+dist_man_MANS += \
+	man/startup-socket-bridge.8 \
+	man/socket-event.7
+
+socket_SOURCES = \
+	socket.c
+nodist_socket_SOURCES = \
 	$(com_ubuntu_Upstart_OUTPUTS) \
 	$(com_ubuntu_Upstart_Job_OUTPUTS)
-upstart_socket_bridge_LDADD = \
+socket_LDADD = \
 	$(LTLIBINTL) \
 	$(NIH_LIBS) \
 	$(NIH_DBUS_LIBS) \
 	$(DBUS_LIBS)
 else
 EXTRA_DIST += \
-	upstart-socket-bridge.c
+	socket.c
 endif
 
-upstart_event_bridge_SOURCES = \
-	upstart-event-bridge.c
-nodist_upstart_event_bridge_SOURCES = \
+event_SOURCES = \
+	event.c
+nodist_event_SOURCES = \
 	$(com_ubuntu_Upstart_OUTPUTS) \
 	$(com_ubuntu_Upstart_Job_OUTPUTS)
-upstart_event_bridge_LDADD = \
+event_LDADD = \
 	$(LTLIBINTL) \
 	$(NIH_LIBS) \
 	$(NIH_DBUS_LIBS) \
 	$(DBUS_LIBS)
 
-upstart_file_bridge_SOURCES = \
-	upstart-file-bridge.c
-nodist_upstart_file_bridge_SOURCES = \
+file_SOURCES = \
+	file.c
+nodist_file_SOURCES = \
 	$(com_ubuntu_Upstart_OUTPUTS) \
 	$(com_ubuntu_Upstart_Job_OUTPUTS)
-upstart_file_bridge_LDADD = \
+file_LDADD = \
 	$(LTLIBINTL) \
 	$(NIH_LIBS) \
 	$(NIH_DBUS_LIBS) \
 	$(DBUS_LIBS)
 
-upstart_dbus_bridge_SOURCES = \
-	upstart-dbus-bridge.c
-nodist_upstart_dbus_bridge_SOURCES = \
+dbus_SOURCES = \
+	dbus.c
+nodist_dbus_SOURCES = \
 	$(com_ubuntu_Upstart_OUTPUTS) \
 	$(com_ubuntu_Upstart_Job_OUTPUTS)
-upstart_dbus_bridge_LDADD = \
+dbus_LDADD = \
 	$(LTLIBINTL) \
 	$(NIH_LIBS) \
 	$(NIH_DBUS_LIBS) \
 	$(DBUS_LIBS)
 
 if ENABLE_LOCAL_BRIDGE
-sbin_PROGRAMS += \
-	upstart-local-bridge
+bridge_PROGRAMS += \
+	local
 
-upstart_local_bridge_SOURCES = \
-	upstart-local-bridge.c
-nodist_upstart_local_bridge_SOURCES = \
+dist_man_MANS += \
+	man/startup-local-bridge.8
+
+local_SOURCES = \
+	local.c
+nodist_local_SOURCES = \
 	$(com_ubuntu_Upstart_OUTPUTS) \
 	$(com_ubuntu_Upstart_Job_OUTPUTS)
-upstart_local_bridge_LDADD = \
+local_LDADD = \
 	$(LTLIBINTL) \
 	$(NIH_LIBS) \
 	$(NIH_DBUS_LIBS) \
 	$(DBUS_LIBS)
 else
 EXTRA_DIST += \
-	upstart-local-bridge.c
+	local.c
 endif
 
 dist_sessions_DATA += \
-	conf-session/upstart-dconf-bridge.conf
+	conf-session/dconf.conf
 
 dist_man_MANS += \
-	man/upstart-dconf-bridge.8 \
+	man/startup-dconf-bridge.8 \
 	man/dconf-event.7
 
 if ENABLE_DCONF_BRIDGE
-sbin_PROGRAMS += \
-	upstart-dconf-bridge
+bridge_PROGRAMS += \
+	dconf
 
-upstart_dconf_bridge_SOURCES = \
-	upstart-dconf-bridge.c
-nodist_upstart_dconf_bridge_SOURCES = \
+dconf_SOURCES = \
+	dconf.c
+nodist_dconf_SOURCES = \
 	$(com_ubuntu_Upstart_OUTPUTS)
-upstart_dconf_bridge_LDADD = \
+dconf_LDADD = \
 	$(LTLIBINTL) \
 	$(NIH_LIBS) \
 	$(NIH_DBUS_LIBS) \
 	$(DBUS_LIBS) \
 	$(GIO_LIBS) \
 	$(DCONF_LIBS)
-upstart_dconf_bridge_CFLAGS = \
+dconf_CFLAGS = \
 	$(NIH_CFLAGS) \
 	$(NIH_DBUS_CFLAGS) \
 	$(DBUS_CFLAGS) \
 	$(DCONF_CFLAGS)
 else
 EXTRA_DIST += \
-	upstart-dconf-bridge.c
+	dconf.c
 endif
 
 dist_init_DATA += \
-	conf/upstart-udev-bridge.conf
+	conf/udev.conf
 
 dist_man_MANS += \
-	man/upstart-udev-bridge.8
+	man/startup-udev-bridge.8
 
 if ENABLE_UDEV_BRIDGE
-sbin_PROGRAMS += \
-	upstart-udev-bridge
+bridge_PROGRAMS += \
+	udev
 
-upstart_udev_bridge_SOURCES = \
-	upstart-udev-bridge.c
-nodist_upstart_udev_bridge_SOURCES = \
+udev_SOURCES = \
+	udev.c
+nodist_udev_SOURCES = \
 	$(com_ubuntu_Upstart_OUTPUTS)
-upstart_udev_bridge_LDADD = \
+udev_LDADD = \
 	$(LTLIBINTL) \
 	$(NIH_LIBS) \
 	$(NIH_DBUS_LIBS) \
 	$(DBUS_LIBS) \
 	$(UDEV_LIBS)
-upstart_udev_bridge_CFLAGS = \
+udev_CFLAGS = \
 	$(NIH_CFLAGS) \
 	$(NIH_DBUS_CFLAGS) \
 	$(DBUS_CFLAGS) \
 	$(UDEV_CFLAGS)
 
 install-data-hook:
-	src=`echo upstart-udev-bridge| sed '$(transform)'`.8; \
+	src=`echo startup-udev-bridge| sed '$(transform)'`.8; \
 	for symlink in \
 		net-device-added \
 		net-device-removed \
@@ -190,8 +197,8 @@ install-data-hook:
 
 else
 EXTRA_DIST += \
-	upstart-udev-bridge.c \
-	man/upstart-udev-bridge.8
+	udev.c \
+	man/startup-udev-bridge.8
 endif
 
 com_ubuntu_Upstart_OUTPUTS = \

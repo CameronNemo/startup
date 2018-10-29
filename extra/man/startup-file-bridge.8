@@ -1,27 +1,27 @@
-.TH upstart\-file\-bridge 8 2013-03-11 upstart
+.TH startup\-file\-bridge 8 2013-03-11 startup
 .\"
 .SH NAME
-upstart\-file\-bridge \- Bridge between Upstart and inotify
+startup\-file\-bridge \- Bridge between startup and inotify
 .\"
 .SH SYNOPSIS
-.B upstart\-file\-bridge
+.B startup\-file\-bridge
 .RI [ OPTIONS ]...
 .\"
 .SH DESCRIPTION
-.B upstart\-file\-bridge
+.B startup\-file\-bridge
 receives information about kernel file events that
 .BR inotify (7)
 has received and creates
-.BR init (8)
+.BR startup (8)
 events for them.
 
-Supported events exposed to Upstart allow jobs to detect creation,
+Supported events exposed allow jobs to detect creation,
 modification and deletion. See
 .BR file\-event (7)
 for further details.
 
 The bridge works by querying the
-.BR init (8)
+.BR startup (8)
 daemon at bridge startup time to determine a list of all jobs whose
 .B start on
 or
@@ -52,7 +52,7 @@ Show brief usage summary.
 .\"
 .TP
 .B \-\-user
-User-session mode: connect to Upstart via the user session rather than
+User-session mode: connect via the user session rather than
 over the D\-Bus system bus.
 .\"
 .TP
@@ -167,7 +167,7 @@ the
 All job conditions specifying the
 .B file
 event are multi-shot: if the same file event occurs multiple times, the
-bridge will emit an Upstart event each time.
+bridge will emit an event each time.
 .\"
 .SH LIMITATIONS
 
@@ -189,8 +189,8 @@ the job is registered by the bridge.
 .\"
 .IP \(bu
 If the system cannot guarantee that the directory will exist at job
-registration time, arrange for the directory to be created by an Upstart
-job before the bridge itself starts.
+registration time, arrange for the directory to be created
+before the bridge itself starts.
 .\"
 .IP \(bu
 In user session mode, if a job specifies a file to watch for and that
@@ -207,7 +207,7 @@ Written by James Hunt
 .\"
 .SH BUGS
 Report bugs at 
-.RB < https://launchpad.net/ubuntu/+source/upstart/+bugs >
+.RB < https://launchpad.net/ubuntu/+source/startup/+bugs >
 .\"
 .SH COPYRIGHT
 Copyright \(co 2013 Canonical Ltd.
@@ -215,7 +215,7 @@ Copyright \(co 2013 Canonical Ltd.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 .SH SEE ALSO
-.BR init (5)
-.BR init (8)
+.BR startup (5)
+.BR startup (8)
 .BR inotify (7)
 .BR file-event (7)

@@ -1,26 +1,26 @@
-.TH upstart\-dbus\-bridge 8 2013-04-25 upstart
+.TH startup\-dbus\-bridge 8 2013-04-25 startup
 .\"
 .SH NAME
-upstart\-dbus\-bridge \- Bridge between Upstart and D-Bus
+startup\-dbus\-bridge \- Bridge between startup and D-Bus
 .\"
 .SH SYNOPSIS
-.B upstart\-dbus\-bridge
+.B startup\-dbus\-bridge
 .RI [ OPTIONS ]...
 .\"
 .SH DESCRIPTION
-.B upstart\-dbus\-bridge
+.B startup\-dbus\-bridge
 receives information about D-Bus signals
 and creates
-.BR init (8)
+.BR startup (8)
 events for them.
 
 With no options, monitors signals on the D-Bus system bus and emits
-an Upstart event called
+an event called
 .I dbus
-via a D-Bus system bus connection to Upstart.
+via a D-Bus system bus connection.
 
 When run with \fB\-\-user\fP, monitors signals on the users D-Bus session bus
-and emits Upstart events via the private D-Bus connection to the users Session Init.
+and emits events via the private D-Bus connection to the users Session Init.
 
 See \fBdbus\-daemon\fP(1) and for further details.
 
@@ -53,7 +53,7 @@ Monitor signals on the D-Bus system bus.
 .\"
 .TP
 .B \-\-user
-User-session mode: connect to Upstart via the user session rather than
+User-session mode: connect via the user session rather than
 over the D\-Bus system bus.
 .\"
 .TP
@@ -66,7 +66,9 @@ under the property BUS.  Used to distinguish multiple D\-Bus bridges.
 Enable verbose output.
 .\"
 .SH RESTRICTIONS
-D-Bus signals emitted by Upstart itself are ignored.
+D-Bus signals emitted by
+.BR startup (8)
+itself are ignored.
 
 .\"
 .SH AUTHOR
@@ -75,7 +77,7 @@ Written by James Hunt
 .\"
 .SH BUGS
 Report bugs at 
-.RB < https://launchpad.net/ubuntu/+source/upstart/+bugs >
+.RB < https://launchpad.net/ubuntu/+source/startup/+bugs >
 .\"
 .SH COPYRIGHT
 Copyright \(co 2013 Canonical Ltd.
@@ -85,5 +87,5 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 .SH SEE ALSO
 .BR dbus\-daemon (1)
 .BR dbus\-event (7)
-.BR init (5)
-.BR init (8)
+.BR startup (5)
+.BR startup (8)

@@ -1,0 +1,11 @@
+description "bridge/dbus-session: emit session bus signal events"
+
+emits dbus
+
+start on started dbus
+stop on stopping dbus
+
+expect daemon
+respawn
+
+exec @startupbridgedir@/dbus --daemon --session --user --bus-name session

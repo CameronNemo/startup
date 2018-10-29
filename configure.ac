@@ -1,10 +1,11 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([upstart], [1.14], [upstart-devel@lists.ubuntu.com])
+AC_INIT([startup], [1.14], [upstart-devel@lists.ubuntu.com])
 NIH_COPYRIGHT([[Copyright © 2006-2014 Canonical Ltd., 2011 Scott James Remnant]])
 AC_CONFIG_SRCDIR([init/main.c])
 AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_MACRO_DIR([macros])
 
 AC_GNU_SOURCE
 
@@ -162,11 +163,31 @@ NIH_COMPILER_COVERAGE
 
 NIH_LINKER_OPTIMISATIONS
 
+AS_AC_EXPAND(startupbridgedir, $libexecdir/startup/bridge)
 
-AC_CONFIG_FILES([ Makefile
-		  dbus/Makefile init/Makefile util/Makefile conf/Makefile
-		  extra/Makefile doc/Makefile contrib/Makefile po/Makefile.in
-		  scripts/Makefile scripts/data/Makefile
-		  test/Makefile lib/Makefile lib/libupstart.pc.in ])
+AC_CONFIG_FILES([
+	Makefile
+	dbus/Makefile
+	init/Makefile
+	util/Makefile
+	conf/Makefile
+	extra/Makefile
+	extra/conf/dbus.conf
+	extra/conf/file.conf
+	extra/conf/socket.conf
+	extra/conf/udev.conf
+	extra/conf-session/dbus-session.conf
+	extra/conf-session/dbus-system.conf
+	extra/conf-session/dconf.conf
+	extra/conf-session/event.conf
+	extra/conf-session/file.conf
+	doc/Makefile
+	contrib/Makefile
+	po/Makefile.in
+	scripts/Makefile
+	scripts/data/Makefile
+	test/Makefile
+	lib/Makefile
+	lib/libupstart.pc.in ])
 AC_CONFIG_HEADERS([config.h])
 AC_OUTPUT

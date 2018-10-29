@@ -87,11 +87,11 @@ default_color_job = '#DCDCDC'  # "Gainsboro"
 default_color_text = 'black'
 default_color_bg = 'white'
 
-default_outfile = 'upstart.dot'
+default_outfile = 'startup.dot'
 
 
 def header(ofh):
-    ofh.write("""digraph upstart {{
+    ofh.write("""digraph startup {{
   node [shape=\"diamond\", fontcolor=\"{options.color_event_text}\", """
               """fillcolor=\"{options.color_event}\", style=\"filled\"];
   rankdir=LR;

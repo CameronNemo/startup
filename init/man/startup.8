@@ -1,33 +1,31 @@
 '\" t
-.TH init 8 2014-05-09 "Upstart"
+.TH startup 8 2014-05-09 "startup"
 .\"
 .SH NAME
-init \- Upstart process management daemon
+startup \- process management daemon
 .\"
 .SH SYNOPSIS
-.B init
+.B startup
 .RI [ OPTION ]...
 .\"
 .SH DESCRIPTION
-.B init
-is the parent of all processes on the system, it is executed by the kernel
-and is responsible for starting all other processes; it is the parent of
-all processes whose natural parents have died and it is responsible for
-reaping those when they die.
+.B startup
+is an event driven task and service manager. Its primary use cases
+include system initialization and session management.
 
 Processes managed by
-.B init
+.B startup
 are known as jobs and are defined by files in the
 .I /etc/init
 directory.  See
-.BR init (5)
-for more details on configuring Upstart.
+.BR startup (5)
+for more details on configuration.
 .\"
 .SS Events
-.BR init (8)
-is an event-based init daemon.  This means that jobs will be automatically
-started and stopped by changes that occur to the system state, including
-as a result of jobs starting and stopping.
+.BR startup (8)
+is an event-based process management daemon.  This means that jobs will be
+automatically started and stopped by changes that occur to the system state,
+including as a result of jobs starting and stopping.
 
 This is different to dependency-based init daemons which start a specified
 set of goal jobs, and resolve the order in which they should be started and
@@ -137,7 +135,8 @@ process is spawned.
 The state is changed from \(aqpre\-start\(aq to \(aqspawned\(aq.
 .\"
 .IP \n+[step] 3
-Upstart then ascertains the \fIfinal\fP PID for the job which may be a
+.BR startup (8)
+then ascertains the \fIfinal\fP PID for the job which may be a
 descendent of the immediate child process if \fBexpect fork\fP or
 \fBexpect daemon\fP has been specified.
 .\"
@@ -208,9 +207,10 @@ stanza is sent to the process group of the main process
 By default this signal is
 .BR SIGTERM "."
 .sp 1
-See \fBsignal\fP(7) and \fBinit\fP(5).
+See \fBsignal\fP(7) and \fBstartup\fP(5).
 .IP \n+[step2] 3
-Upstart waits for up to "kill timeout" seconds (default 5 seconds) for
+.BR startup (8)
+waits for up to "kill timeout" seconds (default 5 seconds) for
 the process to end.
 .IP \n+[step2] 3
 If the process is still running after the timeout, a
@@ -239,8 +239,8 @@ Any jobs whose \(aqstart on\(aq (or \(aqstop on\(aq) condition would be satisfie
 by this job being stopped are started (or stopped respectively).
 .\"
 .SS System V compatibility
-The Upstart
-.BR init (8)
+The
+.BR startup (8)
 daemon does not keep track of runlevels itself, instead they are implemented
 entirely by its userspace tools.  The event emitted to signify a change
 of runlevel is the
@@ -249,7 +249,7 @@ event.  For more information see its manual page.
 .\"
 .SH OPTIONS
 Options are passed to
-.BR init (8)
+.BR startup (8)
 by placing them on the kernel command-line.
 .\"
 .TP
@@ -284,7 +284,7 @@ the first job encountered will be honoured.
 See section
 .B User Session Mode
 in
-.BR init (5)
+.BR startup (5)
 for the ordered list of default configuration directories a
 Session Init will consider.
 
@@ -295,7 +295,7 @@ Default value for jobs that do not specify a \(aq\fBconsole\fR\(aq
 stanza. This could be used for example to set the default to
 \(aq\fBnone\fR\(aq but still honour jobs that specify explicitly
 \(aq\fBconsole log\fR\(aq. See
-.BR init (5)
+.BR startup (5)
 for all possible values of
 .BR console "."
 .\"
@@ -309,7 +309,7 @@ specifies it: the job processes will
 be placed in the cgroup specified by the stanza and the job itself will
 not wait until the cgroup manager has started before starting itself.
 See
-.BR init (5)
+.BR startup (5)
 for further details.
 .\"
 .TP
@@ -333,7 +333,7 @@ Disable logging of job output. Note that jobs specifying \(aq\fBconsole
 log\fR\(aq will be treated as if they had specified
 \(aq\fBconsole none\fR\(aq.
 See 
-.BR init (5)
+.BR startup (5)
 for further details.
 .\"
 .TP
@@ -344,7 +344,7 @@ Disable chroot sessions.
 .B \-\-no\-startup\-event
 Suppress emission of the initial startup event. This option should only
 be used for testing since it will stop the 
-.BR init (8)
+.BR startup (8)
 daemon from starting \fBany\fP jobs automatically.
 .\"
 .TP
@@ -376,10 +376,12 @@ Specify a different initial startup event from the standard
 .\"
 .TP
 .B \-\-user
-Starts in user mode, as used for user sessions. Upstart will be run as
-an unprivileged user, reading configuration files from configuration
-locations as per roughly XDG Base Directory Specification. See 
-.BR init (5)
+Starts in user mode, as used for user sessions.
+.BR startup (8)
+will be run as an unprivileged user, reading configuration files from
+configuration locations as per roughly XDG Base Directory Specification.
+See 
+.BR startup (5)
 for further details.
 .\"
 .TP
@@ -396,7 +398,7 @@ system console or log, useful for debugging boot.
 Outputs version information and exits.
 .\"
 .SH NOTES
-.B init
+.B startup
 is not normally executed by a user process, and expects to have a process
 id of 1.  If this is not the case, it will actually execute
 .BR telinit (8)
@@ -417,7 +419,7 @@ Session Init will emit the
 event and  request all running jobs stop. It will attempt to honour jobs
 .B kill timeout
 values (see
-.BR init (5)
+.BR startup (5)
 for further details). Note however that system policy will prevail: if
 jobs request timeout values longer than the system policy allows for
 complete system shutdown, it will not be possible to honour them before
@@ -437,7 +439,7 @@ job configuration files:
 See
 .B User Session Mode
 in
-.BR init (5)
+.BR startup (5)
 for further details.
 
 .\"
@@ -476,8 +478,6 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 .BR dconf\-event (7),
 .BR file\-event (7),
 .BR filesystem (7),
-.BR init (5),
-.BR init (8),
 .BR initctl (8),
 .BR keyboard\-request (7),
 .BR local\-filesystems (7),
@@ -491,7 +491,9 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 .BR socket\-event (7),
 .BR started (7),
 .BR starting (7),
+.BR startup (5),
 .BR startup (7),
+.BR startup (8),
 .BR stopped (7),
 .BR stopping (7),
 .BR telinit (8),

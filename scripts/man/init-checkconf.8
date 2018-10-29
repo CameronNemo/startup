@@ -1,4 +1,4 @@
-.TH init\-checkconf 8 2013-11-19 "Upstart"
+.TH init\-checkconf 8 2013-11-19 "startup"
 .\"
 .SH NAME
 init\-checkconf \- manual page for init-checkconf
@@ -11,13 +11,15 @@ init\-checkconf \- manual page for init-checkconf
 .RI [ OPTIONS ] " " "\-f" " file "
 .\"
 .SH DESCRIPTION
-Determine if specified Upstart
-.BR init (8)
+Determine if specified
+.BR startup (8)
 job configuration file is valid.
 .P
 By default, two checks are performed:
 .IP \(bu 4
-Ensure Upstart can parse overall file successfully
+Ensure
+.BR startup (8)
+can parse overall file successfully
 .IP \(bu 4
 Ensure all script sections are parseable by shell
 .P
@@ -40,7 +42,7 @@ Do not check script sections.
 .TP
 .BR \-x " \fIpath\fP" " , " \-\-upstart\-path=\fIpath\fP
 Specify path to
-.BR init (8)
+.BR startup (8)
 binary.
 .TP
 .BR \-h " , " \-\-help
@@ -67,5 +69,5 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 .\"
 .SH SEE ALSO
 .BR sh (1)
-.BR init (5)
-.BR init (8)
+.BR startup (5)
+.BR startup (8)

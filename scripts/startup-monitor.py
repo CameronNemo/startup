@@ -49,8 +49,8 @@ from datetime import datetime
 
 VERSION = 0.1
 COPYRIGHT = 'Copyright © 2013 Canonical Ltd.'
-DESCRIPTION = 'Simple Upstart Event Monitor'
-NAME = 'upstart-monitor'
+DESCRIPTION = 'Event Monitor for startup(8)'
+NAME = 'startup-monitor'
 AUTHORS = [
     'James Hunt <james.hunt@ubuntu.com>'
 ]
@@ -97,7 +97,7 @@ DEFAULT_WIN_SIZE_HEIGHT = 200
 DEFAULT_LOGO_SIZE_WIDTH  = 150
 DEFAULT_LOGO_SIZE_HEIGHT = 150
 
-DEFAULT_OUTPUT_FILE = 'upstart-events.txt'
+DEFAULT_OUTPUT_FILE = 'startup-events.txt'
 
 # key=type : value=description
 destinations = \

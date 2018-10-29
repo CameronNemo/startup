@@ -34,8 +34,8 @@ VERSION = '0.1'
 NAME = 'TestUpstart'
 
 # FIXME: should really take account of autoconf prefix
-SYSTEM_UPSTART = '/sbin/init'
-SYSTEM_INITCTL = '/sbin/initctl'
+SYSTEM_UPSTART = '/bin/init'
+SYSTEM_INITCTL = '/bin/initctl'
 SYSTEM_FILE_BRIDGE = '/sbin/upstart-file-bridge'
 
 UPSTART_SESSION_ENV = 'UPSTART_SESSION'

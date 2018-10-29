@@ -25,7 +25,7 @@ util/runlevel.c
 util/shutdown.c
 util/telinit.c
 
-extra/upstart-udev-bridge.c
-extra/upstart-socket-bridge.c
+extra/udev.c
+extra/socket.c
 
-scripts/upstart-monitor.py
+scripts/startup-monitor.py

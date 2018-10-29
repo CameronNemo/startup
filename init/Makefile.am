@@ -22,8 +22,8 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/test -iquote$(top_srcdir)/test
 
 dist_man_MANS = \
-	man/init.8 \
-	man/init.5 \
+	man/startup.8 \
+	man/startup.5 \
 	man/startup.7 \
 	man/starting.7 \
 	man/started.7 \
@@ -32,14 +32,13 @@ dist_man_MANS = \
 	man/control-alt-delete.7 \
 	man/keyboard-request.7 \
 	man/power-status-changed.7 \
-	man/upstart.7 \
 	man/inittab.5 \
 	man/session-end.7
 
 
-sbin_PROGRAMS = init
+bin_PROGRAMS = startup
 
-init_SOURCES = \
+startup_SOURCES = \
 	main.c \
 	paths.h \
 	events.h \
@@ -63,13 +62,13 @@ init_SOURCES = \
 	quiesce.c quiesce.h \
 	errors.h \
 	apparmor.c apparmor.h
-nodist_init_SOURCES = \
+nodist_startup_SOURCES = \
 	$(org_freedesktop_DBus_OUTPUTS) \
 	$(com_ubuntu_Upstart_OUTPUTS) \
 	$(com_ubuntu_Upstart_Job_OUTPUTS) \
 	$(com_ubuntu_Upstart_Instance_OUTPUTS)
 
-init_LDADD = \
+startup_LDADD = \
 	$(LTLIBINTL) \
 	$(NIH_LIBS) \
 	$(NIH_DBUS_LIBS) \
@@ -79,7 +78,7 @@ init_LDADD = \
 	-lrt
 
 if ENABLE_CGROUPS
-init_SOURCES +=	cgroup.c cgroup.h
+startup_SOURCES += cgroup.c cgroup.h
 endif
 
 com_ubuntu_Upstart_OUTPUTS = \
@@ -172,7 +171,7 @@ TEST_DATA_FILES = \
 	$(TEST_DATA_DIR)/upstart-1.11.json \
 	$(TEST_DATA_DIR)/upstart-1.13.json
 
-upstart_test_programs = \
+startup_test_programs = \
 	test_system \
 	test_environ \
 	test_process \
@@ -192,7 +191,7 @@ upstart_test_programs = \
 	test_main
 
 if ENABLE_CGROUPS
-upstart_test_programs += test_cgroup
+startup_test_programs += test_cgroup
 endif
 
 if ENABLE_TAP_OUTPUT
@@ -214,10 +213,10 @@ AM_TESTS_ENVIRONMENT= \
 		UPSTART_JOB;
 
 TESTS = \
-	$(upstart_test_programs) \
+	$(startup_test_programs) \
 	test_conf_preload.sh$(EXEEXT)
 
-EXTRA_DIST = init.supp $(TEST_DATA_FILES) tests/test_conf_preload.sh.in
+EXTRA_DIST = startup.supp $(TEST_DATA_FILES) tests/test_conf_preload.sh.in
 
 test_conf_preload.sh$(EXEEXT): tests/test_conf_preload.sh.in Makefile test_conf
 	sed -e 's|[@]abs_builddir[@]|$(abs_builddir)|g' \
@@ -226,7 +225,7 @@ test_conf_preload.sh$(EXEEXT): tests/test_conf_preload.sh.in Makefile test_conf
 	    $< > $@
 	chmod +x $@
 
-check_PROGRAMS = $(upstart_test_programs) test_conf
+check_PROGRAMS = $(startup_test_programs) test_conf
 
 check_SCRIPTS = test_conf_preload.sh$(EXEEXT)
 CLEANFILES += $(check_SCRIPTS)

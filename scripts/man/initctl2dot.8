@@ -1,4 +1,4 @@
-.TH initctl2dot 8 2013-03-22 "Upstart"
+.TH initctl2dot 8 2013-03-22 "startup"
 .\"
 .SH NAME
 initctl2dot \- manual page for initctl2dot
@@ -17,7 +17,7 @@ format.
 With no options,
 .BR initctl (8)
 will be invoked automatically and the output written to file
-\fIupstart.dot\fP. If run from within an Upstart user session, unless
+\fIstartup.dot\fP. If run from within a user session, unless
 .B \-\-system
 is specified, the data generated will be for the user session.
 .\"
@@ -71,10 +71,10 @@ Specify color for text in job boxes.
 Specify color for job boxes.
 .TP
 \fB\-\-system\fP
-Connect to the Upstart system session.
+Connect to the system session.
 .TP
 \fB\-\-user\fP
-Connect to the Upstart user session.
+Connect to the user session.
 .\"
 .SH AUTHOR
 Written by James Hunt
@@ -91,5 +91,5 @@ This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 .\"
 .SH SEE ALSO
-.BR init (8)
+.BR startup (8)
 .BR initctl (8)

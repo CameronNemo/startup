@@ -1,0 +1,11 @@
+description "bridge/file: emit file events"
+
+emits file
+
+start on started dbus
+stop on session-end
+
+expect daemon
+respawn
+
+exec @startupbridgedir@/file --daemon --user

@@ -20,8 +20,8 @@ dist_man_MANS = \
 	man/telinit.8 \
 	man/runlevel.7
 
+bin_PROGRAMS = initctl
 sbin_PROGRAMS = \
-	initctl \
 	reboot \
 	runlevel \
 	shutdown \
@@ -160,8 +160,8 @@ install-exec-hook:
 	src=`echo initctl | sed '$(transform);s/$$/$(EXEEXT)/'`; \
 	for symlink in start stop restart reload status; do \
 	  inst=`echo $$symlink | sed '$(transform);s/$$/$(EXEEXT)/'`; \
-          echo " ln -sf '$$src' '$(DESTDIR)$(sbindir)/$$inst'"; \
-	  ln -sf "$$src" "$(DESTDIR)$(sbindir)/$$inst"; \
+          echo " ln -sf '$$src' '$(DESTDIR)$(bindir)/$$inst'"; \
+	  ln -sf "$$src" "$(DESTDIR)$(bindir)/$$inst"; \
 	done
 
 	src=`echo reboot | sed '$(transform);s/$$/$(EXEEXT)/'`; \
@@ -251,7 +251,7 @@ test_telinit_LDADD = \
 
 
 .PHONY: tests
-tests: $(BUILT_SOURCES) $(check_PROGRAMS) $(top_builddir)/init/init $(top_builddir)/test/libtest_util_common.a
+tests: $(BUILT_SOURCES) $(check_PROGRAMS) $(top_builddir)/init/startup $(top_builddir)/test/libtest_util_common.a
 
 clean-local:
 	rm -f *.gcno *.gcda

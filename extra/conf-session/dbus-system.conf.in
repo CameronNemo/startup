@@ -1,0 +1,11 @@
+description "bridge/dbus-system: emit system bus signal events"
+
+emits dbus
+
+start on started dbus
+stop on stopping dbus
+
+expect daemon
+respawn
+
+exec @startupbridgedir@/dbus --daemon --system --user --bus-name system

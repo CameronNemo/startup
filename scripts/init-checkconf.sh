@@ -29,7 +29,7 @@
 script_name=${0##*/}
 confdir=$(mktemp -d /tmp/${script_name}.XXXXXXXXXX)
 xdg_runtime_dir=$(mktemp -d /tmp/${script_name}.XXXXXXXXXX)
-upstart_path=/sbin/init
+startup_path=/bin/startup
 initctl_path=/sbin/initctl
 debug_enabled=n
 file_valid=n
@@ -44,18 +44,18 @@ cleanup()
         debug "Restoring XDG_RUNTIME_DIR to '$saved_xdg_runtime_dir'"
     export XDG_RUNTIME_DIR="$saved_xdg_runtime_dir"
 
-    [ -n "$saved_upstart_session" ] && \
-        debug "Restoring UPSTART_SESSION to '$saved_upstart_session'"
-    export UPSTART_SESSION="$saved_upstart_session"
+    [ -n "$saved_startup_session" ] && \
+        debug "Restoring UPSTART_SESSION to '$saved_startup_session'"
+    export UPSTART_SESSION="$saved_startup_session"
   
-    if [ ! -z "$upstart_pid" ]
+    if [ ! -z "$startup_pid" ]
     then
-      debug "Stopping secondary Upstart (running with PID $upstart_pid)"
-      kill -9 "$upstart_pid" >/dev/null 2>&1
+      debug "Stopping secondary startup daemon (running with PID $startup_pid)"
+      kill -9 "$startup_pid" >/dev/null 2>&1
     fi
   
     [ -d "$confdir" ] && rm -rf "$confdir"
-    dir="$xdg_runtime_dir/upstart/sessions"
+    dir="$xdg_runtime_dir/startup/sessions"
     [ -d "$dir" ] && rm -rf "$xdg_runtime_dir"
     [ "$file_valid" = y ] && exit 0
   
@@ -65,7 +65,7 @@ cleanup()
 usage()
 {
 cat <<EOT
-Description: Determine if specified Upstart (init(8)) job configuration
+Description: Determine if specified startup(8) job configuration
              file is valid.
 
 Usage: $script_name [options] -f <conf_file>
@@ -80,7 +80,7 @@ Options:
  --initctl-path=<path>   (default=$initctl_path).
  -s, --noscript        : Do not check script sections.
  -x <path>             : Specify path to init daemon binary
- --upstart-path=<path>   (default=$upstart_path).
+ --startup-path=<path>   (default=$startup_path).
  -h, --help            : Show this help.
 
 EOT
@@ -105,7 +105,7 @@ die()
 }
 
 # Return 0 if Upstart is running, else 1
-upstart_running()
+startup_running()
 {
     initctl --user version >/dev/null 2>&1
 }
@@ -116,7 +116,7 @@ args=$(getopt \
     -n "$script_name" \
     -a \
     --options="df:hi:sx:" \
-    --longoptions="debug file: help initctl-path: noscript upstart-path:" \
+    --longoptions="debug file: help initctl-path: noscript startup-path:" \
     -- "$@")
 
 eval set -- "$args"
@@ -149,8 +149,8 @@ do
         check_scripts=n
         ;;
 
-      -x|--upstart-path)
-        upstart_path="$2"
+      -x|--startup-path)
+        startup_path="$2"
         shift
         ;;
 
@@ -166,10 +166,10 @@ done
 [ -z "$file" ] && die "Must specify configuration file"
 [ ! -f "$file" ] && die "File $file does not exist"
 
-debug "upstart_path=$upstart_path"
+debug "startup_path=$startup_path"
 debug "initctl_path=$initctl_path"
 
-for cmd in "$upstart_path" "$initctl_path"
+for cmd in "$startup_path" "$initctl_path"
 do
     [ -f "$cmd" ] || die "Path $cmd does not exist"
     [ -x "$cmd" ] || die "File $cmd not executable"
@@ -180,13 +180,13 @@ export saved_xdg_runtime_dir="$XDG_RUNTIME_DIR"
 debug "Setting XDG_RUNTIME_DIR='$xdg_runtime_dir'"
 export XDG_RUNTIME_DIR="$xdg_runtime_dir"
 
-export saved_upstart_session="$UPSTART_SESSION"
+export saved_startup_session="$UPSTART_SESSION"
 [ -n "$UPSTART_SESSION" ] \
     && debug "Unsetting UPSTART_SESSION ($UPSTART_SESSION)" \
     && unset UPSTART_SESSION
 
 # this is the only safe way to run another instance of Upstart
-"$upstart_path" --help|grep -q -- --no-startup-event || die "$upstart_path too old"
+"$startup_path" --help|grep -q -- --no-startup-event || die "$startup_path too old"
 
 debug "confdir=$confdir"
 debug "file=$file"
@@ -200,20 +200,20 @@ job="${filename%.conf}"
 cp "$file" "$confdir" || die "Failed to copy file $file to $confdir"
 debug "job=$job"
 
-upstart_out="$(mktemp --tmpdir "${script_name}-upstart-output.XXXXXXXXXX")"
-debug "upstart_out=$upstart_out"
+startup_out="$(mktemp --tmpdir "${script_name}-startup-output.XXXXXXXXXX")"
+debug "startup_out=$startup_out"
 
-upstart_cmd=$(printf \
+startup_cmd=$(printf \
     "%s --user --no-dbus --no-startup-event --verbose --confdir %s" \
-        "$upstart_path" \
+        "$startup_path" \
         "$confdir")
-debug "upstart_cmd=$upstart_cmd"
+debug "startup_cmd=$startup_cmd"
 
-nohup $upstart_cmd >"$upstart_out" 2>&1 &
-upstart_pid=$!
-debug "Upstart pid=$upstart_pid"
+nohup $startup_cmd >"$startup_out" 2>&1 &
+startup_pid=$!
+debug "startup daemon pid=$startup_pid"
 
-# Stop the shell outputting a message when Upstart is killed.
+# Stop the shell outputting a message when startup(8) is killed.
 # We handle this ourselves in cleanup().
 disown 
 
@@ -227,14 +227,14 @@ do
         count=$(echo "$sessions"|wc -l)
         [ "$count" -gt 1 ] && die "Got unexpected session count: $count"
         session=$(echo "$sessions"|awk '{print $2}')
-        debug "Joining Upstart session '$session'"
+        debug "Joining session '$session'"
         export UPSTART_SESSION="$session"
 	set_session=y
     fi
 
-    debug "Waiting for Upstart to initialise (attempt $i)"
+    debug "Waiting for to initialise (attempt $i)"
 
-    upstart_running
+    startup_running
     if [ $? -eq 0 ]
     then
         running=y
@@ -244,9 +244,9 @@ do
     sleep 1
 done
 
-[ $running = n ] && die "Failed to ask Upstart to check conf file"
+[ $running = n ] && die "Failed to ask startup(8) to check conf file"
 
-debug "Secondary Upstart ($upstart_cmd) running with PID $upstart_pid"
+debug "Secondary startup(8) ($startup_cmd) running with PID $startup_pid"
 
 if [ "$check_scripts" = y ]
 then
@@ -270,5 +270,5 @@ then
     exit 0
 fi
 
-errors=$(grep "$job" "$upstart_out"|sed "s,${confdir}/,,g")
+errors=$(grep "$job" "$startup_out"|sed "s,${confdir}/,,g")
 die "$(printf "File $file: syntax invalid:\n${errors}")"
