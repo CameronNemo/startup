@@ -18397,6 +18397,8 @@ int
 main (int   argc,
       char *argv[])
 {
+	nih_local char *rundir;
+
 	nih_error_init ();
 	nih_timer_init ();
 	nih_signal_init ();
@@ -18451,6 +18453,10 @@ main (int   argc,
 	}
 
 	test_dbus_connection ();
+
+	/* FIXME: some test is leaving artifacts behind */
+	rundir = NIH_MUST (nih_sprintf (NULL, "%s/upstart", getenv ("XDG_CONFIG_HOME")));
+	assert0 (rmdir (rundir));
 
 	test_common_cleanup ();
 
