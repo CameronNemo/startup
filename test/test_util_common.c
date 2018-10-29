@@ -962,7 +962,9 @@ test_common_cleanup (void)
 
 	if (saved_xdg_config_home) {
 		nih_assert (test_xdg_config_home[0]);
-		TEST_EQ_STR (test_xdg_config_home, xdg_config_home);
+
+		if (xdg_config_home)
+			TEST_EQ_STR (test_xdg_config_home, xdg_config_home);
 
 		if (stat (test_xdg_config_home, &statbuf)) {
 			nih_error ("A test has removed XDG_CONFIG_HOME '%s'", test_xdg_config_home);
@@ -977,7 +979,7 @@ test_common_cleanup (void)
 		assert0 (rmdir (test_xdg_config_home));
 
 		assert0 (setenv ("XDG_CONFIG_HOME", saved_xdg_config_home, 1));
-		nih_info ("Restoring XDG_RUNTIME_DIR='%s'", saved_xdg_config_home);
+		nih_info ("Restoring XDG_CONFIG_HOME='%s'", saved_xdg_config_home);
 		nih_free (saved_xdg_config_home);
 		saved_xdg_config_home = NULL;
 	}
