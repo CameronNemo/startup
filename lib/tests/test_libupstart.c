@@ -155,8 +155,12 @@ test_libupstart (void)
         assert0 (rmdir (path));
 	path = NIH_MUST (nih_sprintf (NULL, "%s/upstart", xdg_runtime_dir));
         assert0 (rmdir (path));
-
-        assert0 (rmdir (xdg_runtime_dir));
+	path = NIH_MUST (nih_sprintf (NULL, "%s/dbus-1/services", xdg_runtime_dir));
+	assert0 (rmdir (path));
+	path = NIH_MUST (nih_sprintf (NULL, "%s/dbus-1", xdg_runtime_dir));
+	assert0 (rmdir (path));
+	path = NIH_MUST (nih_sprintf (NULL, "%s/upstart", getenv ("XDG_CONFIG_HOME")));
+	assert0 (rmdir (path));
 }
 
 int
@@ -169,7 +173,9 @@ main (int   argc,
 			"chroot environment without D-Bus"
 			"\n\n", __FILE__);
 	} else {
+		test_common_setup ();
 		test_libupstart ();
+		test_common_cleanup ();
 	}
 
 	return 0;
