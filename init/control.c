@@ -948,10 +948,10 @@ control_notify_dbus_address (void            *data,
 	nih_assert (message);
 	nih_assert (address);
 
-	if (getpid () == 1) {
+	if (use_session_bus == FALSE && user_mode == FALSE) {
 		nih_dbus_error_raise_printf (
 			DBUS_INTERFACE_UPSTART ".Error.PermissionDenied",
-			_("Not permissible to notify D-Bus address for PID 1"));
+			_("Not permissible to notify D-Bus address at system level"));
 		return -1;
 	}
 
@@ -1360,10 +1360,10 @@ control_set_env_list (void            *data,
 		return -1;
 	}
 
-	if (getpid () == 1) {
+	if (use_session_bus == FALSE && user_mode == FALSE) {
 		nih_dbus_error_raise_printf (
 			DBUS_INTERFACE_UPSTART ".Error.PermissionDenied",
-			_("Not permissible to modify PID 1 job environment"));
+			_("Not permissible to modify job environment at system level"));
 		return -1;
 	}
 
@@ -1551,10 +1551,10 @@ control_unset_env_list (void            *data,
 		return -1;
 	}
 
-	if (getpid () == 1) {
+	if (use_session_bus == FALSE && user_mode == FALSE) {
 		nih_dbus_error_raise_printf (
 			DBUS_INTERFACE_UPSTART ".Error.PermissionDenied",
-			_("Not permissible to modify PID 1 job environment"));
+			_("Not permissible to modify job environment at system level"));
 		return -1;
 	}
 
@@ -1861,10 +1861,10 @@ control_reset_env (void           *data,
 		return -1;
 	}
 
-	if (getpid () == 1) {
+	if (use_session_bus == FALSE && user_mode == FALSE) {
 		nih_dbus_error_raise_printf (
 			DBUS_INTERFACE_UPSTART ".Error.PermissionDenied",
-			_("Not permissible to modify PID 1 job environment"));
+			_("Not permissible to modify job environment at system level"));
 		return -1;
 	}
 
@@ -2072,7 +2072,7 @@ control_end_session (void             *data,
 	nih_assert (message);
 
 	/* Not supported at the system level */
-	if (getpid () == 1)
+	if (use_session_bus == FALSE && user_mode == FALSE)
 		return 0;
 
 	if (! control_check_permission (message)) {
