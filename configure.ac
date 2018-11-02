@@ -181,6 +181,8 @@ AC_CONFIG_FILES([
 	extra/conf-session/dconf.conf
 	extra/conf-session/event.conf
 	extra/conf-session/file.conf
+	extra/conf-session/socket.conf
+	extra/conf-session/udev.conf
 	doc/Makefile
 	contrib/Makefile
 	po/Makefile.in

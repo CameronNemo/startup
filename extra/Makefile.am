@@ -48,6 +48,9 @@ if ENABLE_SOCKET_BRIDGE
 bridge_PROGRAMS += \
 	socket
 
+dist_sessions_DATA += \
+	conf-session/socket.conf
+
 dist_init_DATA += \
 	conf/socket.conf
 
@@ -156,6 +159,9 @@ else
 EXTRA_DIST += \
 	dconf.c
 endif
+
+dist_sessions_DATA += \
+	conf-session/udev.conf
 
 dist_init_DATA += \
 	conf/udev.conf

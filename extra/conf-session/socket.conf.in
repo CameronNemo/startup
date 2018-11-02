@@ -1,0 +1,11 @@
+description "bridge/socket: emit socket events"
+
+emits socket
+
+start on startup
+stop on session-end
+
+expect daemon
+respawn
+
+exec @startupbridgedir@/socket --daemon
