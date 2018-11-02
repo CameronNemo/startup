@@ -37,6 +37,8 @@ TAGS
 m4
 /lib/libupstart*
 /lib/upstart
+/lib/test_*
+/lib/run_abi_checker.sh
 po/Makevars.template
 po/POTFILES
 po/*.sed
