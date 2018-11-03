@@ -282,6 +282,7 @@ main (int   argc,
 			exit (1);
 		}
 
+#ifdef ENABLE_SYSVCOMPAT
 		/* Check we're process #1 */
 		if (getpid () > 1) {
 			execv (TELINIT, argv);
@@ -290,6 +291,7 @@ main (int   argc,
 			nih_fatal (_("Not being executed as init"));
 			exit (1);
 		}
+#endif /* ENABLE_SYSVCOMPAT */
 
 		/* Clear our arguments from the command-line, so that we show up in
 		 * ps or top output as /sbin/init, with no extra flags.

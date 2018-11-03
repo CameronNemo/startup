@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+EXTRA_DIST =
+
 initconfdir = $(sysconfdir)/init
 
 AM_MAKEFLAGS = TERM=xterm
@@ -32,8 +34,15 @@ dist_man_MANS = \
 	man/control-alt-delete.7 \
 	man/keyboard-request.7 \
 	man/power-status-changed.7 \
-	man/inittab.5 \
 	man/session-end.7
+
+if ENABLE_SYSVCOMPAT
+dist_man_MANS += \
+	man/inittab.5
+else
+EXTRA_DIST += \
+	man/inittab.5
+endif
 
 
 bin_PROGRAMS = startup
@@ -216,7 +225,7 @@ TESTS = \
 	$(startup_test_programs) \
 	test_conf_preload.sh$(EXEEXT)
 
-EXTRA_DIST = startup.supp $(TEST_DATA_FILES) tests/test_conf_preload.sh.in
+EXTRA_DIST += startup.supp $(TEST_DATA_FILES) tests/test_conf_preload.sh.in
 
 test_conf_preload.sh$(EXEEXT): tests/test_conf_preload.sh.in Makefile test_conf
 	sed -e 's|[@]abs_builddir[@]|$(abs_builddir)|g' \

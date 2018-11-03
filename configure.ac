@@ -89,6 +89,16 @@ if test "$enable_cgroups" = yes && test "$have_cgmanager" = yes; then
 	AC_DEFINE([ENABLE_CGROUPS], [1], [Build with Cgroup CGManager support])
 fi
 
+AC_ARG_ENABLE([sysvcompat],
+	AS_HELP_STRING([--disable-sysvcompat],
+		[Disable sysvinit compatibility tools]),
+		[enable_sysvcompat=no], [enable_sysvcompat=yes])
+AM_CONDITIONAL([ENABLE_SYSVCOMPAT], [test "$enable_sysvcompat" = yes])
+
+if test "$enable_sysvcompat" = yes; then
+	AC_DEFINE([ENABLE_SYSVCOMPAT], [1], [Build sysvinit compatibility tools])
+fi
+
 # Reasons for requiring this library version:
 #
 # 1) RFC 4627, the JSON "memo" (it is *NOT* a standard!) helpfully fails
