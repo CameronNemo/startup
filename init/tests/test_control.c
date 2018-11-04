@@ -65,6 +65,7 @@
 
 extern const char *control_server_address;
 extern int no_inherit_env;
+extern int use_session_bus;
 
 void
 test_server_open (void)
@@ -2726,6 +2727,12 @@ main (int   argc,
 
 	test_list_env ();
 	test_get_env ();
+
+	/* On a typical system level instance, the set-env style
+	 * functions will not be permitted. Set use_session_bus
+	 * so that that the functions may be tested */
+	use_session_bus = TRUE;
+
 	test_set_env ();
 	test_unset_env ();
 	test_reset_env ();
