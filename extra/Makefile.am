@@ -70,7 +70,11 @@ socket_LDADD = \
 	$(DBUS_LIBS)
 else
 EXTRA_DIST += \
-	socket.c
+	socket.c \
+	conf-session/socket.conf \
+	conf/socket.conf \
+	man/startup-socket-bridge.8 \
+	man/socket-event.7
 endif
 
 event_SOURCES = \
@@ -125,9 +129,11 @@ local_LDADD = \
 	$(DBUS_LIBS)
 else
 EXTRA_DIST += \
-	local.c
+	local.c \
+	man/startup-local-bridge.8
 endif
 
+if ENABLE_DCONF_BRIDGE
 dist_sessions_DATA += \
 	conf-session/dconf.conf
 
@@ -135,7 +141,6 @@ dist_man_MANS += \
 	man/startup-dconf-bridge.8 \
 	man/dconf-event.7
 
-if ENABLE_DCONF_BRIDGE
 bridge_PROGRAMS += \
 	dconf
 
@@ -157,9 +162,13 @@ dconf_CFLAGS = \
 	$(DCONF_CFLAGS)
 else
 EXTRA_DIST += \
-	dconf.c
+	dconf.c \
+	conf-session/dconf.conf \
+	man/startup-dconf-bridge.8 \
+	man/dconf-event.7
 endif
 
+if ENABLE_UDEV_BRIDGE
 dist_sessions_DATA += \
 	conf-session/udev.conf
 
@@ -169,7 +178,6 @@ dist_init_DATA += \
 dist_man_MANS += \
 	man/startup-udev-bridge.8
 
-if ENABLE_UDEV_BRIDGE
 bridge_PROGRAMS += \
 	udev
 
@@ -204,7 +212,9 @@ install-data-hook:
 else
 EXTRA_DIST += \
 	udev.c \
-	man/startup-udev-bridge.8
+	man/startup-udev-bridge.8 \
+	conf-session/udev.conf \
+	conf/udev.conf
 endif
 
 com_ubuntu_Upstart_OUTPUTS = \
