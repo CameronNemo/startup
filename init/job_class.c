@@ -2773,10 +2773,12 @@ job_class_induct_job (JobClass *class)
 					&job->fds, &job->num_fds,
 					&job->start_env, &len,
 					"UPSTART_FDS"));
+	}
 
-		event_operator_events (job->class->start_on,
-				job, &job->blocking);
+	event_operator_events (job->class->start_on,
+			job, &job->blocking);
 
+	if (job->goal != JOB_START) {
 		job_change_goal (job, JOB_START);
 	}
 
