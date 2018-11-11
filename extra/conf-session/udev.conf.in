@@ -14,4 +14,4 @@ stop on session-end
 expect daemon
 respawn
 
-exec @startupbridgedir@/udev --daemon
+exec @startupbridgedir@/udev --user --daemon
