@@ -7,6 +7,9 @@ emits *-device-changed
 # From http://www.kernel.org/pub/linux/utils/kernel/hotplug/libudev/libudev-udev-device.html
 emits *-device-online
 emits *-device-offline
+# New in Linux 4.12+
+emits *-device-bind
+emits *-device-unbind
 
 start on starting udev
 stop on stopped udev
