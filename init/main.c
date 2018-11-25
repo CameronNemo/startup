@@ -777,6 +777,9 @@ main (int   argc,
 	session_destroy ();
 	control_cleanup ();
 
+	if (args)
+		nih_free (args);
+
 	return ret;
 }
 
