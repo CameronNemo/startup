@@ -715,7 +715,7 @@ wildcard meta-characters (asterisk (\(aq*\(aq), question mark
 Meta-characters are useful to allow
 .BR initctl "(8) " check\-config
 to resolve a class of events, such as those emitted by
-.BR upstart-udev-bridge (8) "" .
+.BR startup-udev-bridge (8) "" .
 
 .\"
 .TP
@@ -1047,7 +1047,7 @@ If
 .B NAME
 is not specified or does not contain
 .BR $UPSTART_CGROUP ","
-the job processes will not be placed in an upstart-specific
+the job processes will not be placed in a startup-specific cgroup.
 
 Note that this special variable cannot be specified with enclosing
 braces around the name.
@@ -1413,7 +1413,7 @@ and James Hunt
 .\"
 .SH REPORTING BUGS
 Report bugs at
-.RB < https://launchpad.net/upstart/+bugs >
+.RB < https://gitlab.com/chinstrap/startup/startup/issues >
 .\"
 .SH COPYRIGHT
 Copyright \(co 2009-2013 Canonical Ltd.

@@ -12,7 +12,8 @@ runlevel \- event signalling change of system runlevel
 .SH DESCRIPTION
 This page describes the
 .B runlevel
-Upstart event, and the general implementation of runlevels in the Upstart
+event, and the general implementation of runlevels in the
+.BR startup (8)
 system.  For the runlevel tool, see
 .BR runlevel (8)
 .\"
@@ -66,7 +67,7 @@ This is performed by the
 script executed on a change of runlevel
 (by jobs run on the
 .B runlevel
-event in the Upstart system).  This script examines symlinks in the
+event).  This script examines symlinks in the
 .I /etc/rc?.d
 directories, symlinks beginning
 .B K
@@ -94,9 +95,10 @@ is used to bring the system back down into single-user mode, after which
 the runlevel will be
 .BR S .
 .\"
-.SS System V initialisation in Upstart
-The compatible implementation of runlevels permits Upstart jobs to be run
-on the
+.SS System V initialisation
+The compatible implementation of runlevels permits
+.BR startup (8)
+jobs to be run on the
 .B runlevel
 event that perform the same functionality as the original System V
 .BR startup (8)
@@ -140,8 +142,8 @@ providing a login shell.  Once that shell terminates, this restarts the
 .I rc-sysinit
 job to re-enter the default runlevel.
 .\"
-.SS Implementation of runlevels in Upstart
-The Upstart
+.SS Implementation of runlevels
+The
 .BR startup (8)
 daemon has no native concepts of runlevel, and unlike the System V daemon,
 makes no attempt to keep track of the current runlevel.
@@ -151,7 +153,7 @@ Instead a compatible implementation is provided by the
 .BR telinit (8)
 and
 .BR shutdown (8)
-tools supplied with Upstart.
+tools supplied.
 
 The
 .BR telinit (8)

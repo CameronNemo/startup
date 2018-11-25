@@ -1,18 +1,18 @@
-The upstart source tree is available using Bazaar with the following
-URL, if you plan to hack on upstart please work off this branch.
+The startup source tree is available using git with the following
+URL, if you plan to hack on startup please work off this repo.
 
-	http://bazaar.launchpad.net/~scott/upstart/trunk
+	https://gitlab.com/chinstrap/startup/startup
 
 Releases are available from:
 
-	http://upstart.ubuntu.com/download/
+	https://gitlab.com/chinstrap/startup/startup/tags
 
-upstart uses Launchpad's bug tracking system:
+startup uses Gitlab's bug tracking system:
 
-	http://bugs.launchpad.net/upstart/
+	https://gitlab.com/chinstrap/startup/startup/issues
 
 If you want to contribute code or bug fixes, please either provide the
-URL to your own Bazaar branch or use the ‘unified’ diff format
+URL to your own git branch or use the ‘unified’ diff format
 (diff -pu) and attach the patch to a bug.  Please supply a suggested
 ChangeLog entry with your patch.
 
@@ -20,7 +20,7 @@ ChangeLog entry with your patch.
 Maintainer tools
 ----------------
 
-The source tree for upstart uses the GNU Build System (sometimes known
+The source tree for startup uses the GNU Build System (sometimes known
 as the GNU Autotools).  You will need the following versions
 installed.
 
@@ -29,7 +29,7 @@ installed.
 	* GNU Libtool 2.2.4
 	* GNU Gettext 0.16.1
 
-After checking out upstart from Bazaar you will need to use these
+After checking out startup from Bazaar you will need to use these
 tools to generate the build files.  The correct way to do this is to
 simply run ‘autoreconf -i’ from the top-level source directory.
 
@@ -37,8 +37,8 @@ simply run ‘autoreconf -i’ from the top-level source directory.
 libnih
 ------
 
-Upstart normally uses the pre-installed version of libnih, however it's
-possible to use a version from a source tree alongside Upstart by
+startup normally uses the pre-installed version of libnih, however it's
+possible to use a version from a source tree alongside startup by
 passing the path of that tree to the configure script using the
 --with-local-libnih option.
 
@@ -46,8 +46,7 @@ passing the path of that tree to the configure script using the
 Configure options
 -----------------
 
-There are some configure script options that you may find useful when
-hacking on upstart.
+There are some configure script options that you may find useful.
 
 	* --enable-compiler-warnings: (GCC only) adds extra CFLAGS to
 	increase the source checking and treat all warnings as errors.
@@ -66,8 +65,8 @@ hacking on upstart.
 Coding style
 ------------
 
-The coding style for upstart is roughly K&R with function names in
-column 0, and variable names aligned in declarations.
+The coding style is roughly K&R with function names in column 0, and
+variable names aligned in declarations.
 
 The right results can be almost achieved by doing the following.
 
