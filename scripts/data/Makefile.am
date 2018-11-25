@@ -5,7 +5,7 @@ icondir = $(datadir)/icons/hicolor/scalable/apps
 icon = startup-monitor.svg
 icon_DATA = $(icon)
 
-$(icon): $(top_srcdir)/doc/upstart-logo.svg
+$(icon): $(top_srcdir)/doc/startup-logo.svg
 	cp $< $@
 
 EXTRA_DIST = $(desktop_DATA)

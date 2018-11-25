@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
 EXTRA_DIST = \
-	upstart-logo.svg \
+	startup-logo.svg \
 	states.dot \
 	states.png
 
