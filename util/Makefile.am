@@ -53,7 +53,7 @@ endif
 
 initctl_SOURCES = \
 	initctl.c initctl.h \
-	$(top_srcdir)/init/xdg.c $(top_srcdir)/init/xdg.h
+	../init/xdg.c ../init/xdg.h
 nodist_initctl_SOURCES = \
 	$(com_ubuntu_Upstart_OUTPUTS) \
 	$(com_ubuntu_Upstart_Job_OUTPUTS) \
@@ -245,7 +245,7 @@ check_PROGRAMS = $(TESTS)
 test_initctl_SOURCES = \
 	tests/test_initctl.c \
 	initctl.c \
-	$(top_srcdir)/init/xdg.c $(top_srcdir)/init/xdg.h
+	../init/xdg.c ../init/xdg.h
 test_initctl_CFLAGS = $(AM_CFLAGS) -DTEST
 test_initctl_LDADD = \
 	com.ubuntu.Upstart.o \
