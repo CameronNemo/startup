@@ -1,4 +1,4 @@
-description "bridge/udev: emit device events"
+description "bridge-udev: emit device events"
 
 # From udev itself
 emits *-device-added
@@ -11,10 +11,10 @@ emits *-device-offline
 emits *-device-bind
 emits *-device-unbind
 
-start on starting udev
-stop on stopped udev
+start on startup
+stop on session-end
 
 expect daemon
 respawn
 
-exec @startupbridgedir@/udev --daemon
+exec @startupbridgedir@/udev --user --daemon

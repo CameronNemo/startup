@@ -1,4 +1,4 @@
-description "bridge/dbus-system: emit system bus signal events"
+description "bridge-dbus-system: emit system bus signal events"
 
 emits dbus
 

@@ -182,17 +182,17 @@ AC_CONFIG_FILES([
 	util/Makefile
 	conf/Makefile
 	extra/Makefile
-	extra/conf/dbus.conf
-	extra/conf/file.conf
-	extra/conf/socket.conf
-	extra/conf/udev.conf
-	extra/conf-session/dbus-session.conf
-	extra/conf-session/dbus-system.conf
-	extra/conf-session/dconf.conf
-	extra/conf-session/event.conf
-	extra/conf-session/file.conf
-	extra/conf-session/socket.conf
-	extra/conf-session/udev.conf
+	extra/conf/bridge-dbus.conf
+	extra/conf/bridge-file.conf
+	extra/conf/bridge-socket.conf
+	extra/conf/bridge-udev.conf
+	extra/conf-session/bridge-dbus-session.conf
+	extra/conf-session/bridge-dbus-system.conf
+	extra/conf-session/bridge-dconf.conf
+	extra/conf-session/bridge-event.conf
+	extra/conf-session/bridge-file.conf
+	extra/conf-session/bridge-socket.conf
+	extra/conf-session/bridge-udev.conf
 	doc/Makefile
 	contrib/Makefile
 	po/Makefile.in

@@ -1,4 +1,4 @@
-description "bridge/file: emit file events"
+description "bridge-file: emit file events"
 
 emits file
 

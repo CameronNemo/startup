@@ -1,4 +1,4 @@
-description "bridge/dbus-session: emit session bus signal events"
+description "bridge-dbus-session: emit session bus signal events"
 
 emits dbus
 

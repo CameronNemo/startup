@@ -1,4 +1,4 @@
-description "bridge/dconf: emit dconf events"
+description "bridge-dconf: emit dconf events"
 
 emits dconf
 

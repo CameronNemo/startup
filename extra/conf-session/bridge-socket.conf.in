@@ -1,4 +1,4 @@
-description "bridge/socket: emit socket events"
+description "bridge-socket: emit socket events"
 
 emits socket
 

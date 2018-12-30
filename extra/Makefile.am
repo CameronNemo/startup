@@ -15,18 +15,18 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/intl
 
 
-initdir = $(sysconfdir)/init/bridge
+initdir = $(sysconfdir)/init
 
-sessionsdir = $(datadir)/upstart/sessions/bridge
+sessionsdir = $(datadir)/upstart/sessions
 
 bridgedir = $(startupbridgedir)
 
 dist_sessions_DATA = \
-	conf-session/event.conf \
-	conf-session/file.conf \
+	conf-session/bridge-event.conf \
+	conf-session/bridge-file.conf \
 	conf-session/re-exec.conf \
-	conf-session/dbus-session.conf \
-	conf-session/dbus-system.conf
+	conf-session/bridge-dbus-session.conf \
+	conf-session/bridge-dbus-system.conf
 
 bridge_PROGRAMS = \
 	event \
@@ -34,8 +34,8 @@ bridge_PROGRAMS = \
 	dbus
 
 dist_init_DATA = \
-	conf/file.conf \
-	conf/dbus.conf
+	conf/bridge-file.conf \
+	conf/bridge-dbus.conf
 
 dist_man_MANS = \
 	man/startup-event-bridge.8 \
@@ -49,10 +49,10 @@ bridge_PROGRAMS += \
 	socket
 
 dist_sessions_DATA += \
-	conf-session/socket.conf
+	conf-session/bridge-socket.conf
 
 dist_init_DATA += \
-	conf/socket.conf
+	conf/bridge-socket.conf
 
 dist_man_MANS += \
 	man/startup-socket-bridge.8 \
@@ -71,8 +71,8 @@ socket_LDADD = \
 else
 EXTRA_DIST += \
 	socket.c \
-	conf-session/socket.conf \
-	conf/socket.conf \
+	conf-session/bridge-socket.conf \
+	conf/bridge-socket.conf \
 	man/startup-socket-bridge.8 \
 	man/socket-event.7
 endif
@@ -135,7 +135,7 @@ endif
 
 if ENABLE_DCONF_BRIDGE
 dist_sessions_DATA += \
-	conf-session/dconf.conf
+	conf-session/bridge-dconf.conf
 
 dist_man_MANS += \
 	man/startup-dconf-bridge.8 \
@@ -170,10 +170,10 @@ endif
 
 if ENABLE_UDEV_BRIDGE
 dist_sessions_DATA += \
-	conf-session/udev.conf
+	conf-session/bridge-udev.conf
 
 dist_init_DATA += \
-	conf/udev.conf
+	conf/bridge-udev.conf
 
 dist_man_MANS += \
 	man/startup-udev-bridge.8
@@ -213,8 +213,8 @@ else
 EXTRA_DIST += \
 	udev.c \
 	man/startup-udev-bridge.8 \
-	conf-session/udev.conf \
-	conf/udev.conf
+	conf-session/bridge-udev.conf \
+	conf/bridge-udev.conf
 endif
 
 com_ubuntu_Upstart_OUTPUTS = \

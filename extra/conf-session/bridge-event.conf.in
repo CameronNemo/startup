@@ -1,4 +1,4 @@
-description "bridge/event: emit system events in session"
+description "bridge-event: emit system events in session"
 
 emits :sys:*
 
