@@ -1,3 +1,65 @@
+2018-11-24  Cameron Nemo  <camerontnorman@gmail.com>
+
+	* init/main.c: free arguments structure before exiting
+
+2018-11-24  Cameron Nemo  <camerontnorman@gmail.com>
+
+	* init/event.c: add blockers for jobs that have already have
+	  their goal set to stop
+
+2018-11-09  Cameron Nemo  <camerontnorman@gmail.com>
+
+	* init/job_class.c: add blockers for existing job instances
+	  as well as newly created ones
+
+2018-11-03  Cameron Nemo  <camerontnorman@gmail.com>
+
+	* util: add option to disable sysvinit compatibility tools
+
+2018-11-02  Cameron Nemo  <camerontnorman@gmail.com>
+
+	* init/control.c: replace PID1 checks with user_mode checks
+
+2018-11-02  Cameron Nemo  <camerontnorman@gmail.com>
+
+	* scripts/startup-monitor.py:
+	  - support running in CLI mode when GTK is not installed
+
+2018-10-20  Cameron Nemo  <camerontnorman@gmail.com>
+
+	* init/main.c:
+	* init/system.c:
+	  - fix compilation on newer glibc by including sys/sysmacros.h
+
+2018-09-24  Cameron Nemo  <camerontnorman@gmail.com>
+
+	* util/utmp.c:
+	* util/runlevel.c:
+	  - fix compilation with musl libc by adding stub utmp/wtmp defs
+
+2018-10-20  Cameron Nemo  <camerontnorman@gmail.com>
+
+	* init/job_process.c: when a process terminates between the
+	  spawning and running states, respawn it appropriately
+
+2018-09-24  Martin Pitt  <martin.pitt@ubuntu.com>
+
+	* extra/udev.c: support running under a user session
+
+2018-09-23  Cameron Nemo  <camerontnorman@gmail.com>
+
+	* extra/socket.c:
+	  - Add option to support running under a user session
+	  - Use SOCKET_PATH variable rather than PATH
+
+2018-10-20  Brian Norris  <briannorris@chromium.org>
+
+	* extra/socket.c: unlink domain sockets on exit
+	  - In case the socket bridge is restarted, remove any domain
+	    sockets that are created.
+	  - Cleanup existing sockets before calling bind()
+	  - Ensure that the path passed to unlink() is NULL terminated
+
 2016-05-02  Steve Langasek  <steve.langasek@ubuntu.com>
 
 	* init/tests/test_job_process.c: Adjust the script-oriented logging
