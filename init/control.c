@@ -135,6 +135,14 @@ DBusConnection *control_bus = NULL;
  **/
 NihList *control_conns = NULL;
 
+/**
+ * disable_dbus:
+ *
+ * If TRUE, do not connect to a D-Bus bus
+ * (only connect to the private socket).
+ **/
+int disable_dbus = FALSE;
+
 /* External definitions */
 extern int      user_mode;
 extern int      disable_respawn;
@@ -948,13 +956,6 @@ control_notify_dbus_address (void            *data,
 	nih_assert (message);
 	nih_assert (address);
 
-	if (use_session_bus == FALSE && user_mode == FALSE) {
-		nih_dbus_error_raise_printf (
-			DBUS_INTERFACE_UPSTART ".Error.PermissionDenied",
-			_("Not permissible to notify D-Bus address at system level"));
-		return -1;
-	}
-
 	if (! control_check_permission (message)) {
 		nih_dbus_error_raise_printf (
 			DBUS_INTERFACE_UPSTART ".Error.PermissionDenied",
@@ -962,14 +963,27 @@ control_notify_dbus_address (void            *data,
 		return -1;
 	}
 
+	/* Ignore if configured to not connect to the bus */
+	if (disable_dbus)
+		return 0;
+
 	/* Ignore as already connected */
 	if (control_bus)
 		return 0;
 
-	control_bus_address = nih_strdup (NULL, address);
-	if (! control_bus_address) {
-		nih_dbus_error_raise_printf (DBUS_ERROR_NO_MEMORY,
-				_("Out of Memory"));
+	if (user_mode) {
+		control_bus_address = nih_strdup (NULL, address);
+		if (! control_bus_address) {
+			nih_dbus_error_raise_printf (DBUS_ERROR_NO_MEMORY,
+					_("Out of Memory"));
+			return -1;
+		}
+	} else if (strncmp (address, "", 1)) {
+		/* When running a system instance or in session bus mode, the
+		 * notified address should be "". Raise an error if it is not.
+		 */
+		nih_dbus_error_raise_printf (DBUS_ERROR_INVALID_ARGS,
+			_("D-Bus address must be empty when not in user mode"));
 		return -1;
 	}
 

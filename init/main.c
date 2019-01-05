@@ -139,14 +139,6 @@ static char *initial_event = NULL;
  **/
 static int disable_startup_event = FALSE;
 
-/**
- * disable_dbus:
- *
- * If TRUE, do not connect to a D-Bus bus
- * (only connect to the private socket).
- **/
-static int disable_dbus = FALSE;
-
 extern int          no_inherit_env;
 extern int          user_mode;
 extern int          chroot_sessions;
@@ -158,6 +150,7 @@ extern char        *log_dir;
 extern DBusBusType  dbus_bus_type;
 extern mode_t       initial_umask;
 extern int          debug_stanza_enabled;
+extern int          disable_dbus;
 
 #ifdef ENABLE_CGROUPS
 extern int          disable_cgroups;
@@ -475,6 +468,7 @@ main (int   argc,
 	nih_signal_set_handler (SIGALRM, nih_signal_handler);
 
 #ifndef DEBUG
+	/* FIXME: we probably should use a PID1 comparison here */
 	if (use_session_bus == FALSE && user_mode == FALSE) {
 		/* Ask the kernel to send us SIGINT when control-alt-delete is
 		 * pressed; generate an event with the same name.
