@@ -139,6 +139,13 @@ static char *initial_event = NULL;
  **/
 static int disable_startup_event = FALSE;
 
+/**
+ * pid_one:
+ *
+ * If TRUE, running as PID 1.
+ **/
+static int pid_one = FALSE;
+
 extern int          no_inherit_env;
 extern int          user_mode;
 extern int          chroot_sessions;
@@ -264,6 +271,9 @@ main (int   argc,
 	if (! user_mode)
 		no_inherit_env = TRUE;
 
+	if (getpid() == 1)
+		pid_one = TRUE;
+
 #ifndef DEBUG
 	if (use_session_bus == FALSE && user_mode == FALSE) {
 
@@ -277,7 +287,7 @@ main (int   argc,
 
 #ifdef ENABLE_SYSVCOMPAT
 		/* Check we're process #1 */
-		if (getpid () > 1) {
+		if (pid_one) {
 			execv (TELINIT, argv);
 			/* Ignore failure, probably just that telinit doesn't exist */
 
@@ -468,8 +478,7 @@ main (int   argc,
 	nih_signal_set_handler (SIGALRM, nih_signal_handler);
 
 #ifndef DEBUG
-	/* FIXME: we probably should use a PID1 comparison here */
-	if (use_session_bus == FALSE && user_mode == FALSE) {
+	if (pid_one) {
 		/* Ask the kernel to send us SIGINT when control-alt-delete is
 		 * pressed; generate an event with the same name.
 		 */
@@ -506,9 +515,9 @@ main (int   argc,
 	}
 
 	/* SIGTERM instructs us to re-exec ourselves when running as PID
-	 * 1, or to exit when running as a Session Init; this signal should
-	 * be the last in the list to ensure that all other signals are
-	 * handled before a SIGTERM.
+	 * 1, or to exit when running as a Session Init or a non-PID1 system
+	 * init; this signal should be the last in the list to ensure that
+	 * all other signals are handled before a SIGTERM.
 	 */
 	nih_signal_set_handler (SIGTERM, nih_signal_handler);
 	NIH_MUST (nih_signal_add_handler (NULL, SIGTERM, term_handler, NULL));
@@ -948,13 +957,14 @@ term_handler (void      *data,
 	nih_assert (args_copy[0] != NULL);
 	nih_assert (signal != NULL);
 
-	if (user_mode) {
+	if (pid_one || use_session_bus) {
+		nih_warn (_("Re-executing %s"), args_copy[0]);
+		stateful_reexec ();
+	} else {
 		quiesce (QUIESCE_REQUESTER_SYSTEM);
-		return;
 	}
 
-	nih_warn (_("Re-executing %s"), args_copy[0]);
-	stateful_reexec ();
+	return;
 }
 
 
