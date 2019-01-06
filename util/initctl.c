@@ -1969,6 +1969,45 @@ check_config_action (NihCommand *command,
 }
 
 /**
+ * re_exec_action:
+ * @command: NihCommand invoked,
+ * @args: command-line arguments.
+ *
+ * This function is called for the "re-exec" command.
+ *
+ * Returns: command exit status.
+ **/
+int
+re_exec_action (NihCommand *command, char * const *args)
+{
+	nih_local NihDBusProxy *upstart = NULL;
+	NihDBusError           *dbus_err;
+
+	nih_assert (command != NULL);
+	nih_assert (args != NULL);
+
+	upstart = upstart_open (NULL);
+	if (! upstart)
+		return 1;
+
+	if (upstart_restart_sync (NULL, upstart) >= 0)
+		return 0;
+
+	dbus_err = (NihDBusError *)nih_error_get ();
+
+	if (dbus_err->number == NIH_DBUS_ERROR &&
+	    strcmp(dbus_err->name, DBUS_ERROR_NO_REPLY) == 0) {
+		/* No expectation of a reply */
+		nih_free (dbus_err);
+		return 0;
+	} else {
+		nih_error ("%s", dbus_err->message);
+		nih_free (dbus_err);
+		return 1;
+	}
+}
+
+/**
  * notify_disk_writeable_action:
  * @command: NihCommand invoked,
  * @args: command-line arguments.
@@ -3322,6 +3361,11 @@ static NihCommand commands[] = {
 	  N_("List all sessions."),
 	  N_("Displays list of running Session Init sessions"),
 	  NULL, NULL, list_sessions_action },
+
+	{ "re-exec", NULL,
+	  N_("Instruct Upstart to perform a stateful re-exec"),
+	  N_("Upstart will serialize its state and re-exec itself"),
+	  NULL, NULL, re_exec_action },
 
 	NIH_COMMAND_LAST
 };
