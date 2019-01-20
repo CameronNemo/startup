@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+initctl re-exec >/dev/null 2>&1 || :
+
+#DEBHELPER#

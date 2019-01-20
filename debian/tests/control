@@ -1,0 +1,3 @@
+Test-Command: true
+Depends: @, dbus
+Restrictions: build-needed

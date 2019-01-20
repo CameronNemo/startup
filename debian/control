@@ -1,0 +1,61 @@
+Source: startup
+Section: admin
+Priority: optional
+Maintainer: Cameron Nemo <camerontnorman@gmail.com>
+Standards-Version: 4.3.0
+Build-Depends: debhelper (>= 9), pkg-config (>= 0.22), libnih-dev (>= 1.0.3), libnih-dbus-dev (>= 1.0.3), nih-dbus-tool (>= 1.0.3), libdbus-1-dev (>= 1.2.16), libexpat1-dev (>= 2.0.0), libudev-dev (>= 151-5), libjson-c-dev (>= 0.10), dbus, bash-completion, dh-autoreconf, autopoint, dh-python, python3:any, automake (>= 1.12)
+X-Python3-Version: >= 3.2
+Vcs-Git: https://gitlab.com/chinstrap/startup.git
+Vcs-Browser: https://gitlab.com/chinstrap/startup/tree/deb-packaging
+Homepage: https://gitlab.com/chinstrap/startup
+XS-Testsuite: autopkgtest
+
+Package: startup
+Architecture: amd64 arm64 ppc64el i386 armhf powerpc
+Depends: ${shlibs:Depends}, ${misc:Depends}, debianutils (>= 4)
+Suggests: startup-tools
+Multi-Arch: foreign
+Description: Event driven service and task manager - essential binaries
+ startup is an event driven service and task manager.
+ In addition to handling system initialization, startup can
+ manage services and tasks in unprivileged user sessions.
+ .
+ This package provides all essential startup components, sufficient
+ for running user sessions managed by startup.
+
+Package: startup-tools
+Architecture: all
+Section: utils
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, startup (>= 1.7), python3-dbus, python3-gi
+Suggests: graphviz
+Description: Event driven service and task manager - analysis tools
+ This package contains a monitor that may be run both as a
+ command-line tool or as a graphical one. It displays startup 
+ events as they are emitted. It is useful for observing system
+ changes and for determining appropriate events for new jobs.
+ Additionally, this package contains a tool that generates
+ dot graphs from startup configuration.
+
+Package: libupstart1
+Architecture: amd64 arm64 armhf i386 powerpc ppc64el
+Section: libs
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Multi-Arch: same
+Description: startup Client Library
+ The libupstart library allows access to services provided by the startup
+ daemon without having to use low-level D-Bus calls.
+ .
+ This package contains the shared library.
+
+Package: libupstart-dev
+Architecture: amd64 arm64 armhf i386 powerpc ppc64el
+Section: libdevel
+Multi-Arch: same
+Depends: libupstart1 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: startup Client Library (development files)
+ The libupstart library allows access to services provided by the startup
+ daemon without having to use low-level D-Bus calls.
+ .
+ This package contains the static library and C header files which are
+ needed for developing software using libupstart.

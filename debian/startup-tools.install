@@ -1,0 +1,6 @@
+usr/bin/initctl2dot
+usr/bin/startup-monitor
+usr/share/icons/hicolor/scalable/apps/startup-monitor.svg
+usr/share/applications/startup-monitor.desktop
+usr/share/man/man8/initctl2dot.8
+usr/share/man/man8/startup-monitor.8
