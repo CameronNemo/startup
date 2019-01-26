@@ -4,8 +4,7 @@ image:
 
 stages:
         - lint
-        - build
-        - test
+        - build-test
 
 before_script:
         - xbps-install -Syu
@@ -14,13 +13,10 @@ cppcheck:
         stage: lint
         script: cppcheck --inline-suppr --error-exitcode=3 .
 
-compile:
-        stage: build
+autotools:
+        stage: build-test
         script:
                 - autoreconf -fi
                 - ./configure
                 - make
-
-check:
-        stage: test
-        script: make check
+                - make check
