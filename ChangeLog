@@ -1,3 +1,11 @@
+2019-01-26  Cameron Nemo  <camerontnorman@gmail.com>
+
+	* util/initctl.c: implement re-exec subcommand
+	* init/main.c: exit cleanly on SIGTERM when not PID1
+	* init/control.c:
+	  - allow using the notify-dbus-address interface when
+	    running in system mode
+
 2018-11-24  Cameron Nemo  <camerontnorman@gmail.com>
 
 	* init/main.c: free arguments structure before exiting
