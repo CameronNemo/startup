@@ -5626,7 +5626,7 @@ test_handler (void)
 
 	source = conf_source_new (NULL, "/tmp", CONF_JOB_DIR);
 	file = conf_file_new (source, "/tmp/test");
-	file->job = class = job_class_new (NULL, "test", NULL);
+	file->job = (class = job_class_new (NULL, "test", NULL));
 	TEST_NE_P (file->job, NULL);
 	class->process[PROCESS_MAIN] = process_new (class);
 	class->process[PROCESS_MAIN]->command = "echo";

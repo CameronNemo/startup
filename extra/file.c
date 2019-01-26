@@ -196,7 +196,7 @@
  * Increment @path to skip over multiple leading slashes.
  **/
 #define skip_slashes(path) \
-	while (*(path) == '/' && (path)+1 && *((path)+1) == '/') \
+	while (*(path) == '/' && *((path)+1) && *((path)+1) == '/') \
 		(path)++
 
 /**

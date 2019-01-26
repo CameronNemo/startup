@@ -2777,8 +2777,9 @@ stanza_limit (JobClass        *class,
 	} else if (! strcmp (arg, "stack")) {
 		resource = RLIMIT_STACK;
 	} else {
-		nih_return_error (-1, NIH_CONFIG_UNKNOWN_STANZA,
-				  _(NIH_CONFIG_UNKNOWN_STANZA_STR));
+		nih_error_raise (NIH_CONFIG_UNKNOWN_STANZA,
+				 _(NIH_CONFIG_UNKNOWN_STANZA_STR));
+		return -1;
 	}
 
 

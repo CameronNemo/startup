@@ -311,8 +311,12 @@ utmp_entry (struct utmpx *utmp,
 	utmp->ut_type = type;
 	utmp->ut_pid = pid;
 
+	/* cppcheck does not understand nih_assert semantics above */
+	/* cppcheck-suppress nullPointer */
 	strncpy (utmp->ut_line, line, sizeof utmp->ut_line);
+	/* cppcheck-suppress nullPointer */
 	strncpy (utmp->ut_id, id, sizeof utmp->ut_id);
+	/* cppcheck-suppress nullPointer */
 	strncpy (utmp->ut_user, user, sizeof utmp->ut_user);
 
 	if (uname (&uts) == 0)
