@@ -1,0 +1,26 @@
+image:
+        name: cameronnemo/gitlab-ci-startup
+        entrypoint: [""]
+
+stages:
+        - lint
+        - build
+        - test
+
+before_script:
+        - xbps-install -Syu
+
+cppcheck:
+        stage: lint
+        script: cppcheck --inline-suppr --error-exitcode=3 .
+
+compile:
+        stage: build
+        script:
+                - autoreconf -fi
+                - ./configure
+                - make
+
+check:
+        stage: test
+        script: make check
