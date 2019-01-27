@@ -16,7 +16,13 @@ cppcheck:
 autotools:
         stage: build-test
         script:
-                - autoreconf -fi
-                - ./configure
-                - make
-                - make check
+                - useradd -d /var/empty -M -U gitlab-ci-startup
+                - chown -R gitlab-ci-startup:gitlab-ci-startup ..
+                - |
+                        runuser -u gitlab-ci-startup -g gitlab-ci-startup -- sh -e -x << EOS
+                        test ! -d startup || cd startup
+                        autoreconf -fi
+                        ./configure
+                        make
+                        make check
+                        EOS
