@@ -1,3 +1,9 @@
+1.13.4  2019-02-01 "Mary got me merry"
+
+	* Improve behavior of a system instance that is not run as
+	  PID 1: exit cleanly on SIGTERM, use initctl to notify a
+	  re-exec and dbus address
+
 1.13.3  2018-12-29 "Here But I'm Gone"
 
 	* Blocking on multiple start or stop events is now possible
