@@ -398,12 +398,7 @@ system console or log, useful for debugging boot.
 Outputs version information and exits.
 .\"
 .SH NOTES
-.B startup
-is not normally executed by a user process, and expects to have a process
-id of 1.  If this is not the case, it will actually execute
-.BR telinit (8)
-and pass all arguments to that.  See that manual page for further
-details. However, if the
+If the
 .B \-\-user
 option is specified, it will run as a
 .B Session Init
