@@ -1905,7 +1905,9 @@ stanza_expect (JobClass        *class,
 	if (! arg)
 		goto finish;
 
-	if (! strcmp (arg, "stop")) {
+	if (! strcmp (arg, "readyfd")) {
+		class->expect = EXPECT_READYFD;
+	} else if (! strcmp (arg, "stop")) {
 		class->expect = EXPECT_STOP;
 	} else if (! strcmp (arg, "daemon")) {
 		class->expect = EXPECT_DAEMON;

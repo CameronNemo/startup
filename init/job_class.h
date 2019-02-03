@@ -49,7 +49,8 @@ typedef enum expect_type {
 	EXPECT_NONE,
 	EXPECT_STOP,
 	EXPECT_DAEMON,
-	EXPECT_FORK
+	EXPECT_FORK,
+	EXPECT_READYFD
 } ExpectType;
 
 /**
