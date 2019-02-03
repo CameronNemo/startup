@@ -2474,11 +2474,11 @@ test_enums (void)
 	/*******************************/
 	TEST_FEATURE ("ExpectType");
 
-	for (i = -3; i < EXPECT_FORK+3; i++) {
+	for (i = -4; i < EXPECT_READYFD+4; i++) {
 
 		/* convert to string value */
 		string_value = job_class_expect_type_enum_to_str (i);
-		if (i < 0 || i > EXPECT_FORK) {
+		if (i < 0 || i > EXPECT_READYFD) {
 			TEST_EQ_P (string_value, NULL);
 			continue;
 		} else {
@@ -2487,7 +2487,7 @@ test_enums (void)
 
 		/* convert back to enum */
 		blocked_value = job_class_expect_type_str_to_enum (string_value);
-		if (i < 0 || i > EXPECT_FORK) {
+		if (i < 0 || i > EXPECT_READYFD) {
 			TEST_EQ (blocked_value, -1);
 		} else {
 			TEST_NE (blocked_value, -1);

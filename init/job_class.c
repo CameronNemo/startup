@@ -2524,6 +2524,7 @@ job_class_expect_type_enum_to_str (ExpectType expect)
 	state_enum_to_str (EXPECT_STOP, expect);
 	state_enum_to_str (EXPECT_DAEMON, expect);
 	state_enum_to_str (EXPECT_FORK, expect);
+	state_enum_to_str (EXPECT_READYFD, expect);
 
 	return NULL;
 }
@@ -2546,6 +2547,7 @@ job_class_expect_type_str_to_enum (const char *expect)
 	state_str_to_enum (EXPECT_STOP, expect);
 	state_str_to_enum (EXPECT_DAEMON, expect);
 	state_str_to_enum (EXPECT_FORK, expect);
+	state_str_to_enum (EXPECT_READYFD, expect);
 
 	return -1;
 }

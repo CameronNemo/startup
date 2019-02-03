@@ -156,8 +156,9 @@ pid_t  job_process_spawn   (Job *job, char * const argv[],
 	__attribute__ ((warn_unused_result));
 
 pid_t  job_process_spawn_with_fd   (Job *job, char * const argv[],
-			    char * const *env, int trace, int script_fd,
-			    ProcessType process, int *job_process_fd)
+			    char **env, int trace, int script_fd,
+			    int readyfd, ProcessType process,
+			    int *job_process_fd)
 	__attribute__ ((warn_unused_result));
 
 

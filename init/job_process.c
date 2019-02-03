@@ -141,6 +141,9 @@ static void job_process_trace_signal    (Job *job, ProcessType process,
 					 int signum);
 static void job_process_trace_fork      (Job *job, ProcessType process);
 static void job_process_trace_exec      (Job *job, ProcessType process);
+static int  job_process_readyfd_new     (Job *job);
+static void job_process_readyfd_reader  (Job *job, NihIo *io, const char *buf,
+                                         size_t len);
 
 extern char         *control_server_address;
 extern int           user_mode;
@@ -195,7 +198,7 @@ job_process_start (Job                    *job,
 	size_t              argc, envc;
 	int                 fds[2] = { -1, -1 };
 	int                 trace = FALSE, shell = FALSE;
-	int                 job_process_fd = -1;
+	int                 job_process_fd = -1, readyfd = -1;
 	JobProcessData     *process_data = NULL;
 
 	nih_assert (job);
@@ -303,15 +306,21 @@ job_process_start (Job                    *job,
 	/* If we're about to spawn the main job and we expect it to become
 	 * a daemon or fork before we can move out of spawned, we need to
 	 * set a trace on it.
+	 * Likewise, if we expect it to notify us on a pipe, we need to set
+	 * up an nih_io handler.
 	 */
-	if ((process == PROCESS_MAIN)
-	    && ((job->class->expect == EXPECT_DAEMON)
-		|| (job->class->expect == EXPECT_FORK)))
-		trace = TRUE;
+	if (process == PROCESS_MAIN) {
+		if ((job->class->expect == EXPECT_DAEMON)
+		     || (job->class->expect == EXPECT_FORK))
+			trace = TRUE;
+		if (job->class->expect == EXPECT_READYFD)
+			readyfd = job_process_readyfd_new (job);
+	}
 
 	/* Spawn the process, repeat until fork() works */
 	while ((job->pid[process] = job_process_spawn_with_fd (job, argv, env,
-					trace, fds[0], process, &job_process_fd)) < 0) {
+					trace, fds[0], readyfd, process,
+					&job_process_fd)) < 0) {
 		NihError *err;
 
 		err = nih_error_get ();
@@ -368,6 +377,7 @@ job_process_start (Job                    *job,
  * @env: NULL-terminated list of environment variables for the process,
  * @trace: whether to trace this process,
  * @script_fd: script file descriptor,
+ * @readyfd: readiness notification file descriptor,
  * @process: job process to spawn,
  * @job_process_fd: readable child setup pipe file descriptor.
  *
@@ -388,6 +398,9 @@ job_process_start (Job                    *job,
  * If @script_fd is not -1, this file descriptor is dup()d to the special fd 9
  * (moving any other out of the way if necessary).
  *
+ * If @readyfd is not -1, this file descriptor is passed to the child process
+ * and the environment variable READY_FD is set.
+ *
  * This function only spawns the process, it is up to the caller to ensure
  * that the information is saved into the job and that the process is watched,
  * etc. Also, it is up to the caller to monitor @job_process_fd to
@@ -405,9 +418,10 @@ job_process_start (Job                    *job,
 pid_t
 job_process_spawn_with_fd (Job          *job,
 		   char * const  argv[],
-		   char * const *env,
+		   char        **env,
 		   int           trace,
 		   int           script_fd,
+		   int           readyfd,
 		   ProcessType   process,
 		   int          *job_process_fd)
 {
@@ -548,6 +562,9 @@ job_process_spawn_with_fd (Job          *job,
 
 		nih_io_set_cloexec (*job_process_fd);
 
+		if (readyfd != -1)
+			close (readyfd);
+
 		return pid;
 	} else if (pid < 0) {
 		nih_error_raise_system ();
@@ -555,6 +572,8 @@ job_process_spawn_with_fd (Job          *job,
 		sigprocmask (SIG_SETMASK, &orig_set, NULL);
 		close (fds[0]);
 		close (fds[1]);
+		if (readyfd != -1)
+			close (readyfd);
 		if (class->console == CONSOLE_LOG) {
 			nih_free (job->log[process]);
 			job->log[process] = NULL;
@@ -577,6 +596,12 @@ job_process_spawn_with_fd (Job          *job,
 
 	job_process_remap_fd (&fds[1], JOB_PROCESS_SCRIPT_FD, fds[1]);
 	nih_io_set_cloexec (fds[1]);
+
+	if (readyfd != -1) {
+		job_process_remap_fd (&readyfd, JOB_PROCESS_SCRIPT_FD, fds[1]);
+		NIH_MUST (environ_set (&env, NULL, NULL, TRUE,
+		                       "READY_FD=%d", readyfd));
+	}
 
 	if (class->console == CONSOLE_LOG) {
 		struct sigaction act;
@@ -2247,6 +2272,61 @@ job_process_trace_exec (Job         *job,
 	}
 }
 
+/**
+ * job_process_readyfd_new:
+ * @job: parent job for readyfd.
+ *
+ * Creates a pipe for readiness notifications from the job. On the read end
+ * of the pipe, the cloexec flag is set and a read handler is added.
+ *
+ * Returns: file descriptor for the write end of the pipe.
+ **/
+static int
+job_process_readyfd_new (Job *job)
+{
+	int fds[2] = { -1,-1 };
+
+	nih_assert (job);
+
+	NIH_ZERO (pipe (fds));
+
+	nih_io_set_cloexec (fds[0]);
+
+	while (! nih_io_reopen (job, fds[0], NIH_IO_STREAM,
+	                        (NihIoReader)job_process_readyfd_reader,
+	                        NULL, NULL, job)) {
+		NihError *err;
+		err = nih_error_get ();
+		if (err->number != ENOMEM)
+			nih_assert_not_reached ();
+		nih_free (err);
+	}
+
+	return fds[1];
+}
+
+/**
+ * job_process_readyfd_reader:
+ * @job: job which has been spawned,
+ * @io: NihIo structure,
+ * @buf: buffer with the contents of the stream,
+ * @len: bytes in @buf.
+ *
+ * Searches for a newline in @buf. If found, attempts to move @job out of the
+ * spawned state into the running state.
+ *
+ **/
+static void
+job_process_readyfd_reader (Job *job, NihIo *io, const char *buf, size_t len)
+{
+	nih_assert (job);
+	nih_assert (io);
+	nih_assert (buf);
+	nih_assert (len >= 0);
+
+	if ((job->state == JOB_SPAWNED) && (strchr (buf, '\n')))
+		job_change_state (job, job_next_state (job));
+}
 
 /**
  * job_process_find:

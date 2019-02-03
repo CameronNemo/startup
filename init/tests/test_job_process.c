@@ -4335,7 +4335,8 @@ test_spawn (void)
 	class->console = CONSOLE_NONE;
 	job   = job_new (class, "");
 
-	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	waitpid (pid, NULL, 0);
@@ -4376,7 +4377,8 @@ test_spawn (void)
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
-	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	waitpid (pid, NULL, 0);
@@ -4408,7 +4410,8 @@ test_spawn (void)
 	class->console = CONSOLE_LOG;
 	job = job_new (class, "");
 
-	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	waitpid (pid, NULL, 0);
@@ -4455,7 +4458,8 @@ test_spawn (void)
 	class->chdir = "/tmp";
 	job = job_new (class, "");
 
-	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	waitpid (pid, NULL, 0);
@@ -4487,7 +4491,8 @@ test_spawn (void)
 	class->console = CONSOLE_NONE;
 	job   = job_new (class, "");
 
-	pid = job_process_spawn_with_fd (job, args, env, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, env, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	waitpid (pid, NULL, 0);
@@ -4517,7 +4522,8 @@ test_spawn (void)
 	class->console = CONSOLE_NONE;
 	job   = job_new (class, "");
 
-	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	assert0 (waitid (P_PID, pid, &info, WEXITED | WSTOPPED | WCONTINUED));
@@ -4540,7 +4546,8 @@ test_spawn (void)
 	class = job_class_new (NULL, "test", NULL);
 	job   = job_new (class, "");
 	class->console = CONSOLE_NONE;
-	pid = job_process_spawn_with_fd (job, args, NULL, TRUE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, NULL, TRUE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	assert0 (waitid (P_PID, pid, &info, WEXITED | WSTOPPED | WCONTINUED));
@@ -4574,7 +4581,8 @@ test_spawn (void)
 	class->console = CONSOLE_NONE;
 	job   = job_new (class, "");
 
-	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_NE (pid, 0);
 
 	buffer = read_from_fd (NULL, job_process_fd);
@@ -4608,7 +4616,8 @@ test_spawn (void)
 
 	TEST_NE_P (job->log, NULL);
 	TEST_EQ_P (job->log[PROCESS_MAIN], NULL);
-	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	job->process_data[PROCESS_MAIN] = NIH_MUST (
 		job_process_data_new (job->process_data, job, PROCESS_MAIN, job_process_fd));
 	TEST_WATCH_UPDATE ();
@@ -4648,7 +4657,8 @@ test_spawn (void)
 	args[1] = function;
 	args[2] = NULL;
 
-	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	/* Ensure process is still running after some period of time.
@@ -4685,7 +4695,8 @@ test_spawn (void)
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
-	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	waitpid (pid, NULL, 0);
@@ -4740,7 +4751,8 @@ test_spawn (void)
 	class->console = CONSOLE_LOG;
 	job = job_new (class, "");
 
-	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	waitpid (pid, NULL, 0);
@@ -4814,7 +4826,9 @@ test_spawn (void)
 	args[3] = NULL;
 
 	job->pid[PROCESS_MAIN] = job_process_spawn_with_fd (job, args, NULL,
-							    FALSE, -1, PROCESS_MAIN, &job_process_fd);
+							    FALSE, -1, -1,
+							    PROCESS_MAIN,
+							    &job_process_fd);
 	pid = job->pid[PROCESS_MAIN];
 	TEST_GT (pid, 0);
 
@@ -4841,7 +4855,9 @@ test_spawn (void)
 	args[3] = NULL;
 
 	job->pid[PROCESS_POST_START] = job_process_spawn_with_fd (job, args, NULL,
-								  FALSE, -1, PROCESS_POST_START, &job_process_fd);
+								  FALSE, -1, -1,
+								  PROCESS_POST_START,
+								  &job_process_fd);
 	pid = job->pid[PROCESS_POST_START];
 	TEST_GT (pid, 0);
 
@@ -4938,7 +4954,9 @@ test_spawn (void)
 			NIH_MUST (nih_str_array_add (&args_array, NULL, &argc, script));
 		}
 
-		pid = job_process_spawn_with_fd (job, args_array, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+		pid = job_process_spawn_with_fd (job, args_array, NULL, FALSE,
+		                                 -1, -1, PROCESS_MAIN,
+						 &job_process_fd);
 
 		if (test_alloc_failed) {
 			TEST_LT (pid, 0);
@@ -5005,7 +5023,8 @@ test_spawn (void)
 	NIH_MUST (nih_str_array_add (&args_array, NULL, &argc, TEST_SHELL_ARG));
 	NIH_MUST (nih_str_array_add (&args_array, NULL, &argc, script));
 
-	pid = job_process_spawn_with_fd (job, args_array, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args_array, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	TEST_EQ (waitpid (pid, &status, 0), pid);
@@ -5061,7 +5080,8 @@ test_spawn (void)
 	NIH_MUST (nih_str_array_add (&args_array, NULL, &argc, TEST_SHELL_ARG));
 	NIH_MUST (nih_str_array_add (&args_array, NULL, &argc, script));
 
-	pid = job_process_spawn_with_fd (job, args_array, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args_array, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	TEST_EQ (waitpid (pid, &status, 0), pid);
@@ -5114,7 +5134,8 @@ test_spawn (void)
 	NIH_MUST (nih_str_array_add (&args_array, NULL, &argc, "-en"));
 	NIH_MUST (nih_str_array_add (&args_array, NULL, &argc, "\\000"));
 
-	pid = job_process_spawn_with_fd (job, args_array, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args_array, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	TEST_EQ (waitpid (pid, &status, 0), pid);
@@ -5169,7 +5190,8 @@ test_spawn (void)
 	args[3] = filebuf;
 	args[4] = NULL;
 
-	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	TEST_NE (waitpid (pid, &status, 0), -1);
@@ -5232,7 +5254,8 @@ test_spawn (void)
 	args[3] = filebuf;
 	args[4] = NULL;
 
-	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+	pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, -1,
+	                                 PROCESS_MAIN, &job_process_fd);
 	TEST_GT (pid, 0);
 
 	TEST_WATCH_UPDATE ();
@@ -5314,7 +5337,8 @@ test_spawn (void)
 				}
 			}
 
-			pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, PROCESS_MAIN, &job_process_fd);
+			pid = job_process_spawn_with_fd (job, args, NULL, FALSE, -1, -1,
+			                                 PROCESS_MAIN, &job_process_fd);
 			TEST_WATCH_UPDATE ();
 			TEST_NE (pid, 0);
 
