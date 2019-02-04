@@ -822,7 +822,6 @@ test_pending_handle_jobs (void)
 	}
 
 
-#if 0 /* FIXME: broke after 8bc67ec3cf7214a0c1a1b39f3592760b2d15644a */
 	/* Check that a job that is already running is not affected by the
 	 * start events happening again.
 	 */
@@ -958,7 +957,6 @@ test_pending_handle_jobs (void)
 		nih_free (event3);
 		nih_free (event4);
 	}
-#endif
 
 
 	/* Check that the class's instance name undergoes expansion against
@@ -1486,9 +1484,8 @@ test_pending_handle_jobs (void)
 	}
 
 
-#if 0 /* FIXME: broke after 8bc67ec3cf7214a0c1a1b39f3592760b2d15644a */
-	/* Check that a job that is already stopping is not affected by the
-	 * stop events happening again.
+	/* Check that a job that is already stopping still blocks stop
+	 * events that happen again but is not affected by those events.
 	 */
 	TEST_FEATURE ("with already stopping job");
 	TEST_ALLOC_FAIL {
@@ -1544,7 +1541,8 @@ test_pending_handle_jobs (void)
 
 		event_poll ();
 
-		TEST_FREE (event1);
+		TEST_NOT_FREE (event1);
+		nih_free (event1);
 
 		TEST_HASH_NOT_EMPTY (class->instances);
 
@@ -1568,14 +1566,61 @@ test_pending_handle_jobs (void)
 		TEST_NOT_FREE (blocked2);
 		nih_free (blocked1);
 		nih_free (blocked2);
-		TEST_LIST_EMPTY (&job->blocking);
+		/* event1 should still be blocked */
+		TEST_LIST_NOT_EMPTY (&job->blocking);
 
 		nih_free (class);
 		nih_free (event3);
 		nih_free (event4);
 	}
-#endif
 
+
+	/**
+	 * Check that a job that is already stopped does not block any
+	 * stop events that happen again.
+	 */
+	TEST_FEATURE ("with an already stopped job");
+	TEST_ALLOC_FAIL {
+		TEST_ALLOC_SAFE {
+			event1 = event_new (NULL, "wibble", NULL);
+
+			TEST_FREE_TAG (event1);
+
+			class = job_class_new (NULL, "test", NULL);
+			class->console = CONSOLE_NONE;
+			class->task = TRUE;
+
+			class->process[PROCESS_POST_STOP] = process_new (class);
+			class->process[PROCESS_POST_STOP]->command = "echo";
+
+			class->stop_on = event_operator_new (
+				class, EVENT_MATCH, "wibble", NULL);
+
+			job = job_new (class, "");
+			job->goal = JOB_STOP;
+			job->state = JOB_WAITING;
+
+			nih_hash_add (job_classes, &class->entry);
+		}
+
+		event_poll ();
+
+		TEST_FREE (event1);
+
+		TEST_HASH_NOT_EMPTY (class->instances);
+
+		job = (Job *)nih_hash_lookup (class->instances, "");
+
+		TEST_EQ (job->goal, JOB_STOP);
+		TEST_EQ (job->state, JOB_WAITING);
+
+		oper = job->stop_on;
+		TEST_EQ (oper->value, FALSE);
+		TEST_EQ_P (oper->event, NULL);
+
+		TEST_LIST_EMPTY (&job->blocking);
+		nih_free (class);
+	}
 
 	/* Check that the operator for the stop event can match against
 	 * environment variables expanded from the job's env member.

@@ -361,8 +361,10 @@ event_pending_handle_jobs (Event *event)
 					job_finished (job, FALSE);
 				}
 
-				event_operator_events (job->stop_on,
-					job, &job->blocking);
+				if (job->state != JOB_WAITING) {
+					event_operator_events (job->stop_on,
+						job, &job->blocking);
+				}
 
 				if (job->goal != JOB_STOP) {
 					job_change_goal (job, JOB_STOP);
