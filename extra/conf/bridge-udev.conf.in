@@ -14,7 +14,7 @@ emits *-device-unbind
 start on starting udev
 stop on stopped udev
 
-expect daemon
+expect readyfd
 respawn
 
-exec @startupbridgedir@/udev --daemon
+exec @startupbridgedir@/udev --readyfd

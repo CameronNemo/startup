@@ -5,6 +5,7 @@ emits :sys:*
 start on started dbus
 stop on stopped dbus
 
+expect readyfd
 respawn
 
-exec @startupbridgedir@/event
+exec @startupbridgedir@/event --readyfd

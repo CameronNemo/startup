@@ -28,6 +28,7 @@
 #include <string.h>
 #include <syslog.h>
 #include <ctype.h>
+#include <unistd.h>
 
 #include <nih/macros.h>
 #include <nih/alloc.h>
@@ -54,12 +55,12 @@ static void emit_event_error     (void *data, NihDBusMessage *message);
 static char *make_safe_string    (const void *parent, const char *original);
 
 /**
- * daemonise:
+ * readyfd:
  *
- * Set to TRUE if we should become a daemon, rather than just running
- * in the foreground.
+ * Set to TRUE if we should write a newline into READY_FD to signal
+ * readiness.
  **/
-static int daemonise = FALSE;
+static int readyfd = FALSE;
 
 /**
  * upstart:
@@ -91,8 +92,8 @@ static int no_strip_udev_data = FALSE;
  * Command-line options accepted by this program.
  **/
 static NihOption options[] = {
-	{ 0, "daemon", N_("Detach and run in the background"),
-	  NULL, NULL, &daemonise, NULL },
+	{ 0, "readyfd", N_("Write to READY_FD to signal readiness"),
+	  NULL, NULL, &readyfd, NULL },
 	{ 0, "no-strip", N_("Do not strip non-printable bytes from udev message data"),
 	  NULL, NULL, &no_strip_udev_data, NULL },
 	{ 0, "user", N_("Connect to user session"),
@@ -174,62 +175,48 @@ main (int   argc,
 				    (NihIoWatcher)udev_monitor_watcher,
 				    udev_monitor));
 
-	/* Become daemon */
-	if (daemonise) {
-		/* Deal with the pidfile location when becoming a daemon.
-		 * We need to be able to run one bridge per upstart daemon.
-		 * Store the PID file in XDG_RUNTIME_DIR or HOME and include the pid of
-		 * the Upstart instance (last part of the DBus path) in the filename.
-		 */
-
-		if (user) {
-			/* Extract PID from UPSTART_SESSION */
-			user_session_path = nih_str_split (NULL, user_session_addr, "/", TRUE);
-
-			for (int i = 0; user_session_path && user_session_path[i]; i++)
-				path_element = user_session_path[i];
-
-			if (! path_element) {
-				nih_fatal (_("Invalid value for UPSTART_SESSION"));
-				exit (1);
-			}
-
-			pidfile_path = getenv ("XDG_RUNTIME_DIR");
-			if (!pidfile_path)
-				pidfile_path = getenv ("HOME");
-
-			if (pidfile_path) {
-				NIH_MUST (nih_strcat_sprintf (&pidfile, NULL, "%s/%s.%s.pid",
-							      pidfile_path, program_invocation_short_name, path_element));
-				nih_main_set_pidfile (pidfile);
-			}
-		}
-
-		if (nih_main_daemonise () < 0) {
-			NihError *err;
-
-			err = nih_error_get ();
-			nih_fatal ("%s: %s", _("Unable to become daemon"),
-				   err->message);
-			nih_free (err);
-
-			exit (1);
-		}
-
-		if (!user) {
-			/* Send all logging output to syslog for system bridge */
-			openlog (program_name, LOG_PID, LOG_DAEMON);
-			nih_log_set_logger (nih_logger_syslog);
-		}
+	if (!user) {
+		/* Send all logging output to syslog for system bridge */
+		openlog (program_name, LOG_PID, LOG_DAEMON);
+		nih_log_set_logger (nih_logger_syslog);
 	}
 
 	/* Handle TERM and INT signals gracefully */
 	nih_signal_set_handler (SIGTERM, nih_signal_handler);
 	NIH_MUST (nih_signal_add_handler (NULL, SIGTERM, nih_main_term_signal, NULL));
 
-	if (! daemonise) {
-		nih_signal_set_handler (SIGINT, nih_signal_handler);
-		NIH_MUST (nih_signal_add_handler (NULL, SIGINT, nih_main_term_signal, NULL));
+	nih_signal_set_handler (SIGINT, nih_signal_handler);
+	NIH_MUST (nih_signal_add_handler (NULL, SIGINT, nih_main_term_signal, NULL));
+
+	/* Handle READY_FD notification */
+	if (readyfd) {
+		int fd;
+		char *env, *endptr;
+
+		env = getenv ("READY_FD");
+
+		if (!env || env[0] == '\0') {
+			nih_fatal (_("READY_FD not set or empty string"));
+			exit (EXIT_FAILURE);
+		}
+
+		errno = 0;
+
+		fd = (int)strtol (env, &endptr, 10);
+
+		if (errno != 0 || endptr[0] != '\0') {
+			nih_fatal (_("READY_FD did not contain a valid integer"));
+			exit (EXIT_FAILURE);
+		}
+
+		while (write (fd, "\n", 1) != 1) {
+			if (errno != 0 && errno != EINTR) {
+				nih_fatal (_("Could not write to READY_FD"));
+				exit (EXIT_FAILURE);
+			}
+		}
+
+		close (fd);
 	}
 
 	ret = nih_main_loop ();

@@ -5,7 +5,7 @@ emits dbus
 start on started dbus
 stop on stopping dbus
 
-expect daemon
+expect readyfd
 respawn
 
-exec @startupbridgedir@/dbus --daemon --system --user --bus-name system
+exec @startupbridgedir@/dbus --readyfd --system --user --bus-name system

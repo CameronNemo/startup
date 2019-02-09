@@ -27,8 +27,9 @@ only once per session init.
 .SH OPTIONS
 .\"
 .TP
-.B \-\-daemon
-Detach and run in the background.
+.B \-\-readyfd
+Write a newline into the file descriptor described by the environment
+variable READY_FD to indicate readiness.
 .\"
 .TP
 .B \-\-debug

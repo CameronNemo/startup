@@ -5,7 +5,7 @@ emits socket
 start on startup
 stop on session-end
 
-expect daemon
+expect readyfd
 respawn
 
-exec @startupbridgedir@/socket --user --daemon
+exec @startupbridgedir@/socket --user --readyfd
