@@ -1,15 +1,15 @@
 The startup source tree is available using git with the following
 URL, if you plan to hack on startup please work off this repo.
 
-	https://gitlab.com/chinstrap/startup/startup
+	https://gitlab.com/chinstrap/startup
 
 Releases are available from:
 
-	https://gitlab.com/chinstrap/startup/startup/tags
+	https://gitlab.com/chinstrap/startup/tags
 
 startup uses Gitlab's bug tracking system:
 
-	https://gitlab.com/chinstrap/startup/startup/issues
+	https://gitlab.com/chinstrap/startup/issues
 
 If you want to contribute code or bug fixes, please either provide the
 URL to your own git branch or use the ‘unified’ diff format

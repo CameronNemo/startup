@@ -1,3 +1,10 @@
+1.13.5  2019-02-10 "¿Preparados? ¿Listos? ¡Yah!"
+
+	* Support READY_FD service readiness notifications
+	* Fix blocking of recurring events when jobs are resting
+	* Remove compile time option for executing telinit when
+	  called as init and not PID one (always call in this case)
+
 1.13.4  2019-02-01 "Mary got me merry"
 
 	* Improve behavior of a system instance that is not run as

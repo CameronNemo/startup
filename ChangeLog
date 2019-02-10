@@ -1,3 +1,15 @@
+2019-02-10  Cameron Nemo  <camerontnorman@gmail.com>
+
+	* init:
+	  - add support for READY_FD service readiness notifications
+	  - properly execute telinit when PID is one and the basename
+	    of argv[0] is "init", do not use conditional compilation
+	    to decide whether or not to do this
+	  - refuse to block events for jobs that are in the resting
+	    state to avoid hangs, reenable relevant tests
+	* extra:
+	  - use READY_FD in most bridges (except: local, dconf)
+
 2019-01-26  Cameron Nemo  <camerontnorman@gmail.com>
 
 	* util/initctl.c: implement re-exec subcommand

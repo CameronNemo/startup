@@ -54,7 +54,7 @@ NAME = 'startup-monitor'
 AUTHORS = [
     'James Hunt <james.hunt@ubuntu.com>'
 ]
-WEBSITE = 'https://gitlab.com/chinstrap/startup/startup'
+WEBSITE = 'https://gitlab.com/chinstrap/startup'
 
 cli = False
 
