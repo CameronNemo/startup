@@ -1290,6 +1290,15 @@ Specifies the interval between sending the job's main process the
 signals when stopping the running job. Default is 5 seconds.
 .\"
 .TP
+.B expect readyfd
+Specifies that the job's main process will write a newline into the
+file descriptor described by the environment variable READY_FD.
+
+.BR startup (8)
+will wait for the newline to be written before running the job's
+post\-start script, or considering the job to be running.
+.\"
+.TP
 .B expect stop
 Specifies that the job's main process will raise the
 .I SIGSTOP
