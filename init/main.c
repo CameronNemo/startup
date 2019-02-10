@@ -285,16 +285,14 @@ main (int   argc,
 			exit (1);
 		}
 
-#ifdef ENABLE_SYSVCOMPAT
-		/* Check we're process #1 */
-		if (pid_one) {
+		/* Invoke telinit when called as init and not PID 1 */
+		if (! pid_one && (strcmp(basename(args_copy[0]), "init") == 0)) {
 			execv (TELINIT, argv);
 			/* Ignore failure, probably just that telinit doesn't exist */
 
 			nih_fatal (_("Not being executed as init"));
 			exit (1);
 		}
-#endif /* ENABLE_SYSVCOMPAT */
 
 		/* Clear our arguments from the command-line, so that we show up in
 		 * ps or top output as /sbin/init, with no extra flags.

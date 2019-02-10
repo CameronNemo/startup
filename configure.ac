@@ -95,10 +95,6 @@ AC_ARG_ENABLE([sysvcompat],
 		[enable_sysvcompat=no], [enable_sysvcompat=yes])
 AM_CONDITIONAL([ENABLE_SYSVCOMPAT], [test "$enable_sysvcompat" = yes])
 
-if test "$enable_sysvcompat" = yes; then
-	AC_DEFINE([ENABLE_SYSVCOMPAT], [1], [Build sysvinit compatibility tools])
-fi
-
 # Reasons for requiring this library version:
 #
 # 1) RFC 4627, the JSON "memo" (it is *NOT* a standard!) helpfully fails
