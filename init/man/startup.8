@@ -15,9 +15,8 @@ include system initialization and session management.
 
 Processes managed by
 .B startup
-are known as jobs and are defined by files in the
-.I /etc/init
-directory.  See
+are known as jobs and are defined by configuration files.
+See
 .BR startup (5)
 for more details on configuration.
 .\"
@@ -272,8 +271,8 @@ the other directories.
 .\"
 .TP
 .B \-\-confdir \fIdirectory\fP
-Read job configuration files from a directory other than the default
-(\fI/etc/init\fP for process ID 1). This option may be specified
+Read job configuration files from a directory other than the defaults.
+This option may be specified
 multiple times which will result in job configuration files being
 loaded from each directory specified (which must exist). Directories
 will be searched for jobs in the specified order.
@@ -324,7 +323,7 @@ running in user mode.
 .TP
 .B \-\-logdir \fIdirectory\fP
 Write job output log files to a directory other than
-\fI/var/log/upstart\fP (system mode) or \fI$XDG_CACHE_HOME/upstart\fP
+\fI/var/log/startup\fP (system mode) or \fI$XDG_CACHE_HOME/startup\fP
 (user session mode).
 .\"
 .TP
@@ -442,13 +441,12 @@ for further details.
 .\"
 .I /etc/init.conf
 
-.I /etc/init/
+.I /var/log/startup
 
-.I $HOME/.init/
+.I $XDG_CACHE_HOME/startup
 
-.I $XDG_CONFIG_DIRS/upstart/
+.I $XDG_RUNTIME_DIR/startup/sessions
 
-.I $XDG_CONFIG_HOME/upstart/
 .\"
 .SH AUTHOR
 Written by Scott James Remnant

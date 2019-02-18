@@ -93,7 +93,7 @@ test_confdir (void)
 	TEST_FILENAME (confdir_f);
 	assert0 (mkdir (confdir_f, 0755));
 
-	xdg_conf_dir = nih_sprintf (NULL, "%s/%s", xdg_config_home, "upstart");
+	xdg_conf_dir = nih_sprintf (NULL, "%s/%s", xdg_config_home, "startup");
 	TEST_NE_P (xdg_conf_dir, NULL);
 	assert0 (mkdir (xdg_conf_dir, 0755));
 

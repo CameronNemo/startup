@@ -3240,7 +3240,7 @@ test_clean_args (void)
 	NIH_MUST (nih_str_array_add (&args, NULL, &len, "/sbin/init"));
 	NIH_MUST (nih_str_array_add (&args, NULL, &len, "--debug"));
 	NIH_MUST (nih_str_array_add (&args, NULL, &len, "--logdir"));
-	NIH_MUST (nih_str_array_add (&args, NULL, &len, "/var/log/upstart"));
+	NIH_MUST (nih_str_array_add (&args, NULL, &len, "/var/log/startup"));
 	NIH_MUST (nih_str_array_add (&args, NULL, &len, "--state-fd"));
 	NIH_MUST (nih_str_array_add (&args, NULL, &len, "7"));
 	NIH_MUST (nih_str_array_add (&args, NULL, &len, "--state-fd"));
@@ -3260,7 +3260,7 @@ test_clean_args (void)
 
 	TEST_EQ_STR (args[0], "/sbin/init");
 	TEST_EQ_STR (args[1], "--logdir");
-	TEST_EQ_STR (args[2], "/var/log/upstart");
+	TEST_EQ_STR (args[2], "/var/log/startup");
 	TEST_EQ_STR (args[3], "--confdir");
 	TEST_EQ_STR (args[4], "/etc/init");
 	TEST_EQ_P (args[5], NULL);

@@ -255,11 +255,12 @@ get_user_upstart_dirs (void)
 
 	/* The current order is inline with Enhanced User Sessions Spec */
 
-	/* User's: ~/.config/upstart or XDG_CONFIG_HOME/upstart */
+	/* XDG_CONFIG_HOME or ~/.config*/
 	path = xdg_get_config_home ();
 	if (! path)
 		goto error;
 
+	/* startup */
 	if (path && path[0]) {
 	        if (! nih_strcat_sprintf (&path, NULL, "/%s", INIT_XDG_SUBDIR))
 			goto error;
@@ -270,8 +271,24 @@ get_user_upstart_dirs (void)
 		path = NULL;
 	}
 
+	path = xdg_get_config_home ();
+	if (! path)
+		goto error;
+
+	/* upstart */
+	if (path && path[0]) {
+		if (! nih_strcat_sprintf (&path, NULL, "/%s",
+					INIT_XDG_SUBDIR_LEGACY))
+			goto error;
+		mkdir (path, INIT_XDG_PATH_MODE);
+		if (! nih_str_array_add (&all_dirs, NULL, NULL, path))
+			goto error;
+		nih_free (path);
+		path = NULL;
+	}
+
 	/* Legacy User's: ~/.init */
-	path = get_home_subdir (USERCONFDIR, FALSE);
+	path = get_home_subdir (INIT_HOME_CONFDIR_LEGACY, FALSE);
 	if (! path)
 		goto error;
 
@@ -282,25 +299,50 @@ get_user_upstart_dirs (void)
 		path = NULL;
 	}
 
-	/* Systems': XDG_CONFIG_DIRS/upstart */
+	/* XDG_CONFIG_DIRS */
 	dirs = xdg_get_config_dirs ();
 	if (! dirs)
 		goto error;
 
+	/* startup */
 	for (char **p = dirs; p && *p; p++) {
 		if (*p[0] != '/')
 			continue;
-		if (! nih_strcat_sprintf (p, NULL, "/%s", INIT_XDG_SUBDIR))
+		if (! nih_strcat_sprintf (p, NULL, "/%s",
+					INIT_XDG_SUBDIR))
 			goto error;
 		if (! nih_str_array_add (&all_dirs, NULL, NULL, *p))
 			goto error;
 	}
+
 	nih_free (dirs);
 	dirs = NULL;
 
-	/* System's read-only location */
+	dirs = xdg_get_config_dirs ();
+	if (! dirs)
+		goto error;
+
+	/* upstart */
+	for (char **p = dirs; p && *p; p++) {
+		if (*p[0] != '/')
+			continue;
+		if (! nih_strcat_sprintf (p, NULL, "/%s",
+					INIT_XDG_SUBDIR_LEGACY))
+			goto error;
+		if (! nih_str_array_add (&all_dirs, NULL, NULL, *p))
+			goto error;
+	}
+
+	nih_free (dirs);
+	dirs = NULL;
+
+	/* System read-only locations */
 	if (! getenv ("UPSTART_NO_SYSTEM_USERCONFDIR")) {
-		if (! nih_str_array_add (&all_dirs, NULL, NULL, SYSTEM_USERCONFDIR))
+		if (! nih_str_array_add (&all_dirs, NULL, NULL,
+					INIT_XDG_DATADIR))
+			goto error;
+		if (! nih_str_array_add (&all_dirs, NULL, NULL,
+					INIT_XDG_DATADIR_LEGACY))
 			goto error;
 	}
 

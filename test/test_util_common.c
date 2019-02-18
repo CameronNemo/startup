@@ -752,7 +752,7 @@ get_session_file (const char *xdg_runtime_dir, pid_t pid)
 	nih_assert (xdg_runtime_dir);
 	nih_assert (pid);
 
-	session_file = nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 			xdg_runtime_dir, (int)pid);
 
 	nih_assert (session_file);
@@ -998,7 +998,7 @@ test_common_cleanup (void)
 			abort ();
 		}
 
-		path = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions", xdg_runtime_dir));
+		path = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions", xdg_runtime_dir));
 
 		if (! stat (path, &statbuf)) {
 			nih_local char *cmd = NULL;
@@ -1009,7 +1009,7 @@ test_common_cleanup (void)
 
 			/* Remove the directory tree the first Session Init created */
 			assert0 (rmdir (path));
-			path = NIH_MUST (nih_sprintf (NULL, "%s/upstart", xdg_runtime_dir));
+			path = NIH_MUST (nih_sprintf (NULL, "%s/startup", xdg_runtime_dir));
 			assert0 (rmdir (path));
 		}
 

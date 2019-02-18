@@ -5,24 +5,46 @@ startup \- process management daemon job configuration
 .\"
 .SH SYNOPSIS
 .TP
-.B /etc/init/
-Default location of system job configuration files.
+.B /etc/startup
+Directory of administrator managed job configuration data.
 .\"
 .TP
-.B $XDG_CONFIG_HOME/upstart/, $XDG_CONFIG_DIRS/upstart/
-Default locations of user session job configuration files.
+.B /etc/init
+Legacy directory of administrator managed job configuration data.
 .\"
 .TP
-.B $HOME/.init/
-Deprecated location of user job configuration files (still
-honoured by User Session Mode).
+.B /usr/share/startup
+Directory of package managed job configuration data.
+.\"
+.TP
+.B $XDG_CONFIG_HOME/startup $XDG_CONFIG_HOME/upstart
+Directory and legacy directory of user managed XDG session job
+configuration data.
+As per spec, XDG_CONFIG_HOME defaults to
+.B $HOME/.config
+.
+.\"
+.TP
+.B $HOME/.init
+Deprecated directory of user job configuration data.
+.\"
+.TP
+.B $XDG_CONFIG_DIRS/startup $XDG_CONFIG_DIRS/upstart  
+Directories and legacy directories of administrator managed XDG session
+job configuration data.
+As per spec, XDG_CONFIG_DIRS defaults to
+.B /etc/xdg
+.
+.\"
+.TP
+.B /usr/share/xdg/startup
+Directory of package managed XDG session job configuration data.
 .\"
 .SH DESCRIPTION
 On startup, the
 .BR startup (8)
-daemon reads its job configuration from files in the
-.I /etc/init/
-directory by default, and watches for future changes to these files using
+daemon reads its job configuration from files in the above directories
+by default, and watches for future changes to these files using
 .BR inotify (7).
 
 If
@@ -75,11 +97,11 @@ The configuration file name as displayed by
 and associated tooling is taken
 from its relative path within the directory without the extension.
 For example a configuration file
-.I /etc/init/rc-sysinit.conf
+.I /etc/startup/rc-sysinit.conf
 is named
 .IR rc\-sysinit ,
 while a configuration file
-.I /etc/init/net/apache.conf
+.I /etc/startup/net/apache.conf
 is named
 .IR net/apache .
 Since override files only modify the way a configuration file is
@@ -106,17 +128,8 @@ below).
 .BR startup (8)
 can manage complete User Sessions. In this mode it runs with a
 process id greater than 1 and will read job configuration files from the
-following list of directories in the order shown:
-
-.IP \(bu 4
-.I $XDG_CONFIG_HOME/upstart/
-.IP \(bu 4
-.I $HOME/.init/
-.IP \(bu 4
-.I $XDG_CONFIG_DIRS/upstart/
-.IP \(bu 4
-.I /usr/share/upstart/sessions/
-.P
+list of directories in the first section of this manpage, which is sorted
+from highest to lowest priority:
 
 Note that the first directory to contain a job is considered the owner
 of that job name: any subsequently searched directory that contains a
@@ -137,9 +150,9 @@ When running in User Session mode,
 will kill all job processes on session logout or shutdown.
 
 All log output will be in
-.I $XDG_CACHE_HOME/upstart
+.I $XDG_CACHE_HOME/startup
 which defaults to
-.I $HOME/.cache/upstart
+.I $HOME/.cache/startup
 .
 
 .\"
@@ -764,9 +777,9 @@ and standard output and standard error are connected to a pseudo-tty
 which logs all job output.
 
 Output is logged to file
-.IR /var/log/upstart/<job-log-file>
+.IR /var/log/startup/<job-log-file>
 or
-.IR $XDG_CACHE_HOME/upstart/<job-log-file>
+.IR $XDG_CACHE_HOME/startup/<job-log-file>
 for system and user session jobs respectively.
 
 If a job has specified \fBinstance\fR,
@@ -1391,26 +1404,26 @@ User job override files.
 .BR (deprecated) .
 .
 .TP
-.I $XDG_CONFIG_HOME/upstart/*.conf
+.I $XDG_CONFIG_HOME/startup/*.conf
 User session job configuration files. See
 .B User Session Mode
 for other locations.
 .
 .TP
-.I $XDG_CONFIG_HOME/upstart/*.override
+.I $XDG_CONFIG_HOME/startup/*.override
 User session job override files. See
 .B User Session Mode
 for other locations.
 .
 .TP
-.I /var/log/upstart/*.log
+.I /var/log/startup/*.log
 Default location of system job output logs.
 .
 .TP
-.I $XDG_CACHE_HOME/upstart/*.log
+.I $XDG_CACHE_HOME/startup/*.log
 Default location of user session job output logs.
 .TP
-.I $XDG_RUNTIME_DIR/upstart/sessions/*.session
+.I $XDG_RUNTIME_DIR/startup/sessions/*.session
 Location of session files created when running in User Session mode.
 .RE
 .\"

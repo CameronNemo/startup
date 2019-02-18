@@ -63,7 +63,7 @@
 #include "errors.h"
 #include "test_util_common.h"
 
-#define EXPECTED_JOB_LOGDIR       "/var/log/upstart"
+#define EXPECTED_JOB_LOGDIR       "/var/log/startup"
 #define TEST_SHELL                "/bin/sh"
 #define TEST_SHELL_ARG            "-e"
 

@@ -621,7 +621,8 @@ main (int   argc,
 		if (! user_mode) {
 			nih_assert (conf_dirs[0]);
 
-			NIH_MUST (conf_source_new (NULL, CONFFILE, CONF_FILE));
+			NIH_MUST (conf_source_new (NULL, INIT_CONFFILE_LEGACY,
+						CONF_FILE));
 
 			for (char **d = conf_dirs; d && *d; d++) {
 				nih_debug ("Using configuration directory %s", *d);
@@ -1082,16 +1083,25 @@ handle_confdir (void)
 
 	nih_assert (conf_dirs);
 
-	/* user has already specified directory on command-line */
-	if (conf_dirs[0])
-		return;
-
+	/* xdg user sessions have a different code path */
 	if (user_mode)
 		return;
 
-	dir = getenv (CONFDIR_ENV);
+	/* directory specified on command-line */
+	if (conf_dirs[0])
+		return;
 
-	NIH_MUST (nih_str_array_add (&conf_dirs, NULL, NULL, dir ? dir : CONFDIR));
+	/* directory specified via environment */
+	dir = getenv (CONFDIR_ENV);
+	if (dir) {
+		NIH_MUST (nih_str_array_add (&conf_dirs, NULL, NULL, dir));
+		return;
+	}
+
+	/* default system configuration directories */
+	NIH_MUST (nih_str_array_add (&conf_dirs, NULL, NULL, INIT_CONFDIR));
+	NIH_MUST (nih_str_array_add (&conf_dirs, NULL, NULL, INIT_CONFDIR_LEGACY));
+	NIH_MUST (nih_str_array_add (&conf_dirs, NULL, NULL, INIT_DATADIR));
 }
 
 /**

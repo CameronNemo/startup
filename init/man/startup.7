@@ -19,15 +19,8 @@ Typically this will involve checking and mounting the partitions and
 drives that form the filesystem, loading drivers for connected devices
 and starting the X windowing system or other login environment.
 
-In the default configuration, the primary task run on the
-.B startup
-event is the
-.I /etc/init/rc-sysinit.conf
-job responsible for generating the System V compatible
-.BR runlevel (7)
-event.  See that page for a more detailed explanation of this process.
-
-This event is emitted when running both as pid 1 and as a Session Init.
+This event is emitted when running both as a system session and as an
+XDG session.
 
 Paradoxically there is currently no corresponding startup-native event
 signifying that the system is to be shutdown, only the System V compatible

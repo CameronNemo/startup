@@ -151,13 +151,15 @@ test_libupstart (void)
 	unlink (session_file);
 
 	/* Remove the directory tree the Session Init created */
-	path = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions", xdg_runtime_dir));
+	path = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions", xdg_runtime_dir));
         assert0 (rmdir (path));
-	path = NIH_MUST (nih_sprintf (NULL, "%s/upstart", xdg_runtime_dir));
+	path = NIH_MUST (nih_sprintf (NULL, "%s/startup", xdg_runtime_dir));
         assert0 (rmdir (path));
 	path = NIH_MUST (nih_sprintf (NULL, "%s/dbus-1/services", xdg_runtime_dir));
 	assert0 (rmdir (path));
 	path = NIH_MUST (nih_sprintf (NULL, "%s/dbus-1", xdg_runtime_dir));
+	assert0 (rmdir (path));
+	path = NIH_MUST (nih_sprintf (NULL, "%s/startup", getenv ("XDG_CONFIG_HOME")));
 	assert0 (rmdir (path));
 	path = NIH_MUST (nih_sprintf (NULL, "%s/upstart", getenv ("XDG_CONFIG_HOME")));
 	assert0 (rmdir (path));

@@ -11509,9 +11509,9 @@ test_list_sessions (void)
 	TEST_EQ (unlink (session_file), 0);
 
 	/* Remove the directory tree the Session Init created */
-	path = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions", dirname));
+	path = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions", dirname));
         TEST_EQ (rmdir (path), 0);
-	path = NIH_MUST (nih_sprintf (NULL, "%s/upstart", dirname));
+	path = NIH_MUST (nih_sprintf (NULL, "%s/startup", dirname));
         TEST_EQ (rmdir (path), 0);
 
 	/*******************************************************************/
@@ -11618,7 +11618,7 @@ test_quiesce (void)
 	sessiondir = nih_strdup (NULL, getenv ("XDG_RUNTIME_DIR"));
 	TEST_NE_P (sessiondir, NULL);
 	
-	cmd = nih_sprintf (NULL, "rm %s/upstart/sessions/*.session 2>/dev/null", sessiondir);
+	cmd = nih_sprintf (NULL, "rm %s/startup/sessions/*.session 2>/dev/null", sessiondir);
 	assert0 (system (cmd));
 
 	/* Use the "secret" interface */
@@ -11647,7 +11647,7 @@ test_quiesce (void)
 	/* Should not now be running */
 	TEST_EQ (kill (upstart_pid, 0), -1);
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				sessiondir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -11720,7 +11720,7 @@ test_quiesce (void)
 	TEST_EQ (kill (upstart_pid, 0), -1);
 	TEST_EQ (errno, ESRCH);
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				sessiondir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -11767,7 +11767,7 @@ test_quiesce (void)
 	TEST_EQ (kill (upstart_pid, 0), -1);
 	TEST_EQ (errno, ESRCH);
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				sessiondir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -11820,7 +11820,7 @@ test_quiesce (void)
 	TEST_EQ (fclose (file), 0);
 	assert0 (unlink (logfile));
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				sessiondir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -11883,7 +11883,7 @@ test_quiesce (void)
 	TEST_EQ (fclose (file), 0);
 	assert0 (unlink (logfile));
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				sessiondir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -11951,7 +11951,7 @@ test_quiesce (void)
 	TEST_EQ (kill (upstart_pid, 0), -1);
 	TEST_EQ (errno, ESRCH);
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				sessiondir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -12001,7 +12001,7 @@ test_quiesce (void)
 	/* Should not now be running */
 	TEST_EQ (kill (upstart_pid, 0), -1);
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				sessiondir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -12042,7 +12042,7 @@ test_quiesce (void)
 	TEST_EQ (kill (upstart_pid, 0), -1);
 	TEST_EQ (errno, ESRCH);
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				sessiondir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -12085,7 +12085,7 @@ test_quiesce (void)
 	TEST_EQ (kill (upstart_pid, 0), -1);
 	TEST_EQ (errno, ESRCH);
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				sessiondir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -12135,7 +12135,7 @@ test_quiesce (void)
 	TEST_EQ (kill (upstart_pid, 0), -1);
 	TEST_EQ (errno, ESRCH);
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				sessiondir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -12201,7 +12201,7 @@ test_quiesce (void)
 
 	assert0 (unlink (pid_file));
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				sessiondir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -12264,7 +12264,7 @@ test_quiesce (void)
 
 	assert0 (unlink (pid_file));
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				sessiondir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -12323,7 +12323,7 @@ test_quiesce (void)
 	/* Should not now be running */
 	TEST_EQ (kill (upstart_pid, 0), -1);
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				sessiondir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -12352,9 +12352,9 @@ test_quiesce (void)
         TEST_EQ (rmdir (logdir), 0);
         TEST_EQ (rmdir (confdir), 0);
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions", sessiondir));
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions", sessiondir));
         TEST_EQ (rmdir (session_file), 0);
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart", sessiondir));
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup", sessiondir));
         TEST_EQ (rmdir (session_file), 0);
 
 	/*******************************************************************/
@@ -18039,7 +18039,7 @@ test_no_inherit_job_env (const char *runtimedir, const char *confdir, const char
 
 	/*******************************************************************/
 
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				runtimedir, (int)upstart_pid));
 
 	STOP_UPSTART (upstart_pid);
@@ -18129,7 +18129,7 @@ test_job_env (void)
 	/*******************************************************************/
 
 	STOP_UPSTART (upstart_pid);
-	session_file = NIH_MUST (nih_sprintf (NULL, "%s/upstart/sessions/%d.session",
+	session_file = NIH_MUST (nih_sprintf (NULL, "%s/startup/sessions/%d.session",
 				xdg_runtime_dir, (int)upstart_pid));
 	unlink (session_file);
 
@@ -18398,6 +18398,7 @@ main (int   argc,
       char *argv[])
 {
 	nih_local char *rundir;
+	nih_local char *rundir_legacy;
 
 	nih_error_init ();
 	nih_timer_init ();
@@ -18455,8 +18456,12 @@ main (int   argc,
 	test_dbus_connection ();
 
 	/* FIXME: some test is leaving artifacts behind */
-	rundir = NIH_MUST (nih_sprintf (NULL, "%s/upstart", getenv ("XDG_CONFIG_HOME")));
+	rundir = NIH_MUST (nih_sprintf (NULL, "%s/startup",
+				getenv ("XDG_CONFIG_HOME")));
+	rundir_legacy = NIH_MUST (nih_sprintf (NULL, "%s/upstart",
+				getenv ("XDG_CONFIG_HOME")));
 	assert0 (rmdir (rundir));
+	assert0 (rmdir (rundir_legacy));
 
 	test_common_cleanup ();
 

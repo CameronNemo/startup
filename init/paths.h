@@ -56,34 +56,6 @@
 
 
 /**
- * CONFFILE:
- *
- * Init daemon configuration file.
- **/
-#ifndef CONFFILE
-#define CONFFILE "/etc/init.conf"
-#endif
-
-/**
- * CONFDIR:
- *
- * Default top-level directory of the system configuration files.
- **/
-#ifndef CONFDIR
-#define CONFDIR "/etc/init"
-#endif
-
-/**
- * USERCONFDIR:
- *
- * Sub-directory of user's home directory for their jobs.
- **/
-#ifndef USERCONFDIR
-#define USERCONFDIR ".init"
-#endif
-
-
-/**
  * CONFDIR_ENV:
  *
  * If this environment variable is set, read configuration files
@@ -106,22 +78,121 @@
 #endif
 
 /**
- * INIT_XDG_SUBDIR:
+ * LOGDIR_ENV:
  *
- * This is the name of the sub folder we will use when constructing
- * config source dirs with XDG compliant folders.
+ * Environment variable that if set specifies an alternative directory
+ * to JOB_LOGDIR to write log files to.
+ *
  **/
-#ifndef INIT_XDG_SUBDIR
-#define INIT_XDG_SUBDIR "upstart"
+#ifndef LOGDIR_ENV
+#define LOGDIR_ENV "UPSTART_LOGDIR"
 #endif
 
 /**
- * SYSTEM_USERCONFDIR:
+ * SESSION_ENV:
  *
- * This is the path to system-wide user session jobs.
+ * Environment variable that is set when running as a Session Init.
  **/
-#ifndef SYSTEM_USERCONFDIR
-#define SYSTEM_USERCONFDIR "/usr/share/upstart/sessions"
+#ifndef SESSION_ENV
+#define SESSION_ENV "UPSTART_SESSION"
+#endif
+
+
+/**
+ * INIT_CONFFILE_LEGACY:
+ *
+ * Legacy init daemon configuration file.
+ **/
+#ifndef INIT_CONFFILE_LEGACY
+#define INIT_CONFFILE_LEGACY "/etc/init.conf"
+#endif
+
+/**
+ * INIT_CONFDIR_LEGACY:
+ *
+ * Legacy top-level directory of the system configuration files.
+ **/
+#ifndef INIT_CONFDIR_LEGACY
+#define INIT_CONFDIR_LEGACY "/etc/init"
+#endif
+
+/**
+ * INIT_DATADIR:
+ *
+ * Directory for configuration data shipped by system integrators.
+ **/
+#ifndef INIT_DATADIR
+#define INIT_DATADIR "/usr/share/startup"
+#endif
+
+/**
+ * INIT_CONFDIR:
+ *
+ * Directory for system administrator configuration files.
+ **/
+#ifndef INIT_CONFDIR
+#define INIT_CONFDIR "/etc/startup"
+#endif
+
+/**
+ * JOB_LOGDIR:
+ *
+ * Directory that jobs which specify CONSOLE_LOG will have their output
+ * logged to.
+ *
+ **/
+#ifndef JOB_LOGDIR
+#define JOB_LOGDIR "/var/log/startup"
+#endif
+
+
+/**
+ * INIT_XDG_DATADIR_LEGACY:
+ *
+ * Legacy path for system-wide user session jobs.
+ **/
+#ifndef INIT_XDG_DATADIR_LEGACY
+#define INIT_XDG_DATADIR_LEGACY "/usr/share/upstart/sessions"
+#endif
+
+/**
+ * INIT_XDG_DATADIR:
+ *
+ * Directory for user session config data shipped by system integrators.
+ **/
+#ifndef INIT_XDG_DATADIR
+#define INIT_XDG_DATADIR "/usr/share/xdg/startup"
+#endif
+
+
+/**
+ * INIT_HOME_CONFDIR_LEGACY:
+ *
+ * Configurations in this folder will be picked up when running as a
+ * user session for compatibility purposes only.
+ **/
+#ifndef INIT_HOME_CONFDIR_LEGACY
+#define INIT_HOME_CONFDIR_LEGACY ".init"
+#endif
+
+/**
+ * INIT_XDG_SUBDIR_LEGACY:
+ *
+ * Like INIT_XDG_SUBDIR, but lower priority.
+ * Used for configurations, but not logs.
+ **/
+#ifndef INIT_XDG_SUBDIR_LEGACY
+#define INIT_XDG_SUBDIR_LEGACY "upstart"
+#endif
+
+/**
+ * INIT_XDG_SUBDIR:
+ *
+ * This is the name of the sub folder we will use when constructing
+ * config source dirs and logging dirs with XDG compliant folders.
+ **/
+#ifndef INIT_XDG_SUBDIR
+#define INIT_XDG_SUBDIR "startup"
 #endif
 
 /**
@@ -133,6 +204,7 @@
 #ifndef INIT_XDG_SESSION_SUBDIR
 #define INIT_XDG_SESSION_SUBDIR "sessions"
 #endif
+
 
 /**
  * SHELL:
@@ -161,37 +233,6 @@
  **/
 #ifndef TELINIT
 #define TELINIT SBINDIR "/telinit"
-#endif
-
-/**
- * JOB_LOGDIR:
- *
- * Directory that jobs which specify CONSOLE_LOG will have their output
- * logged to.
- *
- **/
-#ifndef JOB_LOGDIR
-#define JOB_LOGDIR "/var/log/upstart"
-#endif
-
-/**
- * LOGDIR_ENV:
- *
- * Environment variable that if set specifies an alternative directory
- * to JOB_LOGDIR to write log files to.
- *
- **/
-#ifndef LOGDIR_ENV
-#define LOGDIR_ENV "UPSTART_LOGDIR" 
-#endif
-
-/**
- * SESSION_ENV:
- *
- * Environment variable that is set when running as a Session Init.
- **/
-#ifndef SESSION_ENV
-#define SESSION_ENV "UPSTART_SESSION"
 #endif
 
 /**
