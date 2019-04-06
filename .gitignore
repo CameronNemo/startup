@@ -89,7 +89,6 @@ test-suite.log
 test-driver
 init/tests/.dirstamp
 init/tests/libwrap_inotify.la
-scripts/data/startup-monitor.svg
 scripts/pyupstartvars.py
 test/libtest_util_common.a
 test/test_util_check_env*
