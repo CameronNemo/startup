@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-initdir = $(sysconfdir)/init
+initdir = $(datadir)/startup
 if ENABLE_SYSVCOMPAT
 dist_init_DATA = \
 	rc-sysinit.conf \

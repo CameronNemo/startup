@@ -14,11 +14,8 @@ AM_CPPFLAGS = \
 	-I$(top_builddir) -I$(top_srcdir) -iquote$(builddir) -iquote$(srcdir) \
 	-I$(top_srcdir)/intl
 
-
-initdir = $(sysconfdir)/init
-
-sessionsdir = $(datadir)/upstart/sessions
-
+initdir = $(datadir)/startup
+sessionsdir = $(datadir)/xdg/startup
 bridgedir = $(startupbridgedir)
 
 dist_sessions_DATA = \
@@ -196,19 +193,6 @@ udev_CFLAGS = \
 	$(NIH_DBUS_CFLAGS) \
 	$(DBUS_CFLAGS) \
 	$(UDEV_CFLAGS)
-
-install-data-hook:
-	src=`echo startup-udev-bridge| sed '$(transform)'`.8; \
-	for symlink in \
-		net-device-added \
-		net-device-removed \
-		graphics-device-added \
-		drm-device-added; do \
-	  inst=`echo $$symlink | sed '$(transform)'`.7; \
-          echo " ln -sf '$(man8dir)/$$src' '$(DESTDIR)$(man7dir)/$$inst'"; \
-	  ln -sf "$(man8dir)/$$src" "$(DESTDIR)$(man7dir)/$$inst"; \
-	done
-
 else
 EXTRA_DIST += \
 	udev.c \
