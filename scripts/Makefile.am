@@ -4,7 +4,11 @@ UPSTART_BINARY = $(abs_top_builddir)/init/startup
 INITCTL_BINARY = $(abs_top_builddir)/util/initctl
 FILE_BRIDGE_BINARY = $(abs_top_builddir)/extra/file
 
-SUBDIRS = data
+desktopdir = $(datadir)/applications
+desktop_DATA = data/startup-monitor.desktop
+
+icondir = $(datadir)/icons/hicolor/scalable/apps
+icon_DATA = data/startup-monitor.svg
 
 install_scripts = \
 	initctl2dot.py \
@@ -20,6 +24,8 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	$(install_scripts) \
+	$(desktop_DATA) \
+	$(icon_DATA) \
 	pyupstart.py \
 	tests/__init__.py \
 	tests/test_pyupstart_session_init.py \

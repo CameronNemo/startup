@@ -193,7 +193,6 @@ AC_CONFIG_FILES([
 	contrib/Makefile
 	po/Makefile.in
 	scripts/Makefile
-	scripts/data/Makefile
 	test/Makefile
 	lib/Makefile
 	lib/libupstart.pc.in ])
