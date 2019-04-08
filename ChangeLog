@@ -1,3 +1,11 @@
+2019-04-07  Cameron Nemo  <camerontnorman@gmail.com>
+
+	* init:
+	  - support new paths for configuration and logging
+	* extra:
+	* conf:
+	  - install configs into new paths
+
 2019-02-10  Cameron Nemo  <camerontnorman@gmail.com>
 
 	* init:

@@ -1,3 +1,8 @@
+1.14.0  2019-04-07 "Footprints"
+
+	* startup now reads from new configuration paths. Please
+	  refer to startup(5) for more information.
+
 1.13.5  2019-02-10 "¿Preparados? ¿Listos? ¡Yah!"
 
 	* Support READY_FD service readiness notifications
