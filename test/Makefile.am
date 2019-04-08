@@ -8,7 +8,6 @@ AM_CFLAGS = \
 	$(NIH_DBUS_CFLAGS) \
 	$(DBUS_CFLAGS)
 
-AM_LIBADD = $(CGMANAGER_LIBS) $(NIH_LIBS) $(NIH_DBUS_LIBS)
 AM_CPPFLAGS = \
 	-DLOCALEDIR="\"$(localedir)\"" \
 	-DSBINDIR="\"$(sbindir)\"" \

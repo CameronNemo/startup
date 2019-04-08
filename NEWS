@@ -1,3 +1,7 @@
+1.14.1  2019-04-07 "More Footprints"
+
+	* Why is autotools like this?
+
 1.14.0  2019-04-07 "Footprints"
 
 	* startup now reads from new configuration paths. Please

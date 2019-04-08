@@ -9,14 +9,14 @@ AC_CONFIG_MACRO_DIR([macros])
 
 AC_GNU_SOURCE
 
-AM_INIT_AUTOMAKE([1.10 gnu nostdinc check-news color-tests silent-rules subdir-objects])
+AM_INIT_AUTOMAKE([1.10 foreign nostdinc check-news color-tests silent-rules subdir-objects])
 AM_SILENT_RULES([yes])
 AM_MAINTAINER_MODE([enable])
 
 LT_PREREQ(2.2.4)
 LT_INIT
 
-AM_GNU_GETTEXT_VERSION([0.17])
+AM_GNU_GETTEXT_VERSION([0.19])
 AM_GNU_GETTEXT([external])
 
 # Checks for programs.

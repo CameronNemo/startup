@@ -12,7 +12,6 @@ AM_CFLAGS = \
 	$(DBUS_CFLAGS) \
 	$(JSON_CFLAGS) \
 	$(CGMANAGER_CFLAGS)
-AM_LIBADD = $(CGMANAGER_LIBS) $(NIH_LIBS) $(NIH_DBUS_LIBS)
 
 AM_CPPFLAGS = \
 	-DLOCALEDIR="\"$(localedir)\"" \
@@ -458,7 +457,7 @@ endif
 
 check_LTLIBRARIES = tests/libwrap_inotify.la
 tests_libwrap_inotify_la_SOURCES = tests/wrap_inotify.c
-tests_libwrap_inotify_la_LIBADD = -lrt -ldl $(AM_LIBADD)
+tests_libwrap_inotify_la_LIBADD = -lrt -ldl $(CGMANAGER_LIBS) $(NIH_LIBS) $(NIH_DBUS_LIBS)
 tests_libwrap_inotify_la_LDFLAGS = avoid-version -module -shared -export-dynamic -rpath /nowhere -ldl
 
 test_conf_SOURCES = tests/test_conf.c $(check_LTLIBRARIES)
