@@ -401,7 +401,6 @@ conf_source_new (const void     *parent,
 
 	source->type = type;
 	source->watch = NULL;
-	source->session = NULL;
 
 	source->flag = FALSE;
 	source->files = nih_hash_string_new (source, 0);
@@ -1183,7 +1182,7 @@ conf_reload_path (ConfSource *source,
 			nih_debug ("Loading %s from %s", name, path);
 		}
 
-		file->job = parse_job (NULL, source->session, file->job,
+		file->job = parse_job (NULL, file->job,
 				name, buf, len, &pos, &lineno);
 
 		/* Allow the original ConfFile which has now been replaced to be
@@ -1300,7 +1299,6 @@ conf_file_destroy (ConfFile *file)
 /**
  * conf_select_job:
  * @name: name of job class to locate,
- * @session: session class name belongs to.
  *
  * Select the best available class of a job named @name from the registered
  * configuration sources.
@@ -1308,7 +1306,7 @@ conf_file_destroy (ConfFile *file)
  * Returns: Best available job class or NULL if none available.
  **/
 JobClass *
-conf_select_job (const char *name, const Session *session)
+conf_select_job (const char *name)
 {
 	nih_assert (name != NULL);
 
@@ -1318,9 +1316,6 @@ conf_select_job (const char *name, const Session *session)
 		ConfSource *source = (ConfSource *)iter;
 
 		if (source->type != CONF_JOB_DIR)
-			continue;
-
-		if (source->session != session)
 			continue;
 
 		NIH_HASH_FOREACH (source->files, file_iter) {
@@ -1351,7 +1346,6 @@ conf_source_serialise (const ConfSource *source)
 {
 	json_object      *json;
 	json_object      *json_files;
-	int               session_index;
 
 	nih_assert (source);
 	nih_assert (conf_sources);
@@ -1362,13 +1356,6 @@ conf_source_serialise (const ConfSource *source)
 
 	json_files = json_object_new_array ();
 	if (! json_files)
-		goto error;
-
-	session_index = session_get_index (source->session);
-	if (session_index < 0)
-		goto error;
-
-	if (! state_set_json_int_var (json, "session", session_index))
 		goto error;
 
 	if (! state_set_json_string_var_from_obj (json, source, path))
@@ -1460,22 +1447,12 @@ conf_source_deserialise (void *parent, json_object *json)
 {
 	ConfSource      *source = NULL;
 	ConfSourceType   type = -1;
-	Session         *session;
-	int              session_index = -1;
 	nih_local char  *path = NULL;
 
 	nih_assert (json);
 
 	if (! state_check_json_type (json, object))
 		goto error;
-
-	if (! state_get_json_int_var (json, "session", session_index))
-		goto error;
-
-	if (session_index < 0)
-		goto error;
-
-	session = session_from_index (session_index);
 
 	if (! state_get_json_string_var_strict (json, "path", NULL, path))
 		goto error;
@@ -1488,8 +1465,6 @@ conf_source_deserialise (void *parent, json_object *json)
 	source = conf_source_new (parent, path, type);
 	if (! source)
 		goto error;
-
-	source->session = session;
 
 	if (! state_get_json_int_var_to_obj (json, source, flag))
 		goto error;
@@ -1612,7 +1587,6 @@ conf_file_serialise (const ConfFile *file)
 	json_object  *json;
 	json_object  *json_job_class;
 	JobClass     *registered;
-	int           session_index;
 	ssize_t       conf_source_index;
 
 	nih_assert (file);
@@ -1658,14 +1632,13 @@ conf_file_serialise (const ConfFile *file)
 	 *
 	 * See job_class_serialise_all() for further details.
 	 */
-	registered = job_class_get_registered (file->job->name,
-			file->job->session);
+	registered = job_class_get_registered (file->job->name);
 
 	if (! registered)
 		goto error;
 
 	/* Create a reference to the registered job class in the JSON by
-	 * encoding the name and session index. We do this rather than
+	 * encoding the name. We do this rather than
 	 * simply encoding an index number for the JobClass since
 	 * job_classes is a hash and it is safer should a re-exec
 	 * result from an upgrade to NIH, say, where its hashing
@@ -1679,15 +1652,6 @@ conf_file_serialise (const ConfFile *file)
 	if (! state_set_json_string_var (json_job_class,
 				"name",
 				registered->name))
-		goto error;
-
-	session_index = session_get_index (registered->session);
-	if (session_index < 0)
-		goto error;
-
-	if (! state_set_json_int_var (json_job_class,
-				"session",
-				session_index))
 		goto error;
 
 	json_object_object_add (json, "job_class", json_job_class);
@@ -1819,8 +1783,7 @@ conf_source_get_index (const ConfSource *source)
 	NIH_LIST_FOREACH (conf_sources, iter) {
 		ConfSource *s = (ConfSource *)iter;
 
-		if (! strcmp (source->path, s->path)
-				&& source->session == s->session)
+		if (! strcmp (source->path, s->path))
 			return i;
 		i++;
 	}
@@ -1832,14 +1795,13 @@ conf_source_get_index (const ConfSource *source)
  * conf_file_find:
  *
  * @name: name of ConfFile (without dirname and extension),
- * @session: session ConfFile belongs to.
  *
- * Find the ConfFile with name @name in session @session.
+ * Find the ConfFile with name @name.
  *
  * Returns: ConfFile or NULL if not found.
  **/
 ConfFile *
-conf_file_find (const char *name, const Session *session)
+conf_file_find (const char *name)
 {
 	nih_local char  *basename = NULL;
 
@@ -1847,7 +1809,7 @@ conf_file_find (const char *name, const Session *session)
 
 	conf_init ();
 
-	/* There can only be one ConfFile per session with the same
+	/* There can only be one ConfFile with the same
 	 * basename.
 	 */
 	basename = NIH_MUST (nih_sprintf (NULL, "/%s%s",
@@ -1855,9 +1817,6 @@ conf_file_find (const char *name, const Session *session)
 
 	NIH_LIST_FOREACH (conf_sources, iter) {
 		ConfSource *source = (ConfSource *)iter;
-
-		if (source->session != session)
-			continue;
 
 		NIH_HASH_FOREACH (source->files, file_iter) {
 			ConfFile *file = (ConfFile *)file_iter;

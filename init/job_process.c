@@ -791,16 +791,6 @@ job_process_spawn_with_fd (Job          *job,
 			}
 		}
 
-		/* Handle changing a chroot session job prior to dealing with
-		 * the 'chroot' stanza.
-		 */
-		if (class->session && class->session->chroot) {
-			if (chroot (class->session->chroot) < 0) {
-				nih_error_raise_system ();
-				job_process_error_abort (fds[1], JOB_PROCESS_ERROR_CHROOT, 0);
-			}
-		}
-
 		/* Change the root directory, confining path resolution within it;
 		 * we do this before the working directory call so that is always
 		 * relative to the new root.
@@ -826,8 +816,7 @@ job_process_spawn_with_fd (Job          *job,
 
 		/* Change the user and group of the process to the one
 		 * configured in the job. We must wait until now to lookup the
-		 * UID and GID from the names to accommodate both chroot
-		 * session jobs and jobs with a chroot stanza.
+		 * UID and GID from the names to accommodate jobs with a chroot stanza.
 		 */
 		if (class->setuid) {
 			/* Without resetting errno, it's impossible to
@@ -2409,18 +2398,6 @@ job_process_log_path (Job *job, int user_job)
 
 	if (! dir)
 		nih_return_no_memory_error (NULL);
-
-	/* If the job is running inside a chroot, it must be logged to a
-	 * file within the chroot.
-	 */
-	if (job->class->session && job->class->session->chroot) {
-		char *tmp = dir;
-
-		dir = nih_sprintf (NULL, "%s%s",
-				job->class->session->chroot,
-				tmp);
-		nih_free (tmp);
-	}
 
 	class_name = nih_strdup (NULL, class->name);
 

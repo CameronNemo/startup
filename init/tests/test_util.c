@@ -64,31 +64,6 @@ event_operator_diff (EventOperator *a, EventOperator *b)
 }
 
 /**
- * session_from_chroot:
- * @chroot: full path to chroot.
- *
- * Obtain the session relating to the specified chroot.
- *
- * Returns: Session, or NULL if no session found.
- **/
-Session *
-session_from_chroot (const char *chroot)
-{
-	nih_assert (chroot);
-
-	session_init ();
-
-	NIH_LIST_FOREACH (sessions, iter) {
-		Session *session = (Session *)iter;
-
-		if (! strcmp (session->chroot, chroot))
-				return session;
-	}
-
-	return NULL;
-}
-
-/**
  * ensure_env_clean:
  *
  * Ensure most common data structures are empty.
@@ -99,14 +74,12 @@ session_from_chroot (const char *chroot)
 void
 ensure_env_clean (void)
 {
-	TEST_NE_P (sessions, NULL);
 	TEST_NE_P (events, NULL);
 	TEST_NE_P (conf_sources, NULL);
 	TEST_NE_P (job_classes, NULL);
 	TEST_NE_P (log_unflushed_files, NULL);
 
 	/* Ensure environment is clean before test is run */
-	TEST_LIST_EMPTY (sessions);
 	TEST_LIST_EMPTY (events);
 	TEST_LIST_EMPTY (conf_sources);
 	TEST_HASH_EMPTY (job_classes);
@@ -123,25 +96,21 @@ ensure_env_clean (void)
 void
 clean_env (void)
 {
-	session_init ();
 	event_init ();
 	job_class_init ();
 	conf_init ();
 	log_unflushed_init ();
 
-	nih_free (sessions);
 	nih_free (events);
 	nih_free (job_classes);
 	nih_free (conf_sources);
 	nih_free (log_unflushed_files);
 
-	sessions = NULL;
 	events = NULL;
 	job_classes = NULL;
 	conf_sources = NULL;
 	log_unflushed_files = NULL;
 
-	session_init ();
 	event_init ();
 	job_class_init ();
 	conf_init ();

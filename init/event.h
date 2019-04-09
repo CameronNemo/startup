@@ -23,7 +23,6 @@
 #include <nih/macros.h>
 #include <nih/list.h>
 
-#include "session.h"
 #include "state.h"
 
 #include <json.h>
@@ -44,7 +43,6 @@ typedef enum event_progress {
 /**
  * Event:
  * @entry: list header,
- * @session: session the event is attached to,
  * @name: string name of the event,
  * @env: NULL-terminated array of environment variables,
  * @fd: open file descriptor associated with a particular
@@ -68,7 +66,6 @@ typedef enum event_progress {
 typedef struct event {
 	NihList          entry;
 
-	Session *        session;
  	char            *name;
 	char           **env;
 	int              fd;

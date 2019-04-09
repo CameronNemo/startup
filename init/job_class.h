@@ -35,7 +35,6 @@
 
 #include "process.h"
 #include "event_operator.h"
-#include "session.h"
 
 
 /**
@@ -133,7 +132,6 @@ typedef enum console_type {
  * @entry: list header,
  * @name: unique name,
  * @path: path of D-Bus object,
- * @session: attached session,
  * @instance: pattern to uniquely identify multiple instances,
  * @instances: hash table of active instances,
  * @description: description; intended for humans,
@@ -182,7 +180,6 @@ typedef struct job_class {
 
 	char           *name;
 	char           *path;
-	Session *       session;
 
 	char           *instance;
 	NihHash        *instances;
@@ -258,8 +255,7 @@ const char *job_class_environment_get      (const char *name)
 	__attribute__ ((warn_unused_result));
 
 JobClass  * job_class_new                  (const void *parent,
-					    const char *name,
-					    Session *session)
+					    const char *name)
 	__attribute__ ((warn_unused_result));
 
 int         job_class_consider             (JobClass *class);
@@ -366,7 +362,7 @@ json_object * job_class_serialise_all (void)
 int job_class_deserialise_all (json_object *json)
 	__attribute__ ((warn_unused_result));
 
-JobClass * job_class_get (const char *name, Session *session)
+JobClass * job_class_get (const char *name)
 	__attribute__ ((warn_unused_result));
 
 json_object * job_class_serialise_job_environ (void)
@@ -380,7 +376,7 @@ void job_class_prepare_reexec (void);
 time_t     job_class_max_kill_timeout (void)
 	__attribute__ ((warn_unused_result));
 
-JobClass  *job_class_get_registered (const char *name, const Session *session)
+JobClass  *job_class_get_registered (const char *name)
 	__attribute__ ((warn_unused_result));
 
 void       job_class_event_block (void *parent, JobClass *old, JobClass *new);

@@ -46,7 +46,7 @@ test_new (void)
 	 * in a list.
 	 */
 	TEST_FEATURE ("with job");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	job = job_new (class, "");
 
 	TEST_ALLOC_FAIL {
@@ -364,9 +364,6 @@ int
 main (int   argc,
       char *argv[])
 {
-	/* run tests in legacy (pre-session support) mode */
-	setenv ("UPSTART_NO_SESSIONS", "1", 1);
-
 	test_new ();
 
 	return 0;

@@ -39,7 +39,6 @@
 
 #include "paths.h"
 #include "state.h"
-#include "session.h"
 #include "event.h"
 #include "job_class.h"
 #include "job.h"
@@ -52,7 +51,6 @@
 #include "cgroup.h"
 #endif /* ENABLE_CGROUPS */
 
-json_object *json_sessions = NULL;
 json_object *json_events = NULL;
 json_object *json_classes = NULL;
 json_object *json_conf_sources = NULL;
@@ -364,14 +362,6 @@ state_to_string (char **json_string, size_t *len)
 	if (! json)
 		return -1;
 
-	json_sessions = session_serialise_all ();
-	if (! json_sessions) {
-		nih_error ("%s Sessions", _("Failed to serialise"));
-		goto error;
-	}
-
-	json_object_object_add (json, "sessions", json_sessions);
-
 	json_events = event_serialise_all ();
 	if (! json_events) {
 		nih_error ("%s Events", _("Failed to serialise"));
@@ -496,11 +486,6 @@ state_from_string (const char *state)
 
 	if (! state_check_json_type (json, object))
 		goto out;
-
-	if (session_deserialise_all (json) < 0) {
-		nih_error ("%s Sessions", _("Failed to deserialise"));
-		goto out;
-	}
 
 	if (event_deserialise_all (json) < 0) {
 		nih_error ("%s Events", _("Failed to deserialise"));
@@ -1276,15 +1261,12 @@ state_get_json_type (const char *short_type)
 int
 state_deserialise_resolve_deps (json_object *json)
 {
-	int  session_index = -1;
-
 	nih_assert (json);
 
-	/* XXX: Sessions, Events, JobClasses, Jobs and DBusConnections
+	/* XXX: Events, JobClasses, Jobs and DBusConnections
 	 * must have previously been deserialised before invoking
 	 * this function.
 	 */
-	nih_assert (json_sessions);
 	nih_assert (json_events);
 	nih_assert (json_classes);
 
@@ -1312,9 +1294,6 @@ state_deserialise_resolve_deps (json_object *json)
 		json_object     *json_jobs;
 		JobClass        *class = NULL;
 		nih_local char  *class_name = NULL;
-		Session         *session;
-
-		session_index = -1;
 
 		json_class = json_object_array_get_idx (json_classes, i);
 		if (! json_class)
@@ -1323,37 +1302,13 @@ state_deserialise_resolve_deps (json_object *json)
 		if (! state_check_json_type (json_class, object))
 			goto error;
 		
-		if (! state_get_json_int_var (json_class, "session", session_index))
-			goto error;
-
-		if (session_index > 0) {
-			/* Although ConfSources are now serialised,
-			 * skip JobClasses with associated user/chroot
-			 * sessions to avoid behavioural changes for
-			 * the time being.
-			 */
-			continue;
-		}
-
-		session = session_from_index (session_index);
-
-		/* All (non-NULL) sessions should already exist */
-		if (session_index > 0 && ! session)
-			goto error;
-
 		if (! state_get_json_string_var_strict (json_class, "name", NULL, class_name))
 			goto error;
 
 		/* lookup class associated with JSON class index */
-		class = job_class_get_registered (class_name, session);
+		class = job_class_get_registered (class_name);
 
 		if (! class)
-			goto error;
-
-		/* Sessions have been ignored, but handle the impossible
-		 * anyway.
-		 */
-		if (class->session)
 			goto error;
 
 		if (! state_get_json_var_full (json_class, "jobs", array, json_jobs))
@@ -1380,7 +1335,7 @@ state_deserialise_resolve_deps (json_object *json)
 				goto error;
 
 			/* lookup job */
-			job = job_find (class->session, NULL, class->name, job_name);
+			job = job_find (NULL, class->name, job_name);
 			if (! job)
 				goto error;
 
@@ -1421,7 +1376,6 @@ state_serialise_blocked (const Blocked *blocked)
 {
 	json_object  *json;
 	json_object  *json_blocked_data;
-	int           session_index;
 
 	nih_assert (blocked);
 
@@ -1443,18 +1397,6 @@ state_serialise_blocked (const Blocked *blocked)
 			if (! state_set_json_string_var (json_blocked_data,
 						"class",
 						blocked->job->class->name))
-				goto error;
-
-			session_index = session_get_index (blocked->job->class->session);
-			if (session_index < 0)
-				goto error;
-
-			/* Encode parent classes session index to aid in
-			 * finding the correct job on deserialisation.
-			 */
-			if (! state_set_json_int_var (json_blocked_data,
-						"session",
-						session_index))
 				goto error;
 
 			if (! state_set_json_string_var (json_blocked_data,
@@ -1649,8 +1591,6 @@ state_deserialise_blocked (void *parent, json_object *json,
 			nih_local char  *job_name = NULL;
 			nih_local char  *job_class_name = NULL;
 			Job             *job;
-			Session         *session;
-			int              session_index;
 
 			if (! state_get_json_string_var_strict (json_blocked_data,
 						"name", NULL, job_name))
@@ -1660,19 +1600,7 @@ state_deserialise_blocked (void *parent, json_object *json,
 						"class", NULL, job_class_name))
 				goto error;
 
-			/* On error, assume NULL session since the likelihood
-			 * is we're upgrading from Upstart 1.6 that did not set
-			 * the 'session' JSON object.
-			 */
-			if (! state_get_json_int_var (json_blocked_data, "session", session_index))
-				session_index = 0;
-
-			if (session_index < 0)
-				goto error;
-
-			session = session_from_index (session_index);
-
-			job = job_find (session, NULL, job_class_name, job_name);
+			job = job_find (NULL, job_class_name, job_name);
 			if (! job)
 				goto error;
 

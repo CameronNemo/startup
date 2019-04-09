@@ -46,7 +46,6 @@
 #include "events.h"
 #include "environ.h"
 #include "process.h"
-#include "session.h"
 #include "job_class.h"
 #include "job.h"
 #include "job_process.h"
@@ -169,13 +168,8 @@ job_new (JobClass   *class,
 
 	job->class = class;
 
-	if (job->class->session && job->class->session->chroot) {
-		/* JobClass already contains a valid D-Bus path prefix for the job */
-		job->path = nih_dbus_path (job, class->path, job->name, NULL);
-	} else {
-		job->path = nih_dbus_path (job, DBUS_PATH_UPSTART, "jobs",
-				class->name, job->name, NULL);
-	}
+	job->path = nih_dbus_path (job, DBUS_PATH_UPSTART, "jobs",
+			class->name, job->name, NULL);
 
 	if (! job->path)
 		goto error;
@@ -1127,7 +1121,6 @@ job_emit_event (Job *job)
 	}
 
 	event = NIH_MUST (event_new (NULL, name, env));
-	event->session = job->class->session;
 
 	if (block) {
 		Blocked *blocked;
@@ -1352,21 +1345,10 @@ job_start (Job             *job,
 	   NihDBusMessage  *message,
 	   int              wait)
 {
-	Session *session;
 	Blocked *blocked = NULL;
 
 	nih_assert (job != NULL);
 	nih_assert (message != NULL);
-
-	/* Don't permit out-of-session modification */
-	session = session_from_dbus (NULL, message);
-	if (session != job->class->session) {
-		nih_dbus_error_raise_printf (
-			DBUS_INTERFACE_UPSTART ".Error.PermissionDenied",
-			_("You do not have permission to modify job: %s"),
-			job_name (job));
-		return -1;
-	}
 
 	if (job->goal == JOB_START) {
 		nih_dbus_error_raise_printf (
@@ -1440,21 +1422,10 @@ job_stop (Job            *job,
 	  NihDBusMessage *message,
 	  int             wait)
 {
-	Session *session;
 	Blocked *blocked = NULL;
 
 	nih_assert (job != NULL);
 	nih_assert (message != NULL);
-
-	/* Don't permit out-of-session modification */
-	session = session_from_dbus (NULL, message);
-	if (session != job->class->session) {
-		nih_dbus_error_raise_printf (
-			DBUS_INTERFACE_UPSTART ".Error.PermissionDenied",
-			_("You do not have permission to modify job: %s"),
-			job_name (job));
-		return -1;
-	}
 
 	if (job->goal == JOB_STOP) {
 		nih_dbus_error_raise_printf (
@@ -1516,21 +1487,10 @@ job_restart (Job            *job,
 	     NihDBusMessage *message,
 	     int             wait)
 {
-	Session *session;
 	Blocked *blocked = NULL;
 
 	nih_assert (job != NULL);
 	nih_assert (message != NULL);
-
-	/* Don't permit out-of-session modification */
-	session = session_from_dbus (NULL, message);
-	if (session != job->class->session) {
-		nih_dbus_error_raise_printf (
-			DBUS_INTERFACE_UPSTART ".Error.PermissionDenied",
-			_("You do not have permission to modify job: %s"),
-			job_name (job));
-		return -1;
-	}
 
 	if (job->goal == JOB_STOP) {
 		nih_dbus_error_raise_printf (
@@ -1586,20 +1546,8 @@ int
 job_reload (Job            *job,
 	    NihDBusMessage *message)
 {
-	Session *session;
-
 	nih_assert (job != NULL);
 	nih_assert (message != NULL);
-
-	/* Don't permit out-of-session modification */
-	session = session_from_dbus (NULL, message);
-	if (session != job->class->session) {
-		nih_dbus_error_raise_printf (
-			DBUS_INTERFACE_UPSTART ".Error.PermissionDenied",
-			_("You do not have permission to modify job: %s"),
-			job_name (job));
-		return -1;
-	}
 
 	if (job->pid[PROCESS_MAIN] <= 0) {
 		nih_dbus_error_raise_printf (
@@ -2101,7 +2049,7 @@ job_deserialise (JobClass *parent, json_object *json)
 			if (*stop_on) {
 				nih_local JobClass *tmp = NULL;
 
-				tmp = NIH_MUST (job_class_new (NULL, "tmp", NULL));
+				tmp = NIH_MUST (job_class_new (NULL, "tmp"));
 
 				tmp->stop_on = parse_on_simple (tmp, "stop", stop_on);
 				if (! tmp->stop_on) {
@@ -2565,19 +2513,16 @@ error:
 /**
  * job_find:
  *
- * @session: session of job class,
  * @job_class: name of job class,
  * @job_name: name of job instance.
  *
  * Lookup job based on parent class name and
  * job instance name.
  *
- * Returns: existing Job on success, or NULL if job class or
- * job are not found in @session.
+ * Returns: existing Job on success, or NULL if job class not found.
  **/
 Job *
-job_find (const Session  *session,
-	  JobClass       *class,
+job_find (JobClass       *class,
 	  const char     *job_class,
 	  const char     *job_name)
 {
@@ -2590,7 +2535,7 @@ job_find (const Session  *session,
 		goto error;
 
 	if (! class)
-		class = job_class_get_registered (job_class, session);
+		class = job_class_get_registered (job_class);
 
 	if (! class)
 		goto error;

@@ -53,7 +53,6 @@ startup_SOURCES = \
 	system.c system.h \
 	environ.c environ.h \
 	process.c process.h \
-	session.c session.h \
 	state.c state.h \
 	job_class.c job_class.h \
 	job_process.c job_process.h \
@@ -172,9 +171,6 @@ TEST_DATA_FILES = \
 	$(TEST_DATA_DIR)/upstart-1.8+apparmor.json \
 	$(TEST_DATA_DIR)/upstart-1.8+full_serialisation-apparmor.json \
 	$(TEST_DATA_DIR)/upstart-1.8+full_serialisation+apparmor.json \
-	$(TEST_DATA_DIR)/upstart-session2.json \
-	$(TEST_DATA_DIR)/upstart-session-infinity.json \
-	$(TEST_DATA_DIR)/upstart-session.json \
 	$(TEST_DATA_DIR)/upstart-1.9.json \
 	$(TEST_DATA_DIR)/upstart-1.11.json \
 	$(TEST_DATA_DIR)/upstart-1.13.json
@@ -255,7 +251,7 @@ test_process_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -274,7 +270,7 @@ test_job_class_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -292,7 +288,7 @@ test_job_process_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -311,7 +307,7 @@ test_job_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -330,7 +326,7 @@ test_log_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -349,7 +345,7 @@ test_state_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -368,7 +364,7 @@ test_event_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -386,7 +382,7 @@ test_event_operator_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -405,7 +401,7 @@ test_blocked_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -423,7 +419,7 @@ test_parse_job_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -442,7 +438,7 @@ test_parse_conf_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -465,7 +461,7 @@ test_conf_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -484,7 +480,7 @@ test_conf_static_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -516,7 +512,7 @@ test_cgroup_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o cgroup.o \
+	log.o state.o xdg.o apparmor.o cgroup.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -533,7 +529,7 @@ test_control_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \
@@ -551,7 +547,7 @@ test_main_LDADD = \
 	system.o environ.o process.o \
 	job_class.o job_process.o job.o event.o event_operator.o blocked.o \
 	parse_job.o parse_conf.o conf.o control.o quiesce.o \
-	session.o log.o state.o xdg.o apparmor.o \
+	log.o state.o xdg.o apparmor.o \
 	org.freedesktop.DBus.o \
 	com.ubuntu.Upstart.o \
 	com.ubuntu.Upstart.Job.o com.ubuntu.Upstart.Instance.o \

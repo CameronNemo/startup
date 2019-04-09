@@ -76,7 +76,7 @@ test_new (void)
 	job_class_init ();
 
 	TEST_ALLOC_FAIL {
-		class = job_class_new (NULL, "test", NULL);
+		class = job_class_new (NULL, "test");
 		if (test_alloc_failed) {
 			TEST_EQ_P (class, NULL);
 			continue;
@@ -190,17 +190,17 @@ test_consider (void)
 	source2 = conf_source_new (NULL, "/tmp/bar", CONF_JOB_DIR);
 
 	file1 = conf_file_new (source2, "/tmp/bar/frodo");
-	class1 = file1->job = job_class_new (NULL, "frodo", NULL);
+	class1 = file1->job = job_class_new (NULL, "frodo");
 	class1->console = CONSOLE_NONE;
 
 	file2 = conf_file_new (source2, "/tmp/bar/bilbo");
-	class2 = file2->job = job_class_new (NULL, "bilbo", NULL);
+	class2 = file2->job = job_class_new (NULL, "bilbo");
 	class2->console = CONSOLE_NONE;
 
 	source3 = conf_source_new (NULL, "/tmp/baz", CONF_JOB_DIR);
 
 	file3 = conf_file_new (source3, "/tmp/baz/frodo");
-	class3 = file3->job = job_class_new (NULL, "frodo", NULL);
+	class3 = file3->job = job_class_new (NULL, "frodo");
 	class3->console = CONSOLE_NONE;
 
 
@@ -394,7 +394,7 @@ test_consider (void)
 	 * becomes the hash table member.
 	 */
 	TEST_FEATURE ("with replacable registered class and not best class");
-	class4 = job_class_new (NULL, "frodo", NULL);
+	class4 = job_class_new (NULL, "frodo");
 	class4->console = CONSOLE_NONE;
 	nih_hash_add (job_classes, &class4->entry);
 	job_class_register (class4, conn, FALSE);
@@ -493,17 +493,17 @@ test_reconsider (void)
 	source2 = conf_source_new (NULL, "/tmp/bar", CONF_JOB_DIR);
 
 	file1 = conf_file_new (source2, "/tmp/bar/frodo");
-	class1 = file1->job = job_class_new (NULL, "frodo", NULL);
+	class1 = file1->job = job_class_new (NULL, "frodo");
 	class1->console = CONSOLE_NONE;
 
 	file2 = conf_file_new (source2, "/tmp/bar/bilbo");
-	class2 = file2->job = job_class_new (NULL, "bilbo", NULL);
+	class2 = file2->job = job_class_new (NULL, "bilbo");
 	class2->console = CONSOLE_NONE;
 
 	source3 = conf_source_new (NULL, "/tmp/baz", CONF_JOB_DIR);
 
 	file3 = conf_file_new (source3, "/tmp/baz/frodo");
-	class3 = file3->job = job_class_new (NULL, "frodo", NULL);
+	class3 = file3->job = job_class_new (NULL, "frodo");
 	class3->console = CONSOLE_NONE;
 
 
@@ -737,7 +737,7 @@ test_reconsider (void)
 	nih_free (source2);
 	nih_free (source1);
 
-	class4 = job_class_new (NULL, "frodo", NULL);
+	class4 = job_class_new (NULL, "frodo");
 	class4->console = CONSOLE_NONE;
 	nih_hash_add (job_classes, &class4->entry);
 	job_class_register (class4, conn, FALSE);
@@ -807,7 +807,7 @@ test_register (void)
 	 * announce it.
 	 */
 	TEST_FEATURE ("with signal emission");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 	assert (dbus_connection_get_object_path_data (conn, class->path,
@@ -845,7 +845,7 @@ test_register (void)
 	 * by emitting a signal immediately afterwards.
 	 */
 	TEST_FEATURE ("without signal emission");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 	assert (dbus_connection_get_object_path_data (conn, class->path,
@@ -914,7 +914,7 @@ test_unregister (void)
 	assert (! dbus_error_is_set (&dbus_error));
 
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 	assert (dbus_connection_get_object_path_data (conn, class->path,
@@ -972,7 +972,7 @@ test_environment (void)
 	 * just have the built-ins in the returned environment.
 	 */
 	TEST_FEATURE ("with no configured environment");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 	/* necessary to call this initially to avoid disrupting
@@ -1008,7 +1008,7 @@ test_environment (void)
 	 * will have those appended to the environment as well as the builtins.
 	 */
 	TEST_FEATURE ("with configured environment");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 	class->env = nih_str_array_new (class);
@@ -1046,7 +1046,7 @@ test_environment (void)
 	/* Check that configured environment override built-ins.
 	 */
 	TEST_FEATURE ("with configuration overriding built-ins");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 	class->env = nih_str_array_new (class);
@@ -1105,7 +1105,7 @@ test_get_instance (void)
 	TEST_FEATURE ("with running job");
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			job = job_new (class, "");
 
@@ -1143,7 +1143,7 @@ test_get_instance (void)
 	/* Check that if there's no such instance, a D-Bus error is raised.
 	 */
 	TEST_FEATURE ("with unknown job");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 	message = nih_new (NULL, NihDBusMessage);
@@ -1175,7 +1175,7 @@ test_get_instance (void)
 	TEST_FEATURE ("with environment");
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->instance = "$FOO";
 
@@ -1220,7 +1220,7 @@ test_get_instance (void)
 	 * is returned.
 	 */
 	TEST_FEATURE ("with invalid environment");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	class->instance = "$FOO";
 
@@ -1264,7 +1264,7 @@ test_get_instance_by_name (void)
 	TEST_FUNCTION ("job_class_get_instance_by_name");
 	nih_error_init ();
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 
@@ -1395,7 +1395,7 @@ test_get_all_instances (void)
 	nih_error_init ();
 	job_class_init ();
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 
@@ -1529,7 +1529,7 @@ test_start (void)
 	 * the reply will be sent to the sender.
 	 */
 	TEST_FEATURE ("with new job");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 	method = dbus_message_new_method_call (
@@ -1631,7 +1631,7 @@ test_start (void)
 	 * immediately and the job not blocked.
 	 */
 	TEST_FEATURE ("with no wait");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 	method = dbus_message_new_method_call (
@@ -1721,7 +1721,7 @@ test_start (void)
 	 * it through to running, the reply will be sent to the sender.
 	 */
 	TEST_FEATURE ("with stopping job");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
@@ -1833,7 +1833,7 @@ test_start (void)
 	 * a D-Bus error is raised immediately.
 	 */
 	TEST_FEATURE ("with starting job");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
@@ -1890,7 +1890,7 @@ test_start (void)
 	 * when it's starting.
 	 */
 	TEST_FEATURE ("with environment");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	class->instance = "$FOO";
 
@@ -1998,7 +1998,7 @@ test_start (void)
 	 * is returned.
 	 */
 	TEST_FEATURE ("with invalid environment");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 	method = dbus_message_new_method_call (
@@ -2085,7 +2085,7 @@ test_stop (void)
 	 * will be sent to the sender.
 	 */
 	TEST_FEATURE ("with running job");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
@@ -2177,7 +2177,7 @@ test_stop (void)
 	 * and no blocking entry created.
 	 */
 	TEST_FEATURE ("with no wait");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
@@ -2255,7 +2255,7 @@ test_stop (void)
 	 * a D-Bus error is raised immediately.
 	 */
 	TEST_FEATURE ("with stopping job");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
@@ -2311,7 +2311,7 @@ test_stop (void)
 	 * immediately.
 	 */
 	TEST_FEATURE ("with unknown job");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 	method = dbus_message_new_method_call (
@@ -2361,7 +2361,7 @@ test_stop (void)
 	 * for the pre-stop script.
 	 */
 	TEST_FEATURE ("with environment");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	class->instance = "$FOO";
 
@@ -2457,7 +2457,7 @@ test_stop (void)
 	 * is returned.
 	 */
 	TEST_FEATURE ("with invalid environment");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
@@ -2547,7 +2547,7 @@ test_restart (void)
 	 * through to waiting, the reply will be sent to the sender.
 	 */
 	TEST_FEATURE ("with running job");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
@@ -2655,7 +2655,7 @@ test_restart (void)
 	 * entry created.
 	 */
 	TEST_FEATURE ("with no wait");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
@@ -2747,7 +2747,7 @@ test_restart (void)
 	 * a D-Bus error is raised immediately.
 	 */
 	TEST_FEATURE ("with stopping job");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
@@ -2803,7 +2803,7 @@ test_restart (void)
 	 * immediately.
 	 */
 	TEST_FEATURE ("with unknown job");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 
 	method = dbus_message_new_method_call (
@@ -2853,7 +2853,7 @@ test_restart (void)
 	 * when it's starting again.
 	 */
 	TEST_FEATURE ("with environment");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	class->instance = "$FOO";
 
@@ -2967,7 +2967,7 @@ test_restart (void)
 	 * is returned.
 	 */
 	TEST_FEATURE ("with invalid environment");
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
@@ -3044,7 +3044,7 @@ test_get_name (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 
 			message = nih_new (NULL, NihDBusMessage);
@@ -3097,7 +3097,7 @@ test_get_description (void)
 	TEST_FEATURE ("with description");
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->description = nih_strdup (class, "a test job");
 
@@ -3138,7 +3138,7 @@ test_get_description (void)
 	TEST_FEATURE ("with no description");
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 
 			message = nih_new (NULL, NihDBusMessage);
@@ -3191,7 +3191,7 @@ test_get_author (void)
 	TEST_FEATURE ("with author");
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->author = nih_strdup (class, "a test job");
 
@@ -3232,7 +3232,7 @@ test_get_author (void)
 	TEST_FEATURE ("with no author");
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 
 			message = nih_new (NULL, NihDBusMessage);
@@ -3285,7 +3285,7 @@ test_get_version (void)
 	TEST_FEATURE ("with version");
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->version = nih_strdup (class, "a test job");
 
@@ -3326,7 +3326,7 @@ test_get_version (void)
 	TEST_FEATURE ("with no version");
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 
 			message = nih_new (NULL, NihDBusMessage);
@@ -3382,7 +3382,7 @@ test_get_start_on (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 
 			class->start_on = event_operator_new (
@@ -3478,7 +3478,7 @@ test_get_start_on (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 
 			message = nih_new (NULL, NihDBusMessage);
@@ -3535,7 +3535,7 @@ test_get_stop_on (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 
 			class->stop_on = event_operator_new (
@@ -3631,7 +3631,7 @@ test_get_stop_on (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 
 			message = nih_new (NULL, NihDBusMessage);
@@ -3687,7 +3687,7 @@ test_get_emits (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->emits = nih_str_array_new (class);
 
@@ -3740,7 +3740,7 @@ test_get_emits (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 
 			message = nih_new (NULL, NihDBusMessage);
@@ -3780,9 +3780,6 @@ int
 main (int   argc,
       char *argv[])
 {
-	/* run tests in legacy (pre-session support) mode */
-	setenv ("UPSTART_NO_SESSIONS", "1", 1);
-
 	test_new ();
 	test_consider ();
 	test_reconsider ();

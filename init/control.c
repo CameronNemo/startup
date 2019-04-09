@@ -48,7 +48,6 @@
 #include "dbus/upstart.h"
 
 #include "environ.h"
-#include "session.h"
 #include "job_class.h"
 #include "job.h"
 #include "blocked.h"
@@ -90,6 +89,15 @@ static void  control_session_file_remove (void);
  * when running as a non-priv user (but not as a Session Init).
  **/
 int use_session_bus = FALSE;
+
+/**
+ * insecure_control_interface:
+ *
+ * If TRUE, allow messages from users other than the daemon's own.
+ *
+ * Used for testing
+ **/
+int insecure_control_interface = FALSE;
 
 /**
  * dbus_bus_type:
@@ -455,8 +463,6 @@ control_register_all (DBusConnection *conn)
  * Called to request that Upstart reloads its configuration from disk,
  * useful when inotify is not available or the user is generally paranoid.
  *
- * Notes: chroot sessions are permitted to make this call.
- *
  * Returns: zero on success, negative value on raised error.
  **/
 int
@@ -503,7 +509,6 @@ control_get_job_by_name (void            *data,
 			 const char      *name,
 			 char           **job)
 {
-	Session  *session;
 	JobClass *class = NULL;
 	JobClass *global_class = NULL;
 
@@ -520,29 +525,8 @@ control_get_job_by_name (void            *data,
 		return -1;
 	}
 
-	/* Get the relevant session */
-	session = session_from_dbus (NULL, message);
-
 	/* Lookup the job */
 	class = (JobClass *)nih_hash_search (job_classes, name, NULL);
-
-	while (class && (class->session != session)) {
-
-		/* Found a match in the global session which may be used
-		 * later if no matching user session job exists.
-		 */
-		if ((! class->session) && (session && ! session->chroot))
-			global_class = class;
-
-		class = (JobClass *)nih_hash_search (job_classes, name,
-				&class->entry);
-	}
-
-	/* If no job with the given name exists in the appropriate
-	 * session, look in the global namespace (aka the NULL session).
-	 */ 
-	if (! class)
-		class = global_class;
 
 	if (! class) {
 		nih_dbus_error_raise_printf (
@@ -578,7 +562,6 @@ control_get_all_jobs (void             *data,
 		      NihDBusMessage   *message,
 		      char           ***jobs)
 {
-	Session *session;
 	char   **list;
 	size_t   len;
 
@@ -592,15 +575,8 @@ control_get_all_jobs (void             *data,
 	if (! list)
 		nih_return_system_error (-1);
 
-	/* Get the relevant session */
-	session = session_from_dbus (NULL, message);
-
 	NIH_HASH_FOREACH (job_classes, iter) {
 		JobClass *class = (JobClass *)iter;
-
-		if ((class->session || (session && session->chroot))
-		    && (class->session != session))
-			continue;
 
 		if (! nih_str_array_add (&list, message, &len,
 					 class->path)) {
@@ -706,9 +682,6 @@ control_emit_event_with_file (void            *data,
 		flags &= ~FD_CLOEXEC;
 		fcntl (event->fd, F_SETFD, flags);
 	}
-
-	/* Obtain the session */
-	event->session = session_from_dbus (NULL, message);
 
 	if (wait) {
 		blocked = blocked_new (event, BLOCKED_EMIT_METHOD, message);
@@ -906,7 +879,6 @@ control_notify_disk_writeable (void   *data,
 		     NihDBusMessage *message)
 {
 	int       ret;
-	Session  *session;
 
 	nih_assert (message != NULL);
 
@@ -916,13 +888,6 @@ control_notify_disk_writeable (void   *data,
 			_("You do not have permission to notify disk is writeable"));
 		return -1;
 	}
-
-	/* Get the relevant session */
-	session = session_from_dbus (NULL, message);
-
-	/* "nop" when run from a chroot */
-	if (session && session->chroot)
-		return 0;
 
 	ret = log_clear_unflushed ();
 
@@ -1200,7 +1165,6 @@ control_get_state (void           *data,
 		   NihDBusMessage  *message,
 		   char           **state)
 {
-	Session  *session;
 	size_t    len;
 
 	nih_assert (message);
@@ -1211,19 +1175,6 @@ control_get_state (void           *data,
 			DBUS_INTERFACE_UPSTART ".Error.PermissionDenied",
 			_("You do not have permission to request state"));
 		return -1;
-	}
-
-	/* Get the relevant session */
-	session = session_from_dbus (NULL, message);
-
-	/* We don't want chroot sessions snooping outside their domain.
-	 *
-	 * Ideally, we'd allow them to query their own session, but the
-	 * current implementation doesn't lend itself to that.
-	 */
-	if (session && session->chroot) {
-		nih_warn (_("Ignoring state query from chroot session"));
-		return 0;
 	}
 
 	if (state_to_string (state, &len) < 0)
@@ -1256,8 +1207,6 @@ int
 control_restart (void           *data,
 		 NihDBusMessage *message)
 {
-	Session  *session;
-
 	nih_assert (message != NULL);
 
 	if (! control_check_permission (message)) {
@@ -1265,20 +1214,6 @@ control_restart (void           *data,
 			DBUS_INTERFACE_UPSTART ".Error.PermissionDenied",
 			_("You do not have permission to request restart"));
 		return -1;
-	}
-
-	/* Get the relevant session */
-	session = session_from_dbus (NULL, message);
-
-	/* Chroot sessions must not be able to influence
-	 * the outside system.
-	 *
-	 * Making this a NOP is safe since it is the Upstart outside the
-	 * chroot which manages all chroot jobs.
-	 */
-	if (session && session->chroot) {
-		nih_warn (_("Ignoring restart request from chroot session"));
-		return 0;
 	}
 
 	nih_info (_("Restarting"));
@@ -1357,7 +1292,6 @@ control_set_env_list (void            *data,
 		      char * const    *vars,
 		      int              replace)
 {
-	Session         *session;
 	Job             *job = NULL;
 	char            *job_name = NULL;
 	char            *instance = NULL;
@@ -1395,19 +1329,8 @@ control_set_env_list (void            *data,
 		return -1;
 	}
 
-	/* Get the relevant session */
-	session = session_from_dbus (NULL, message);
-
-	/* Chroot sessions must not be able to influence
-	 * the outside system.
-	 */
-	if (session && session->chroot) {
-		nih_warn (_("Ignoring set env request from chroot session"));
-		return 0;
-	}
-
 	/* Lookup the job */
-	control_get_job (session, job, job_name, instance);
+	control_get_job (job, job_name, instance);
 
 	for (var = vars; var && *var; var++) {
 		nih_local char *envvar = NULL;
@@ -1548,7 +1471,6 @@ control_unset_env_list (void            *data,
 			char * const    *job_details,
 			char * const    *names)
 {
-	Session         *session;
 	Job             *job = NULL;
 	char            *job_name = NULL;
 	char            *instance = NULL;
@@ -1586,19 +1508,8 @@ control_unset_env_list (void            *data,
 		return -1;
 	}
 
-	/* Get the relevant session */
-	session = session_from_dbus (NULL, message);
-
-	/* Chroot sessions must not be able to influence
-	 * the outside system.
-	 */
-	if (session && session->chroot) {
-		nih_warn (_("Ignoring unset env request from chroot session"));
-		return 0;
-	}
-
 	/* Lookup the job */
-	control_get_job (session, job, job_name, instance);
+	control_get_job (job, job_name, instance);
 
 	for (name = names; name && *name; name++) {
 		if (! *name) {
@@ -1687,7 +1598,6 @@ control_get_env (void             *data,
 		 const char       *name,
 		 char            **value)
 {
-	Session     *session;
 	const char  *tmp;
 	Job         *job = NULL;
 	char        *job_name = NULL;
@@ -1723,19 +1633,8 @@ control_get_env (void             *data,
 		return -1;
 	}
 
-	/* Get the relevant session */
-	session = session_from_dbus (NULL, message);
-
-	/* Chroot sessions must not be able to influence
-	 * the outside system.
-	 */
-	if (session && session->chroot) {
-		nih_warn (_("Ignoring get env request from chroot session"));
-		return 0;
-	}
-
 	/* Lookup the job */
-	control_get_job (session, job, job_name, instance);
+	control_get_job (job, job_name, instance);
 
 	if (job) {
 		tmp = environ_get (job->env, name);
@@ -1789,7 +1688,6 @@ control_list_env (void             *data,
 		 char * const      *job_details,
 		 char            ***env)
 {
-	Session   *session;
 	Job       *job = NULL;
 	char      *job_name = NULL;
 	char      *instance = NULL;
@@ -1819,11 +1717,8 @@ control_list_env (void             *data,
 		return -1;
 	}
 
-	/* Get the relevant session */
-	session = session_from_dbus (NULL, message);
-
 	/* Lookup the job */
-	control_get_job (session, job, job_name, instance);
+	control_get_job (job, job_name, instance);
 
 	if (job) {
 		*env = nih_str_array_copy (job, NULL, job->env);
@@ -1860,7 +1755,6 @@ control_reset_env (void           *data,
 		 NihDBusMessage   *message,
 		 char * const    *job_details)
 {
-	Session    *session;
 	Job        *job = NULL;
 	char       *job_name = NULL;
 	char       *instance = NULL;
@@ -1896,20 +1790,8 @@ control_reset_env (void           *data,
 		return -1;
 	}
 
-	/* Get the relevant session */
-	session = session_from_dbus (NULL, message);
-
-	/* Chroot sessions must not be able to influence
-	 * the outside system.
-	 */
-	if (session && session->chroot) {
-		nih_warn (_("Ignoring reset env request from chroot session"));
-		return 0;
-	}
-
 	/* Lookup the job */
-	control_get_job (session, job, job_name, instance);
-
+	control_get_job (job, job_name, instance);
 
 	if (job) {
 		size_t len;
@@ -1981,7 +1863,9 @@ control_get_origin_uid (NihDBusMessage *message, uid_t *uid)
  * Determine if caller should be allowed to make a control request.
  *
  * Note that these permission checks rely on D-Bus to limit
- * session bus access to the same user.
+ * session bus access to the same user, but this restriction is
+ * relaxed when the insecure_control_interface variable is set
+ * (this situation only occurs when running the test suite).
  *
  * Returns: TRUE if permission is granted, else FALSE.
  **/
@@ -1989,22 +1873,16 @@ static int
 control_check_permission (NihDBusMessage *message)
 {
 	int    ret;
-	uid_t  uid;
-	pid_t  pid;
 	uid_t  origin_uid = 0;
 
 	nih_assert (message);
 
-	uid = getuid ();
-	pid = getpid ();
+	if (insecure_control_interface)
+		return TRUE;
 
 	ret = control_get_origin_uid (message, &origin_uid);
 
-	/* Its possible that D-Bus might be unable to determine the user
-	 * making the request. In this case, deny the request unless
-	 * we're running as a Session Init or via the test harness.
-	 */
-	if ((ret && origin_uid == uid) || user_mode || (uid && pid != 1))
+	if (ret && origin_uid == getuid ())
 		return TRUE;
 
 	return FALSE;
@@ -2081,8 +1959,6 @@ int
 control_end_session (void             *data,
 		     NihDBusMessage   *message)
 {
-	Session  *session;
-
 	nih_assert (message);
 
 	/* Not supported at the system level */
@@ -2094,14 +1970,6 @@ control_end_session (void             *data,
 			DBUS_INTERFACE_UPSTART ".Error.PermissionDenied",
 			_("You do not have permission to end session"));
 		return -1;
-	}
-
-	/* Get the relevant session */
-	session = session_from_dbus (NULL, message);
-
-	if (session && session->chroot) {
-		nih_warn (_("Ignoring session end request from chroot session"));
-		return 0;
 	}
 
 	quiesce (QUIESCE_REQUESTER_SESSION);

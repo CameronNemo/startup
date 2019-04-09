@@ -26,7 +26,6 @@
 #include <nih/list.h>
 #include <nih/watch.h>
 
-#include "session.h"
 #include "job_class.h"
 
 
@@ -48,7 +47,6 @@ typedef enum conf_source_type {
 /**
  * ConfSource:
  * @entry: list header,
- * @session: attached session,
  * @path: path to source,
  * @type: type of source,
  * @watch: NihWatch structure for automatic change notification,
@@ -66,7 +64,6 @@ typedef enum conf_source_type {
  **/
 typedef struct conf_source {
 	NihList             entry;
-	Session *           session;
 	char               *path;
 	ConfSourceType      type;
 
@@ -126,7 +123,7 @@ int         conf_source_reload (ConfSource *source)
 
 int         conf_file_destroy  (ConfFile *file);
 
-JobClass *  conf_select_job    (const char *name, const Session *session);
+JobClass *  conf_select_job    (const char *name);
 
 const char *
 conf_source_type_enum_to_str (ConfSourceType type)
@@ -169,7 +166,7 @@ conf_source_get_index (const ConfSource *source)
 	__attribute__ ((warn_unused_result));
 
 ConfFile *
-conf_file_find (const char *name, const Session *session)
+conf_file_find (const char *name)
 	__attribute__ ((warn_unused_result));
 
 #ifdef DEBUG

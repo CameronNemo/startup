@@ -4705,10 +4705,10 @@ test_source_reload (void)
 	/* initial load */
 	conf_reload ();
 
-	class1 = job_class_get_registered ("rc-sysinit", NULL);
+	class1 = job_class_get_registered ("rc-sysinit");
 	TEST_NE_P (class1, NULL);
 
-	class2 = job_class_get_registered ("foo", NULL);
+	class2 = job_class_get_registered ("foo");
 	TEST_NE_P (class2, NULL);
 
 	TEST_LIST_EMPTY (events);
@@ -4806,10 +4806,10 @@ test_source_reload (void)
 	/* initial load */
 	conf_reload ();
 
-	registered = job_class_get_registered ("foo", NULL);
+	registered = job_class_get_registered ("foo");
 	TEST_NE_P (registered, NULL);
 
-	best = conf_select_job (registered->name, registered->session);
+	best = conf_select_job (registered->name);
 	TEST_NE_P (best, NULL);
 
 	/* give job a chance to run - we don't expect it to though */
@@ -4850,12 +4850,12 @@ test_source_reload (void)
 	TEST_EQ (event1->blockers, 1);
 
 	/* JobClass should have been destroyed and recreated */
-	class1 = job_class_get_registered ("foo", NULL);
+	class1 = job_class_get_registered ("foo");
 	TEST_NE_P (class1, registered);
 
 	registered = class1;
 
-	best = conf_select_job (registered->name, registered->session);
+	best = conf_select_job (registered->name);
 	TEST_NE_P (best, NULL);
 
 	TEST_EQ_P (registered, best);
@@ -4881,12 +4881,12 @@ test_source_reload (void)
 	TEST_EQ (event1->blockers, 1);
 
 	/* JobClass should have been destroyed and recreated */
-	class1 = job_class_get_registered ("foo", NULL);
+	class1 = job_class_get_registered ("foo");
 	TEST_NE_P (class1, registered);
 
 	registered = class1;
 
-	best = conf_select_job (registered->name, registered->session);
+	best = conf_select_job (registered->name);
 	TEST_NE_P (best, NULL);
 
 	TEST_EQ_P (registered, best);
@@ -4960,9 +4960,9 @@ test_file_destroy (void)
 	 */
 	TEST_FEATURE ("with not-current job");
 	file = conf_file_new (source, "/path/to/file");
-	job = file->job = job_class_new (NULL, "foo", NULL);
+	job = file->job = job_class_new (NULL, "foo");
 
-	other = job_class_new (NULL, "foo", NULL);
+	other = job_class_new (NULL, "foo");
 	nih_hash_add (job_classes, &other->entry);
 
 	TEST_FREE_TAG (job);
@@ -4982,7 +4982,7 @@ test_file_destroy (void)
 	 */
 	TEST_FEATURE ("with stopped job");
 	file = conf_file_new (source, "/path/to/file");
-	job = file->job = job_class_new (NULL, "foo", NULL);
+	job = file->job = job_class_new (NULL, "foo");
 
 	nih_hash_add (job_classes, &job->entry);
 
@@ -5002,7 +5002,7 @@ test_file_destroy (void)
 	 */
 	TEST_FEATURE ("with running job");
 	file = conf_file_new (source, "/path/to/file");
-	job = file->job = job_class_new (NULL, "foo", NULL);
+	job = file->job = job_class_new (NULL, "foo");
 
 	nih_hash_add (job_classes, &job->entry);
 
@@ -5046,26 +5046,26 @@ test_select_job (void)
 	source2 = conf_source_new (NULL, "/tmp/bar", CONF_JOB_DIR);
 
 	file1 = conf_file_new (source2, "/tmp/bar/frodo");
-	class1 = file1->job = job_class_new (NULL, "frodo", NULL);
+	class1 = file1->job = job_class_new (NULL, "frodo");
 
 	file2 = conf_file_new (source2, "/tmp/bar/bilbo");
 
 	file3 = conf_file_new (source2, "/tmp/bar/drogo");
-	class2 = file3->job = job_class_new (NULL, "drogo", NULL);
+	class2 = file3->job = job_class_new (NULL, "drogo");
 
 	source3 = conf_source_new (NULL, "/tmp/baz", CONF_JOB_DIR);
 
 	file4 = conf_file_new (source3, "/tmp/baz/frodo");
-	class3 = file4->job = job_class_new (NULL, "frodo", NULL);
+	class3 = file4->job = job_class_new (NULL, "frodo");
 
 	file5 = conf_file_new (source2, "/tmp/bar/bilbo");
-	class4 = file5->job = job_class_new (NULL, "bilbo", NULL);
+	class4 = file5->job = job_class_new (NULL, "bilbo");
 
 
 	/* Check that a job with only one file is returned.
 	 */
 	TEST_FEATURE ("with one file");
-	ptr = conf_select_job ("drogo", NULL);
+	ptr = conf_select_job ("drogo");
 
 	TEST_EQ_P (ptr, class2);
 
@@ -5074,7 +5074,7 @@ test_select_job (void)
 	 * returned.
 	 */
 	TEST_FEATURE ("with multiple files");
-	ptr = conf_select_job ("frodo", NULL);
+	ptr = conf_select_job ("frodo");
 
 	TEST_EQ_P (ptr, class1);
 
@@ -5082,7 +5082,7 @@ test_select_job (void)
 	/* Check that files with no attached job are ignored.
 	 */
 	TEST_FEATURE ("with file but no attached job");
-	ptr = conf_select_job ("bilbo", NULL);
+	ptr = conf_select_job ("bilbo");
 
 	TEST_EQ_P (ptr, class4);
 
@@ -5090,7 +5090,7 @@ test_select_job (void)
 	/* Check that when there is no match, NULL is returned.
 	 */
 	TEST_FEATURE ("with no match");
-	ptr = conf_select_job ("meep", NULL);
+	ptr = conf_select_job ("meep");
 
 	TEST_EQ_P (ptr, NULL);
 
@@ -5105,9 +5105,6 @@ int
 main (int   argc,
       char *argv[])
 {
-	/* run tests in legacy (pre-session support) mode */
-	setenv ("UPSTART_NO_SESSIONS", "1", 1);
-
 	test_source_new ();
 	test_file_new ();
 	test_source_reload_job_dir ();

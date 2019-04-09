@@ -60,7 +60,7 @@ test_toggle_conf_name (void)
 	nih_free (f);
 
 	/* test parent param */
-	job = job_class_new (NULL, "foo", NULL);
+	job = job_class_new (NULL, "foo");
 	TEST_NE_P (job, NULL);
 
 	f = toggle_conf_name (job, filename);

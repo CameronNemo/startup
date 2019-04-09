@@ -137,7 +137,6 @@ event_new (const void  *parent,
 
 	nih_list_init (&event->entry);
 
-	event->session = NULL;
 	event->fd = -1;
 
 	event->progress = EVENT_PENDING;
@@ -315,13 +314,6 @@ event_pending_handle_jobs (Event *event)
 
 	NIH_HASH_FOREACH_SAFE (job_classes, iter) {
 		JobClass *class = (JobClass *)iter;
-
-		/* Only affect jobs within the same session as the event
-		 * unless the event has no session, in which case do them
-		 * all.
-		 */
-		if (event->session && (class->session != event->session))
-			continue;
 
 		/* We stop first so that if an event is listed both as a
 		 * stop and start event, it causes an active running process
@@ -515,7 +507,6 @@ event_finished (Event *event)
 			failed = NIH_MUST (nih_sprintf (NULL, "%s/failed",
 							event->name));
 			new_event = NIH_MUST (event_new (NULL, failed, NULL));
-			new_event->session = event->session;
 
 			if (event->env)
 				new_event->env = NIH_MUST (nih_str_array_copy (
@@ -547,7 +538,6 @@ json_object *
 event_serialise (const Event *event)
 {
 	json_object  *json;
-	int           session_index;
 
 	nih_assert (event);
 	nih_assert (event->name);
@@ -555,13 +545,6 @@ event_serialise (const Event *event)
 	json = json_object_new_object ();
 	if (! json)
 		return NULL;
-
-	session_index = session_get_index (event->session);
-	if (session_index < 0)
-		goto error;
-
-	if (! state_set_json_int_var (json, "session", session_index))
-		goto error;
 
 	if (! state_set_json_string_var_from_obj (json, event, name))
 		goto error;
@@ -654,7 +637,6 @@ event_deserialise (json_object *json)
 	Event              *event = NULL;
 	nih_local char     *name = NULL;
         nih_local char    **env = NULL;
-	int                 session_index = -1;
 
 	nih_assert (json);
 
@@ -678,12 +660,6 @@ event_deserialise (json_object *json)
 
 	if (! state_get_json_int_var_to_obj (json, event, fd))
 		goto error;
-
-	if (! state_get_json_int_var (json, "session", session_index))
-		goto error;
-
-	/* can't check return value here (as all values are legitimate) */
-	event->session = session_from_index (session_index);
 
 	if (! state_get_json_enum_var (json,
 				event_progress_str_to_enum,

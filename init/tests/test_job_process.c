@@ -534,7 +534,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->process[PROCESS_MAIN] = process_new (class);
 			class->process[PROCESS_MAIN]->command = nih_sprintf (
@@ -568,7 +568,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->process[PROCESS_MAIN] = process_new (class);
 			class->process[PROCESS_MAIN]->command = nih_sprintf (
@@ -608,7 +608,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->process[PROCESS_MAIN] = process_new (class);
 			class->process[PROCESS_MAIN]->script = TRUE;
@@ -647,7 +647,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->process[PROCESS_MAIN] = process_new (class);
 			class->process[PROCESS_MAIN]->script = TRUE;
@@ -686,7 +686,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->process[PROCESS_MAIN] = process_new (class);
 			class->process[PROCESS_MAIN]->script = TRUE;
@@ -725,7 +725,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->process[PROCESS_MAIN] = process_new (class);
 			class->process[PROCESS_MAIN]->script = FALSE;
@@ -763,7 +763,6 @@ test_start (void)
 			TEST_FILE_EQ (output, "PWD=/\n");
 		TEST_FILE_EQ (output, "UPSTART_INSTANCE=\n");
 		TEST_FILE_EQ (output, "UPSTART_JOB=test\n");
-		TEST_FILE_EQ (output, "UPSTART_NO_SESSIONS=1\n");
 		TEST_FILE_END (output);
 		fclose (output);
 		unlink (filename);
@@ -780,7 +779,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->process[PROCESS_MAIN] = process_new (class);
 			class->process[PROCESS_MAIN]->script = FALSE;
@@ -818,7 +817,6 @@ test_start (void)
 			TEST_FILE_EQ (output, "PWD=/\n");
 		TEST_FILE_EQ (output, "UPSTART_INSTANCE=foo\n");
 		TEST_FILE_EQ (output, "UPSTART_JOB=test\n");
-		TEST_FILE_EQ (output, "UPSTART_NO_SESSIONS=1\n");
 		TEST_FILE_END (output);
 		fclose (output);
 		unlink (filename);
@@ -836,7 +834,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->process[PROCESS_PRE_STOP] = process_new (class);
 			class->process[PROCESS_PRE_STOP]->script = FALSE;
@@ -875,7 +873,6 @@ test_start (void)
 			TEST_FILE_EQ (output, "PWD=/\n");
 		TEST_FILE_EQ (output, "UPSTART_INSTANCE=\n");
 		TEST_FILE_EQ (output, "UPSTART_JOB=test\n");
-		TEST_FILE_EQ (output, "UPSTART_NO_SESSIONS=1\n");
 		TEST_FILE_END (output);
 		fclose (output);
 		unlink (filename);
@@ -893,7 +890,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->process[PROCESS_POST_STOP] = process_new (class);
 			class->process[PROCESS_POST_STOP]->script = FALSE;
@@ -932,7 +929,6 @@ test_start (void)
 			TEST_FILE_EQ (output, "PWD=/\n");
 		TEST_FILE_EQ (output, "UPSTART_INSTANCE=\n");
 		TEST_FILE_EQ (output, "UPSTART_JOB=test\n");
-		TEST_FILE_EQ (output, "UPSTART_NO_SESSIONS=1\n");
 		TEST_FILE_END (output);
 		fclose (output);
 		unlink (filename);
@@ -950,7 +946,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->process[PROCESS_MAIN] = process_new (class);
 			class->process[PROCESS_MAIN]->script = TRUE;
@@ -993,7 +989,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->process[PROCESS_MAIN] = process_new (class);
 			class->process[PROCESS_MAIN]->script = FALSE;
@@ -1032,7 +1028,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->process[PROCESS_PRE_START] = process_new (class);
 			class->process[PROCESS_PRE_START]->script = FALSE;
@@ -1072,7 +1068,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->expect = EXPECT_DAEMON;
 			class->process[PROCESS_MAIN] = process_new (class);
@@ -1122,7 +1118,7 @@ test_start (void)
 
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->expect = EXPECT_FORK;
 			class->process[PROCESS_MAIN] = process_new (class);
@@ -1178,7 +1174,7 @@ test_start (void)
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
 			TEST_HASH_EMPTY (job_classes);
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
 			class->process[PROCESS_MAIN] = process_new (class);
 			class->process[PROCESS_MAIN]->script = FALSE;
@@ -1233,7 +1229,7 @@ test_start (void)
 
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "prism", NULL);
+	class = job_class_new (NULL, "prism");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -1300,7 +1296,7 @@ test_start (void)
 	TEST_FEATURE ("ensure sane fds with no console, and script");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "prism", NULL);
+	class = job_class_new (NULL, "prism");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -1367,7 +1363,7 @@ test_start (void)
 	TEST_FEATURE ("ensure sane fds with console log, no script");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "prism", NULL);
+	class = job_class_new (NULL, "prism");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -1434,7 +1430,7 @@ test_start (void)
 	TEST_FEATURE ("ensure sane fds with console log, and script");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "prism", NULL);
+	class = job_class_new (NULL, "prism");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -1501,7 +1497,7 @@ test_start (void)
 	TEST_FEATURE ("ensure that no log file written for single-line no-output script");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
 
@@ -1537,7 +1533,7 @@ test_start (void)
 	TEST_FEATURE ("ensure that no log file written for single-line no-output command");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
 
@@ -1573,7 +1569,7 @@ test_start (void)
 	TEST_FEATURE ("ensure that no log file written for CONSOLE_NONE");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
 
@@ -1619,7 +1615,7 @@ test_start (void)
 	TEST_FEATURE ("ensure that no log file written for multi-line no-output script");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
 
@@ -1674,7 +1670,7 @@ test_start (void)
 	 * However, we test this scenario in test_spawn() so all is not
 	 * lost.
 	 */
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
@@ -1738,7 +1734,7 @@ test_start (void)
 	TEST_GT (sprintf (fifoname, "%s/pipe", dirname), 0);
 	TEST_EQ (mknod (fifoname, S_IFIFO|S_IRUSR|S_IWUSR, 0), 0);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
@@ -1823,7 +1819,7 @@ test_start (void)
 	TEST_FEATURE ("with single-line command that is killed");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
@@ -1940,7 +1936,7 @@ test_start (void)
 	 * However, we test this scenario in test_spawn() so all is not
 	 * lost.
 	 */
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
@@ -2013,7 +2009,7 @@ test_start (void)
 	TEST_GT (sprintf (fifoname, "%s/pipe", dirname), 0);
 	TEST_EQ (mknod (fifoname, S_IFIFO|S_IRUSR|S_IWUSR, 0), 0);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
@@ -2084,7 +2080,7 @@ test_start (void)
 	TEST_FEATURE ("with multi-line script that writes 1 byte");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "multiline", NULL);
+	class = job_class_new (NULL, "multiline");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -2158,7 +2154,7 @@ test_start (void)
 	 * However, we test this scenario in test_spawn() so all is not
 	 * lost.
 	 */
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
@@ -2233,7 +2229,7 @@ test_start (void)
 	 * send the data.
 	 */
 
-	class = job_class_new (NULL, "multiline", NULL);
+	class = job_class_new (NULL, "multiline");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -2298,7 +2294,7 @@ test_start (void)
 	TEST_FEATURE ("with instance job and single-line script that writes 1 line to stdout");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/test-instance.log", dirname), 0);
@@ -2355,7 +2351,7 @@ test_start (void)
 	TEST_FEATURE ("with single-line script that writes >1 lines to stdout");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "foo", NULL);
+	class = job_class_new (NULL, "foo");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -2419,7 +2415,7 @@ test_start (void)
 	TEST_FEATURE ("with single-line command that writes >1 lines to stdout");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "foo", NULL);
+	class = job_class_new (NULL, "foo");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -2480,7 +2476,7 @@ test_start (void)
 	TEST_FEATURE ("with multi-line script that writes >1 lines to stdout");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "elf", NULL);
+	class = job_class_new (NULL, "elf");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -2542,7 +2538,7 @@ test_start (void)
 	TEST_FEATURE ("with single-line script that writes 1 line to stderr");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
@@ -2604,7 +2600,7 @@ test_start (void)
 	 *
 	 * dd(1) is a good choice as it always writes to stderr.
 	 */
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
@@ -2663,7 +2659,7 @@ test_start (void)
 	TEST_FEATURE ("with multi-line script that writes 1 line to stderr");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
@@ -2723,7 +2719,7 @@ test_start (void)
 	TEST_FEATURE ("with single-line script that writes >1 lines to stderr");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "foo", NULL);
+	class = job_class_new (NULL, "foo");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -2788,7 +2784,7 @@ test_start (void)
 	TEST_FEATURE ("with single-line command that writes >1 lines to stderr");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "foo", NULL);
+	class = job_class_new (NULL, "foo");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -2849,7 +2845,7 @@ test_start (void)
 	TEST_FEATURE ("with multi-line script that writes >1 lines to stderr");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "elf", NULL);
+	class = job_class_new (NULL, "elf");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -2912,7 +2908,7 @@ test_start (void)
 	TEST_FEATURE ("with single-line script that writes 1 line to stdout then 1 line to stderr");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "blah", NULL);
+	class = job_class_new (NULL, "blah");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -2973,7 +2969,7 @@ test_start (void)
 	TEST_FEATURE ("with single-line script that writes 1 line to stderr then 1 line to stdout");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "blah", NULL);
+	class = job_class_new (NULL, "blah");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3034,7 +3030,7 @@ test_start (void)
 	TEST_FEATURE ("with single-line command that writes to stdout and stderr");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "blah", NULL);
+	class = job_class_new (NULL, "blah");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3097,7 +3093,7 @@ test_start (void)
 	TEST_FEATURE ("with single-line script running an invalid command");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "blah", NULL);
+	class = job_class_new (NULL, "blah");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3167,7 +3163,7 @@ test_start (void)
 	TEST_RESET_MAIN_LOOP ();
 	TEST_INSTALL_CHILD_HANDLERS ();
 
-	class = job_class_new (NULL, "buzz", NULL);
+	class = job_class_new (NULL, "buzz");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3221,7 +3217,7 @@ test_start (void)
 
 	TEST_INSTALL_CHILD_HANDLERS ();
 
-	class = job_class_new (NULL, "asterix", NULL);
+	class = job_class_new (NULL, "asterix");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3291,7 +3287,7 @@ test_start (void)
 	TEST_RESET_MAIN_LOOP ();
 	TEST_INSTALL_CHILD_HANDLERS ();
 
-	class = job_class_new (NULL, "asterix", NULL);
+	class = job_class_new (NULL, "asterix");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3358,7 +3354,7 @@ test_start (void)
 	TEST_FEATURE ("with single-line command running an invalid command, then a post-stop command");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "asterix", NULL);
+	class = job_class_new (NULL, "asterix");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3429,7 +3425,7 @@ test_start (void)
 	TEST_FEATURE ("with single-line command running an invalid command, then an invalid post-stop command");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "asterix", NULL);
+	class = job_class_new (NULL, "asterix");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3486,7 +3482,7 @@ test_start (void)
 	TEST_FEATURE ("with single-line command running a valid command, then a 1-line invalid post-stop command");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "obelix", NULL);
+	class = job_class_new (NULL, "obelix");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3566,7 +3562,7 @@ test_start (void)
 	TEST_RESET_MAIN_LOOP ();
 	TEST_INSTALL_CHILD_HANDLERS ();
 
-	class = job_class_new (NULL, "blah", NULL);
+	class = job_class_new (NULL, "blah");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3623,7 +3619,7 @@ test_start (void)
 	TEST_FEATURE ("with multi-line script that writes 1 line to stdout then 1 line to stderr");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "blah", NULL);
+	class = job_class_new (NULL, "blah");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3686,7 +3682,7 @@ test_start (void)
 	TEST_FEATURE ("with multi-line script that writes 1 line to stderr then 1 line to stdout");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "blah", NULL);
+	class = job_class_new (NULL, "blah");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3754,7 +3750,7 @@ test_start (void)
 	TEST_FEATURE ("with single line command writing fast and exiting");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "budapest", NULL);
+	class = job_class_new (NULL, "budapest");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3825,7 +3821,7 @@ test_start (void)
 	TEST_FEATURE ("with single line command writing lots of data fast and exiting");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "foo", NULL);
+	class = job_class_new (NULL, "foo");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -3955,7 +3951,7 @@ test_start (void)
 	TEST_FEATURE ("with log object freed on process exit");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "acorn", NULL);
+	class = job_class_new (NULL, "acorn");
 	TEST_NE_P (class, NULL);
 
 	TEST_FILENAME (filename);
@@ -4040,7 +4036,7 @@ test_start (void)
 	TEST_NE_P (output, NULL);
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->process[PROCESS_MAIN] = process_new (class);
 			class->process[PROCESS_MAIN]->command = nih_sprintf (
 				class->process[PROCESS_MAIN],
@@ -4100,7 +4096,7 @@ test_start (void)
 	TEST_NE_P (output, NULL);
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "test", NULL);
+			class = job_class_new (NULL, "test");
 			class->process[PROCESS_MAIN] = process_new (class);
 			class->process[PROCESS_MAIN]->command = nih_sprintf (
 				class->process[PROCESS_MAIN],
@@ -4147,7 +4143,7 @@ test_start (void)
 	TEST_FEATURE ("with multiple processes and log");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "aero", NULL);
+	class = job_class_new (NULL, "aero");
 	TEST_NE_P (class, NULL);
 
 	TEST_EQ (setenv ("UPSTART_LOGDIR", dirname, 1), 0);
@@ -4331,7 +4327,7 @@ test_spawn (void)
 
 	sprintf (function, "%d", TEST_PIDS);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job   = job_new (class, "");
 
@@ -4373,7 +4369,7 @@ test_spawn (void)
 
 	sprintf (function, "%d", TEST_CONSOLE);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
@@ -4406,7 +4402,7 @@ test_spawn (void)
 
 	sprintf (function, "%d", TEST_CONSOLE);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_LOG;
 	job = job_new (class, "");
 
@@ -4453,7 +4449,7 @@ test_spawn (void)
 
 	sprintf (function, "%d", TEST_PWD);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	class->chdir = "/tmp";
 	job = job_new (class, "");
@@ -4487,7 +4483,7 @@ test_spawn (void)
 	env[1] = "FOO=bar";
 	env[2] = NULL;
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job   = job_new (class, "");
 
@@ -4500,7 +4496,6 @@ test_spawn (void)
 
 	TEST_FILE_EQ (output, "FOO=bar\n");
 	TEST_FILE_EQ (output, "PATH=/bin\n");
-	TEST_FILE_EQ (output, "UPSTART_NO_SESSIONS=1\n");
 	TEST_FILE_END (output);
 
 	fclose (output);
@@ -4518,7 +4513,7 @@ test_spawn (void)
 
 	sprintf (function, "%d", TEST_SIMPLE);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job   = job_new (class, "");
 
@@ -4543,7 +4538,7 @@ test_spawn (void)
 
 	sprintf (function, "%d", TEST_SIMPLE);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	job   = job_new (class, "");
 	class->console = CONSOLE_NONE;
 	pid = job_process_spawn_with_fd (job, args, NULL, TRUE, -1, -1,
@@ -4577,7 +4572,7 @@ test_spawn (void)
 	args[1] = filename;
 	args[2] = NULL;
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job   = job_new (class, "");
 
@@ -4608,7 +4603,7 @@ test_spawn (void)
 	args[0] = "does-not-exist";
 	args[1] = NULL;
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_LOG;
 	job   = job_new (class, "");
 	job->goal = JOB_START;
@@ -4647,7 +4642,7 @@ test_spawn (void)
 	TEST_FEATURE ("with debug enabled");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	class->debug = TRUE;
 	job = job_new (class, "");
@@ -4691,7 +4686,7 @@ test_spawn (void)
 	args[2] = filename;
 	args[3] = NULL;
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_NONE;
 	job = job_new (class, "");
 
@@ -4747,7 +4742,7 @@ test_spawn (void)
 	args[2] = filename;
 	args[3] = NULL;
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->console = CONSOLE_LOG;
 	job = job_new (class, "");
 
@@ -4803,7 +4798,7 @@ test_spawn (void)
 
 	TEST_EQ (setenv ("UPSTART_LOGDIR", dirname, 1), 0);
 
-	class = job_class_new (NULL, "multiproc", NULL);
+	class = job_class_new (NULL, "multiproc");
 	TEST_NE_P (class, NULL);
 
 	class->console = CONSOLE_LOG;
@@ -4934,7 +4929,7 @@ test_spawn (void)
 	TEST_EQ (setenv ("UPSTART_LOGDIR", dirname, 1), 0);
 	TEST_ALLOC_FAIL {
 		TEST_ALLOC_SAFE {
-			class = job_class_new (NULL, "simple-test", NULL);
+			class = job_class_new (NULL, "simple-test");
 			TEST_NE_P (class, NULL);
 
 			job = job_new (class, "");
@@ -5003,7 +4998,7 @@ test_spawn (void)
 	 */
 	TEST_EQ (setenv ("UPSTART_LOGDIR", dirname, 1), 0);
 
-	class = job_class_new (NULL, "with-single-line-script-and-console-log", NULL);
+	class = job_class_new (NULL, "with-single-line-script-and-console-log");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/with-single-line-script-and-console-log.log", dirname), 0);
@@ -5060,7 +5055,7 @@ test_spawn (void)
 
 	TEST_EQ (setenv ("UPSTART_LOGDIR", dirname, 1), 0);
 
-	class = job_class_new (NULL, "with-multi-line-script-and-console-log", NULL);
+	class = job_class_new (NULL, "with-multi-line-script-and-console-log");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/with-multi-line-script-and-console-log.log", dirname), 0);
@@ -5120,7 +5115,7 @@ test_spawn (void)
 
 	TEST_EQ (setenv ("UPSTART_LOGDIR", dirname, 1), 0);
 
-	class = job_class_new (NULL, "read-single-null-bytes-with-console-log", NULL);
+	class = job_class_new (NULL, "read-single-null-bytes-with-console-log");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/read-single-null-bytes-with-console-log.log", dirname), 0);
@@ -5171,7 +5166,7 @@ test_spawn (void)
 
 	TEST_EQ (setenv ("UPSTART_LOGDIR", dirname, 1), 0);
 
-	class = job_class_new (NULL, "read-data-from-forked-process", NULL);
+	class = job_class_new (NULL, "read-data-from-forked-process");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/read-data-from-forked-process.log", dirname), 0);
@@ -5235,7 +5230,7 @@ test_spawn (void)
 
 	TEST_EQ (setenv ("UPSTART_LOGDIR", dirname, 1), 0);
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	TEST_NE_P (class, NULL);
 
 	TEST_GT (sprintf (filename, "%s/test.log", dirname), 0);
@@ -5298,7 +5293,7 @@ test_spawn (void)
 
 		TEST_EQ (setenv ("UPSTART_LOGDIR", dirname, 1), 0);
 
-		class = job_class_new (NULL, "test", NULL);
+		class = job_class_new (NULL, "test");
 		TEST_NE_P (class, NULL);
 		TEST_EQ (class->console, CONSOLE_LOG);
 
@@ -5382,7 +5377,7 @@ test_log_path (void)
 	TEST_FEATURE ("with system job with simple name");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "system", NULL);
+	class = job_class_new (NULL, "system");
 	TEST_NE_P (class, NULL);
 	job = job_new (class, "");
 	TEST_NE_P (job, NULL);
@@ -5399,7 +5394,7 @@ test_log_path (void)
 	TEST_FEATURE ("with system job containing illegal path characters");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "//hello_foo bar.z/", NULL);
+	class = job_class_new (NULL, "//hello_foo bar.z/");
 	TEST_NE_P (class, NULL);
 	job = job_new (class, "");
 	TEST_NE_P (job, NULL);
@@ -5416,7 +5411,7 @@ test_log_path (void)
 	TEST_FEATURE ("with system job with named instance");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "foo bar", NULL);
+	class = job_class_new (NULL, "foo bar");
 	TEST_NE_P (class, NULL);
 	job = job_new (class, "bar foo");
 	TEST_NE_P (job, NULL);
@@ -5433,7 +5428,7 @@ test_log_path (void)
 	TEST_FEATURE ("with system job with named instance and illegal path characters");
 	TEST_HASH_EMPTY (job_classes);
 
-	class = job_class_new (NULL, "a/b", NULL);
+	class = job_class_new (NULL, "a/b");
 	TEST_NE_P (class, NULL);
 	job = job_new (class, "c/d_?/");
 	TEST_NE_P (job, NULL);
@@ -5452,7 +5447,7 @@ test_log_path (void)
 
 	TEST_EQ (setenv ("UPSTART_LOGDIR", dirname, 1), 0);
 
-	class = job_class_new (NULL, "a/b", NULL);
+	class = job_class_new (NULL, "a/b");
 	TEST_NE_P (class, NULL);
 	job = job_new (class, "c/d_?/");
 	TEST_NE_P (job, NULL);
@@ -5484,7 +5479,7 @@ test_kill (void)
 	nih_timer_init ();
 	event_init ();
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->kill_timeout = 1000;
 
 	class->process[PROCESS_MAIN] = process_new (class);
@@ -5650,7 +5645,7 @@ test_handler (void)
 
 	source = conf_source_new (NULL, "/tmp", CONF_JOB_DIR);
 	file = conf_file_new (source, "/tmp/test");
-	file->job = (class = job_class_new (NULL, "test", NULL));
+	file->job = (class = job_class_new (NULL, "test"));
 	TEST_NE_P (file->job, NULL);
 	class->process[PROCESS_MAIN] = process_new (class);
 	class->process[PROCESS_MAIN]->command = "echo";
@@ -9213,20 +9208,20 @@ test_find (void)
 	ProcessType  process;
 
 	TEST_FUNCTION ("job_process_find");
-	class1 = job_class_new (NULL, "foo", NULL);
+	class1 = job_class_new (NULL, "foo");
 	class1->process[PROCESS_MAIN] = process_new (class1);
 	class1->process[PROCESS_POST_START] = process_new (class1);
 	class1->instance = "$FOO";
 	nih_hash_add (job_classes, &class1->entry);
 
-	class2 = job_class_new (NULL, "bar", NULL);
+	class2 = job_class_new (NULL, "bar");
 	class2->process[PROCESS_PRE_START] = process_new (class2);
 	class2->process[PROCESS_MAIN] = process_new (class2);
 	class2->process[PROCESS_PRE_STOP] = process_new (class2);
 	class2->instance = "$FOO";
 	nih_hash_add (job_classes, &class2->entry);
 
-	class3 = job_class_new (NULL, "baz", NULL);
+	class3 = job_class_new (NULL, "baz");
 	class3->process[PROCESS_POST_STOP] = process_new (class3);
 	nih_hash_add (job_classes, &class3->entry);
 
@@ -9351,7 +9346,7 @@ test_utmp (void)
 	TEST_FUNCTION ("job_process_handler");
 	program_name = "test";
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	class->process[PROCESS_MAIN] = process_new (class);
 	class->process[PROCESS_MAIN]->command = "echo";
 
@@ -9752,15 +9747,6 @@ int
 main (int   argc,
       char *argv[])
 {
-	/* Note we do not set the UPSTART_NO_SESSIONS variable since this
-	 * would cause these tests to fail (as they scrutinize the job
-	 * environment).
-	 */
-
-	/* run tests in legacy (pre-session support) mode */
-	setenv ("UPSTART_NO_SESSIONS", "1", 1);
-
-
 	/* We re-exec this binary to test various children features.  To
 	 * do that, we need to know the full path to the program.
 	 */

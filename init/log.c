@@ -28,7 +28,6 @@
 #include <nih/main.h>
 #include "log.h"
 #include "job_process.h"
-#include "session.h"
 #include "conf.h"
 #include "paths.h"
 
@@ -66,8 +65,7 @@ NihList *log_unflushed_files = NULL;
  *      will be read from,
  * @uid: user id associated with this logger.
  *
- * Allocates and returns a new Log structure with the given @path
- * and @session.
+ * Allocates and returns a new Log structure with the given @path.
  *
  * If @parent is not NULL, it should be a pointer to another object which
  * will be used as a parent for the returned job class.  When all parents

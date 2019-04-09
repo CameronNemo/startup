@@ -1374,7 +1374,7 @@ test_operator_serialisation (void)
 	job_class_init ();
 	conf_init ();
 
-	job = job_class_new (NULL, "operator_test", NULL);
+	job = job_class_new (NULL, "operator_test");
 
 	for (test = test_operators; test && test->value; test++)
 	{
@@ -1436,9 +1436,6 @@ int
 main (int   argc,
       char *argv[])
 {
-	/* run tests in legacy (pre-session support) mode */
-	setenv ("UPSTART_NO_SESSIONS", "1", 1);
-
 	test_operator_new ();
 	test_operator_copy ();
 	test_operator_destroy ();

@@ -48,7 +48,6 @@
 /**
  * control_get_job:
  * 
- * @session: session,
  * @job: job that will be set,
  * @job_name: name of job to search for,
  * @instance: instance of @job_name to search for.
@@ -58,12 +57,12 @@
  *
  * Returns: -1 on raised error, or nothing on success.
  **/
-#define control_get_job(session, job, job_name, instance)             \
+#define control_get_job(job, job_name, instance)             \
 {                                                                     \
 	if (job_name) {                                               \
 		JobClass *class;                                      \
                                                                       \
-		class = job_class_get_registered (job_name, session); \
+		class = job_class_get_registered (job_name); \
 		if (! class) {                                        \
 			nih_dbus_error_raise_printf (                 \
 				DBUS_INTERFACE_UPSTART                \
@@ -73,7 +72,7 @@
 			return -1;                                    \
 		}                                                     \
 								      \
-		job = job_find (session, class, job_name, instance);  \
+		job = job_find (class, job_name, instance);  \
 		if (! job) {                                          \
 			nih_dbus_error_raise_printf (                 \
 				DBUS_INTERFACE_UPSTART                \

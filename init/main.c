@@ -148,7 +148,6 @@ static int pid_one = FALSE;
 
 extern int          no_inherit_env;
 extern int          user_mode;
-extern int          chroot_sessions;
 extern int          disable_job_logging;
 extern int          use_session_bus;
 extern int          default_console;
@@ -171,9 +170,6 @@ extern int          disable_cgroups;
 static NihOption options[] = {
 	{ 0, "append-confdir", N_("specify additional directory to load configuration files from"),
 		NULL, "DIR", NULL, append_conf_dir_setter },
-
-	{ 0, "chroot-sessions", N_("enable chroot sessions"),
-		NULL, NULL, &chroot_sessions, NULL },
 
 	{ 0, "confdir", N_("specify alternative directory to load configuration files from"),
 		NULL, "DIR", NULL, conf_dir_setter },
@@ -751,9 +747,6 @@ main (int   argc,
 		control_notify_restarted();
 	}
 
-	if (chroot_sessions)
-		nih_debug ("Chroot Sessions enabled");
-
 	/* Set us as the child subreaper.
 	 * This ensures that even when init doesn't run as PID 1, it'll always be
 	 * the ultimate parent of everything it spawns. */
@@ -776,7 +769,6 @@ main (int   argc,
 
 	/* Cleanup */
 	conf_destroy ();
-	session_destroy ();
 	control_cleanup ();
 
 	if (args)

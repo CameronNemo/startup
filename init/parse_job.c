@@ -312,7 +312,6 @@ static NihConfigStanza stanzas[] = {
 /**
  * parse_job:
  * @parent: parent object for new job,
- * @session: session,
  * @update: If not NULL, update the existing specified JobClass,
  * @name: name of new job,
  * @file: file or string to parse,
@@ -334,7 +333,6 @@ static NihConfigStanza stanzas[] = {
  **/
 JobClass *
 parse_job (const void *parent,
-	   Session    *session,
 	   JobClass   *update,
 	   const char *name,
 	   const char *file,
@@ -355,7 +353,7 @@ parse_job (const void *parent,
 	} else {
 		nih_debug ("Creating new JobClass %s",
 			  name);
-		class = job_class_new (parent, name, session);
+		class = job_class_new (parent, name);
 		if (! class)
 			nih_return_system_error (NULL);
 	}

@@ -66,6 +66,7 @@
 extern const char *control_server_address;
 extern int no_inherit_env;
 extern int use_session_bus;
+extern int insecure_control_interface;
 
 void
 test_server_open (void)
@@ -235,10 +236,10 @@ test_server_connect (void)
 	 * new connection has them automatically registered.
 	 */
 	TEST_FEATURE ("with existing jobs");
-	class1 = job_class_new (NULL, "foo", NULL);
+	class1 = job_class_new (NULL, "foo");
 	nih_hash_add (job_classes, &class1->entry);
 
-	class2 = job_class_new (NULL, "bar", NULL);
+	class2 = job_class_new (NULL, "bar");
 	job1 = job_new (class2, "test1");
 	job2 = job_new (class2, "test2");
 	nih_hash_add (job_classes, &class2->entry);
@@ -535,10 +536,10 @@ test_bus_open (void)
 	refuse_registration = FALSE;
 	server_conn = NULL;
 
-	class1 = job_class_new (NULL, "foo", NULL);
+	class1 = job_class_new (NULL, "foo");
 	nih_hash_add (job_classes, &class1->entry);
 
-	class2 = job_class_new (NULL, "bar", NULL);
+	class2 = job_class_new (NULL, "bar");
 	job1 = job_new (class2, "test1");
 	job2 = job_new (class2, "test2");
 	nih_hash_add (job_classes, &class2->entry);
@@ -990,7 +991,7 @@ test_get_job_by_name (void)
 	nih_error_init ();
 	job_class_init ();
 
-	class = job_class_new (NULL, "test", NULL);
+	class = job_class_new (NULL, "test");
 	nih_hash_add (job_classes, &class->entry);
 
 
@@ -1105,13 +1106,13 @@ test_get_all_jobs (void)
 	 * in an array allocated as a child of the message structure.
 	 */
 	TEST_FEATURE ("with registered jobs");
-	class1 = job_class_new (NULL, "frodo", NULL);
+	class1 = job_class_new (NULL, "frodo");
 	nih_hash_add (job_classes, &class1->entry);
 
-	class2 = job_class_new (NULL, "bilbo", NULL);
+	class2 = job_class_new (NULL, "bilbo");
 	nih_hash_add (job_classes, &class2->entry);
 
-	class3 = job_class_new (NULL, "sauron", NULL);
+	class3 = job_class_new (NULL, "sauron");
 	nih_hash_add (job_classes, &class3->entry);
 
 	TEST_ALLOC_FAIL {
@@ -2206,7 +2207,7 @@ test_list_env (void)
 	job_details = nih_str_array_new (NULL);
 	nih_assert (job_details);
 
-	class = job_class_new (NULL, "foo", NULL);
+	class = job_class_new (NULL, "foo");
 	TEST_NE_P (class, NULL);
 
 	job = job_new (class, "");
@@ -2318,7 +2319,7 @@ test_get_env (void)
 				NULL,
 				""));
 
-	class = job_class_new (NULL, "foo", NULL);
+	class = job_class_new (NULL, "foo");
 	TEST_NE_P (class, NULL);
 
 	job = job_new (class, "");
@@ -2429,7 +2430,7 @@ test_set_env (void)
 				NULL,
 				""));
 
-	class = job_class_new (NULL, "foo", NULL);
+	class = job_class_new (NULL, "foo");
 	TEST_NE_P (class, NULL);
 
 	job = job_new (class, "");
@@ -2536,7 +2537,7 @@ test_unset_env (void)
 				NULL,
 				""));
 
-	class = job_class_new (NULL, "foo", NULL);
+	class = job_class_new (NULL, "foo");
 	TEST_NE_P (class, NULL);
 
 	job = job_new (class, "");
@@ -2637,7 +2638,7 @@ test_reset_env (void)
 	job_details = nih_str_array_new (NULL);
 	nih_assert (job_details);
 
-	class = job_class_new (NULL, "foo", NULL);
+	class = job_class_new (NULL, "foo");
 	TEST_NE_P (class, NULL);
 
 	job = job_new (class, "");
@@ -2701,8 +2702,10 @@ int
 main (int   argc,
       char *argv[])
 {
-	/* run tests in legacy (pre-session support) mode */
-	setenv ("UPSTART_NO_SESSIONS", "1", 1);
+	/* in production, the daemon will ignore messages that do not come from
+	 * its own user, but we need these messages to get through for the tests
+	 * to function correctly */
+	insecure_control_interface = TRUE;
 
 	test_server_open ();
 	test_server_connect ();

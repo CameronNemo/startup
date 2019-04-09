@@ -23,13 +23,12 @@
 #include <nih/macros.h>
 #include <nih/config.h>
 
-#include "session.h"
 #include "job_class.h"
 
 
 NIH_BEGIN_EXTERN
 
-JobClass *parse_job (const void *parent, Session *session,
+JobClass *parse_job (const void *parent,
 		     JobClass *update, const char *name,
 		     const char *file, size_t len,
 		     size_t *pos, size_t *lineno)
