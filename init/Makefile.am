@@ -2,8 +2,6 @@
 
 EXTRA_DIST =
 
-initconfdir = $(sysconfdir)/init
-
 AM_MAKEFLAGS = TERM=xterm
 
 AM_CFLAGS = \
@@ -16,7 +14,6 @@ AM_CFLAGS = \
 AM_CPPFLAGS = \
 	-DLOCALEDIR="\"$(localedir)\"" \
 	-DCONFFILE="\"$(sysconfdir)/init.conf\"" \
-	-DCONFDIR="\"$(initconfdir)\"" \
 	-DSBINDIR="\"$(sbindir)\"" \
 	-I$(top_builddir) -I$(top_srcdir) -iquote$(builddir) -iquote$(srcdir) \
 	-I$(top_srcdir)/intl \
@@ -214,7 +211,9 @@ AM_TESTS_ENVIRONMENT= \
 		UPSTART_SESSION \
 		UPSTART_INSTANCE \
 		UPSTART_EVENTS \
-		UPSTART_JOB;
+		UPSTART_JOB \
+		LANG \
+		LC_ALL;
 
 TESTS = \
 	$(startup_test_programs) \
@@ -560,9 +559,6 @@ test_main_LDADD = \
 if ENABLE_CGROUPS
 test_main_LDADD += cgroup.o $(CGMANAGER_LIBS)
 endif
-
-install-data-local:
-	$(MKDIR_P) $(DESTDIR)$(initconfdir)
 
 clean-local:
 	rm -f *.gcno *.gcda
