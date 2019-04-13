@@ -20,7 +20,6 @@ autotools:
                 - chown -R gitlab-ci-startup:gitlab-ci-startup ..
                 - |
                         runuser -u gitlab-ci-startup -g gitlab-ci-startup -- sh -e -x << EOS
-                        test ! -d startup || cd startup
                         autoreconf -fi
                         ./configure
                         make
