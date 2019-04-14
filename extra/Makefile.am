@@ -10,7 +10,6 @@ AM_CFLAGS = \
 
 AM_CPPFLAGS = \
 	-DLOCALEDIR="\"$(localedir)\"" \
-	-DSBINDIR="\"$(sbindir)\"" \
 	-I$(top_builddir) -I$(top_srcdir) -iquote$(builddir) -iquote$(srcdir) \
 	-I$(top_srcdir)/intl
 
@@ -160,7 +159,7 @@ dconf_CFLAGS = \
 else
 EXTRA_DIST += \
 	dconf.c \
-	conf-session/dconf.conf \
+	conf-session/bridge-dconf.conf \
 	man/startup-dconf-bridge.8 \
 	man/dconf-event.7
 endif

@@ -10,7 +10,6 @@ AM_CFLAGS = \
 
 AM_CPPFLAGS = \
 	-DLOCALEDIR="\"$(localedir)\"" \
-	-DSBINDIR="\"$(sbindir)\"" \
 	-DUPSTART_BINARY="\"$(UPSTART_BINARY)\"" \
 	-DINITCTL_BINARY="\"$(INITCTL_BINARY)\"" \
 	-I$(top_builddir) -I$(top_srcdir) -iquote$(builddir) -iquote$(srcdir) \
