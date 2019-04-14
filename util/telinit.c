@@ -269,8 +269,7 @@ main (int   argc,
 		  "since the daemon watches its configuration for changes.\n"
 		  "\n"
 		  "RUNLEVEL may be U or u to instruct the init daemon to "
-		  "re-execute itself, this is not recommended since Upstart "
-		  "does not currently preserve its state.\n"));
+		  "re-execute itself\n"));
 
 	args = nih_option_parser (NULL, argc, argv, options, FALSE);
 	if (! args)
