@@ -26,12 +26,7 @@
  * This is the default PATH set by the init process itself.
  **/
 #ifndef PATH
-#define _PATH "/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin"
-#ifdef EXTRA_PATH
-#define PATH _PATH ":" EXTRA_PATH
-#else
-#define PATH _PATH
-#endif
+#define PATH "/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin"
 #endif
 
 

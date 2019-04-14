@@ -14,7 +14,6 @@ AM_CFLAGS = \
 
 AM_CPPFLAGS = \
 	-DLOCALEDIR="\"$(localedir)\"" \
-	-DSBINDIR="\"$(sbindir)\"" \
 	-I$(top_builddir) -I$(top_srcdir) -iquote$(builddir) -iquote$(srcdir) \
 	-I$(top_srcdir)/intl \
 	-I$(top_srcdir)/test -iquote $(top_srcdir)/test
@@ -91,6 +90,7 @@ run_abi_checker.sh: run_abi_checker.sh.in libupstart.la $(abi_build_XML)
 	    -e 's|[@]abi_build_XML[@]|$(abi_build_XML)|g' \
 	    -e 's|[@]abi_official[@]|$(abi_official)|g' \
 	    -e 's|[@]abi_compliance_checker[@]|$(ABI_COMPLIANCE_CHECKER)|g' \
+	    -e 's|[@]abi_dumper[@]|$(ABI_DUMPER)|g' \
 	    $< > $@
 	chmod +x $@
 

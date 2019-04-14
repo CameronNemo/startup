@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([startup], [1.14.0], [https://gitlab.com/chinstrap/startup/issues])
+AC_INIT([startup], [2.0], [https://gitlab.com/chinstrap/startup/issues])
 NIH_COPYRIGHT([[Copyright © 2006-2014 Canonical Ltd., 2011 Scott James Remnant]])
 AC_CONFIG_SRCDIR([init/main.c])
 AC_CONFIG_MACRO_DIR([m4])
@@ -31,7 +31,7 @@ AC_PATH_PROG([NIH_DBUS_TOOL], [nih-dbus-tool])
 NIH_WITH_LOCAL_LIBNIH
 
 PKG_CHECK_MODULES([NIH], [libnih >= 1.0.2])
-PKG_CHECK_MODULES([NIH_DBUS], [libnih-dbus >= 1.0.0])
+PKG_CHECK_MODULES([NIH_DBUS], [libnih-dbus >= 1.0.3])
 PKG_CHECK_MODULES([DBUS], [dbus-1 >= 1.2.16])
 PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.36], [have_gio=yes], [have_gio=no])
 PKG_CHECK_MODULES([UDEV], [libudev >= 146], [have_udev=yes], [have_udev=no])
@@ -120,11 +120,15 @@ AC_ARG_ENABLE([abi-check],
 		[abi_check=no], [abi_check=yes])
 
 if test x$abi_check = xyes; then
-	AC_CHECK_PROGS([ABI_COMPLIANCE_CHECKER],[abi-compliance-checker])
+	AC_CHECK_PROGS([ABI_COMPLIANCE_CHECKER], [abi-compliance-checker])
 	AC_SUBST([ABI_COMPLIANCE_CHECKER])
+	AC_CHECK_PROGS([ABI_DUMPER], [abi-dumper])
+	AC_SUBST([ABI_DUMPER])
 fi
 
-AM_CONDITIONAL([HAVE_ABI_CHECKER], [test ! -z "$ABI_COMPLIANCE_CHECKER" && test -e "$srcdir"/lib/abi/"$host_cpu"-"$host_os"/*.abi])
+AM_CONDITIONAL([HAVE_ABI_CHECKER], [test ! -z "$ABI_COMPLIANCE_CHECKER" && \
+		test ! -z "$ABI_DUMPER" && \
+		test -e "$srcdir"/lib/abi/"$host_cpu"-"$host_os"/*.abi])
 
 # Checks for header files.
 AC_CHECK_HEADERS([valgrind/valgrind.h, sys/prctl.h])
@@ -148,20 +152,6 @@ do
 done
 
 # Checks for library functions.
-
-# Other checks
-AC_MSG_CHECKING([whether to include sbindir in PATH])
-eval upstart_sbindir=\"$sbindir\"
-case $upstart_sbindir in
-    /sbin|NONE/sbin|//sbin|/usr/sbin|/usr/local/sbin)
-    	AC_MSG_RESULT([no])
-	;;
-    *)
-    	AC_MSG_RESULT([yes])
-	AC_DEFINE_UNQUOTED([EXTRA_PATH], ["$upstart_sbindir"],
-			   [Directory to append to path.])
-	;;
-esac
 
 NIH_COMPILER_WARNINGS
 NIH_COMPILER_OPTIMISATIONS
