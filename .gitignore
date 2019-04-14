@@ -35,10 +35,12 @@ TAGS
 /mkinstalldirs
 /stamp-h1
 m4
+/lib/logs
 /lib/libupstart*
 /lib/upstart
 /lib/test_*
 /lib/run_abi_checker.sh
+/doc/states.png
 po/Makevars.template
 po/POTFILES
 po/*.sed
@@ -51,6 +53,7 @@ po/en@boldquot.insert-header
 po/en@boldquot.po
 po/stamp-po
 po/*.gmo
+po/startup.pot
 init/com.ubuntu.Upstart.[ch]
 init/com.ubuntu.Upstart.Job.[ch]
 init/com.ubuntu.Upstart.Instance.[ch]
