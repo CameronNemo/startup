@@ -159,7 +159,7 @@ NIH_COMPILER_COVERAGE
 
 NIH_LINKER_OPTIMISATIONS
 
-AS_AC_EXPAND(startupbridgedir, $libexecdir/startup/bridge)
+AS_AC_EXPAND(startupbridgedir, $libexecdir/$PACKAGE/bridge)
 
 AC_CONFIG_FILES([
 	Makefile
