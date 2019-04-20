@@ -140,11 +140,11 @@ static char *initial_event = NULL;
 static int disable_startup_event = FALSE;
 
 /**
- * pid_one:
+ * initial_pid:
  *
- * If TRUE, running as PID 1.
+ * Initial PID of the daemon.
  **/
-static int pid_one = FALSE;
+static pid_t initial_pid = -1;
 
 extern int          no_inherit_env;
 extern int          user_mode;
@@ -267,8 +267,7 @@ main (int   argc,
 	if (! user_mode)
 		no_inherit_env = TRUE;
 
-	if (getpid() == 1)
-		pid_one = TRUE;
+	initial_pid = getpid ();
 
 #ifndef DEBUG
 	if (use_session_bus == FALSE && user_mode == FALSE) {
@@ -282,7 +281,7 @@ main (int   argc,
 		}
 
 		/* Invoke telinit when called as init and not PID 1 */
-		if (! pid_one && (strcmp(basename(args_copy[0]), "init") == 0)) {
+		if (initial_pid != 1 && (strncmp(program_name, "init", 5) == 0)) {
 			execv (TELINIT, argv);
 			/* Ignore failure, probably just that telinit doesn't exist */
 
@@ -472,7 +471,7 @@ main (int   argc,
 	nih_signal_set_handler (SIGALRM, nih_signal_handler);
 
 #ifndef DEBUG
-	if (pid_one) {
+	if (initial_pid == 1) {
 		/* Ask the kernel to send us SIGINT when control-alt-delete is
 		 * pressed; generate an event with the same name.
 		 */
@@ -537,12 +536,12 @@ main (int   argc,
 		FILE *fd;
 
 		snprintf (filename, sizeof (filename),
-			  "/proc/%d/oom_score_adj", getpid ());
+			  "/proc/%lld/oom_score_adj", initial_pid);
 		oom_value = JOB_DEFAULT_OOM_SCORE_ADJ;
 		fd = fopen (filename, "w");
 		if ((! fd) && (errno == ENOENT)) {
 			snprintf (filename, sizeof (filename),
-				  "/proc/%d/oom_adj", getpid ());
+				  "/proc/%lld/oom_adj", initial_pid);
 			oom_value = (JOB_DEFAULT_OOM_SCORE_ADJ
 				     * ((JOB_DEFAULT_OOM_SCORE_ADJ < 0) ? 17 : 15)) / 1000;
 			fd = fopen (filename, "w");
@@ -752,7 +751,7 @@ main (int   argc,
 	 * the ultimate parent of everything it spawns. */
 
 #ifdef HAVE_SYS_PRCTL_H
-	if (getpid () > 1 && prctl (PR_SET_CHILD_SUBREAPER, 1) < 0) {
+	if (initial_pid > 1 && prctl (PR_SET_CHILD_SUBREAPER, 1) < 0) {
 		nih_warn ("%s: %s", _("Unable to register as subreaper"),
 				  strerror (errno));
 
@@ -830,7 +829,7 @@ logger_kmsg (NihLogLevel priority,
 	if (fd < 0)
 		return -1;
 
-	buffer = nih_sprintf (NULL, "<%c>%s: %s\n", tag, program_name, message);
+	buffer = nih_sprintf (NULL, "<%c>%s[%lld]: %s\n", tag, program_name, initial_pid, message);
 	if (! buffer)
 		goto out;
 
@@ -948,7 +947,7 @@ term_handler (void      *data,
 	nih_assert (args_copy[0] != NULL);
 	nih_assert (signal != NULL);
 
-	if (pid_one || use_session_bus) {
+	if (initial_pid == 1 || use_session_bus) {
 		nih_warn (_("Re-executing %s"), args_copy[0]);
 		stateful_reexec ();
 	} else {
