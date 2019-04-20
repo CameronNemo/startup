@@ -830,7 +830,7 @@ logger_kmsg (NihLogLevel priority,
 	if (fd < 0)
 		return -1;
 
-	buffer = nih_sprintf (NULL, "<%c>%s: %s\n", tag, program_name, message);
+	buffer = nih_sprintf (NULL, "<%c>%s[%lld]: %s\n", tag, program_name, getpid(), message);
 	if (! buffer)
 		goto out;
 
