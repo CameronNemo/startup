@@ -849,7 +849,6 @@ test_pending_handle_jobs (void)
 
 			class = job_class_new (NULL, "test");
 			class->console = CONSOLE_NONE;
-			class->task = TRUE;
 
 			assert (nih_str_array_add (&(class->env), class,
 						   NULL, "FOO=BAR"));

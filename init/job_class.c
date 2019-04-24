@@ -2660,7 +2660,8 @@ job_class_induct_job (JobClass *class)
 					"UPSTART_FDS"));
 	}
 
-	if (job->state != JOB_RUNNING) {
+	if ((job->class->task && job->state == JOB_RUNNING)
+	    || job->state != JOB_RUNNING) {
 		event_operator_events (job->class->start_on,
 				job, &job->blocking);
 	}
