@@ -8,13 +8,20 @@ stages:
 
 before_script:
         - xbps-install -Syu
+        - xbps-install -yu
 
 cppcheck:
         stage: lint
         script: cppcheck --inline-suppr --error-exitcode=3 .
+        except:
+                refs:
+                        - deb-packaging
 
 autotools:
         stage: build-test
+        except:
+                refs:
+                        - deb-packaging
         script:
                 - useradd -d /var/empty -M -U gitlab-ci-startup
                 - chown -R gitlab-ci-startup:gitlab-ci-startup ..
