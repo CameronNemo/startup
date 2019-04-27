@@ -1720,67 +1720,56 @@ job_process_terminated (Job         *job,
 			break;
 		}
 
-		/* We don't assume that because the primary process was
-		 * killed or exited with a non-zero status, it failed.
-		 * Instead we check the normalexit list to see whether
-		 * the exit signal or status is in that list, and only
-		 * if not, do we consider it failed.
-		 *
-		 * For services that can be respawned, a zero exit status is
-		 * also a failure unless listed.
-		 */
-		if ((status || (job->class->respawn && (! job->class->task)))
-		    && (job->goal == JOB_START)) {
+		/* only fail or respawn the job if goal is START */
+		if (job->goal != JOB_START)
+			break;
+
+		/* normal exit defaults to 0, except for respawned services
+		 * which have no normal exit status by default */
+		if (!(job->class->normalexit_len == 0 && status == 0)
+		    || (job->class->respawn && ! job->class->task))
 			failed = TRUE;
-			for (size_t i = 0; i < job->class->normalexit_len; i++) {
-				if (job->class->normalexit[i] == status) {
-					failed = FALSE;
-					break;
-				}
-			}
 
-			/* We might be able to respawn the failed job;
-			 * that's a simple matter of doing nothing.  Check
-			 * the job isn't running away first though.
-			 */
-			if (failed && job->class->respawn && ! disable_respawn) {
-				if (job_process_catch_runaway (job)) {
-					nih_warn (_("%s respawning too fast, stopped"),
-						  job_name (job));
-
-					failed = FALSE;
-					job_failed (job, PROCESS_INVALID, 0);
-				} else {
-					nih_warn (_("%s %s process ended, respawning"),
-						  job_name (job),
-						  process_name (process));
-					failed = FALSE;
-
-					/* If we're not going to change the
-					 * state because there's a post-start
-					 * or pre-stop script running, we need
-					 * to remember to do it when that
-					 * finishes.
-					 */
-					if (! state)
-						job_change_goal (job, JOB_RESPAWN);
-
-					/* job_next_state will return post-starting,
-					 * but we want stopping so it will respawn
-					 */
-					if (job->state == JOB_SPAWNED) {
-						job_change_state (job, JOB_STOPPING);
-						state = FALSE;
-					}
-					break;
-				}
+		/* in any case, normal exit can be overridden */
+		for (size_t i = 0; i < job->class->normalexit_len; i++) {
+			if (job->class->normalexit[i] == status) {
+				failed = FALSE;
+				break;
 			}
 		}
 
-		/* Otherwise whether it's failed or not, we should
-		 * stop the job now.
+		if (! failed || ! job->class->respawn || disable_respawn) {
+			stop = TRUE;
+			break;
+		}
+
+		/* we take action on the failure for the respawn jobs below */
+		failed = FALSE;
+
+		if (job_process_catch_runaway (job)) {
+			nih_warn (_("%s respawning too fast, stopped"),
+				  job_name (job));
+
+			job_failed (job, PROCESS_INVALID, 0);
+			stop = TRUE;
+			break;
+		}
+
+		nih_warn (_("%s %s process ended, respawning"),
+			  job_name (job), process_name (process));
+
+		/* We do not change state when there is a post-start or pre-stop
+		 * script running, so remember to respawn when that finishes. */
+		if (! state)
+			job_change_goal (job, JOB_RESPAWN);
+
+		/* job_next_state will return post-starting,
+		 * but we want stopping so it will respawn
 		 */
-		stop = TRUE;
+		if (job->state == JOB_SPAWNED) {
+			job_change_state (job, JOB_STOPPING);
+			state = FALSE;
+		}
 		break;
 	case PROCESS_SECURITY:
 		nih_assert (job->state == JOB_SECURITY);
@@ -1929,10 +1918,9 @@ job_process_terminated (Job         *job,
 	 * state twice.
 	 */
 	if (stop) {
-		if (job->state == JOB_RUNNING)
-			state = FALSE;
-
 		job_change_goal (job, JOB_STOP);
+		if (job->state == JOB_RUNNING)
+			return;
 	}
 
 	if (state)
