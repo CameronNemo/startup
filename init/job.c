@@ -1001,6 +1001,88 @@ job_finished (Job *job,
 
 
 /**
+ * job_emit_event_env:
+ * @job: job generating the event,
+ * @stop: whether the job is to be stopped.
+ *
+ * When we emit a job event, we need to include some extra veriables
+ * depending on the context.
+ *
+ * Returns: new array of environment variables.
+ **/
+char **
+job_emit_event_env (Job *job, int stop)
+{
+	size_t len = 0;
+	char **env = NIH_MUST (nih_str_array_new (NULL));
+
+	/* Add the job and instance name */
+	NIH_MUST (environ_set (&env, NULL, &len, TRUE,
+			       "JOB=%s", job->class->name));
+	NIH_MUST (environ_set (&env, NULL, &len, TRUE,
+	                       "INSTANCE=%s", job->name));
+
+	/* Add any exported variables from the job environment */
+	for (char **e = job->class->export; e && *e; e++) {
+		char * const *str;
+
+		str = environ_lookup (job->env, *e, strlen (*e));
+		if (str)
+			NIH_MUST (environ_add (&env, NULL, &len, FALSE, *str));
+	}
+
+	if (! stop)
+		return env;
+
+	/* Stop events include a "failed" argument if a process failed,
+	 * otherwise stop events have an "ok" argument. */
+
+	if (! job->failed) {
+		NIH_MUST (environ_add (&env, NULL, &len, TRUE, "RESULT=ok"));
+		return env;
+	}
+
+	NIH_MUST (environ_add (&env, NULL, &len, TRUE, "RESULT=failed"));
+
+	/* Include info about which process failed, and signal/exit info */
+
+	/* If it was a respawn failure, set process name to "respawn". */
+	if (job->failed_process == PROCESS_INVALID) {
+		NIH_MUST (environ_add (&env, NULL, &len, TRUE,
+		                       "PROCESS=respawn"));
+		return env;
+	}
+
+	NIH_MUST (environ_set (&env, NULL, &len, TRUE, "PROCESS=%s",
+	                       process_name (job->failed_process)));
+
+	/* If the spawn itself failed, do not include signal/exit info */
+	if (job->exit_status == -1)
+		return env;
+
+	/* If the job was terminated by a signal, it will be stored in the
+	 * higher byte and we set EXIT_SIGNAL rather than EXIT_STATUS. */
+
+	if (job->exit_status & ~0xff) {
+		const char *sig;
+		sig = nih_signal_to_name (job->exit_status >> 8);
+		if (sig) {
+			NIH_MUST (environ_set (&env, NULL, &len, TRUE,
+			                       "EXIT_SIGNAL=%s", sig));
+		} else {
+			NIH_MUST (environ_set (&env, NULL, &len, TRUE,
+			                       "EXIT_SIGNAL=%d", job->exit_status >> 8));
+		}
+		return env;
+	}
+
+	NIH_MUST (environ_set (&env, NULL, &len, TRUE,
+	                       "EXIT_STATUS=%d", job->exit_status));
+	return env;
+}
+
+
+/**
  * job_emit_event:
  * @job: job generating the event.
  *
@@ -1026,8 +1108,6 @@ job_emit_event (Job *job)
 	const char      *name;
 	int              block = FALSE, stop = FALSE;
 	nih_local char **env = NULL;
-	char           **e;
-	size_t           len;
 
 	nih_assert (job != NULL);
 
@@ -1052,74 +1132,7 @@ job_emit_event (Job *job)
 		nih_assert_not_reached ();
 	}
 
-	len = 0;
-	env = NIH_MUST (nih_str_array_new (NULL));
-
-	/* Add the job and instance name */
-	NIH_MUST (environ_set (&env, NULL, &len, TRUE,
-			       "JOB=%s", job->class->name));
-	NIH_MUST (environ_set (&env, NULL, &len, TRUE,
-			       "INSTANCE=%s", job->name));
-
-	/* Stop events include a "failed" argument if a process failed,
-	 * otherwise stop events have an "ok" argument.
-	 */
-	if (stop && job->failed) {
-		NIH_MUST (environ_add (&env, NULL, &len, TRUE,
-				       "RESULT=failed"));
-
-		/* Include information about the process that failed, and
-		 * the signal/exit information.  If it was the spawn itself
-		 * that failed, we don't include signal/exit information and
-		 * if it was a respawn failure, we use the special "respawn"
-		 * argument instead of the process name,
-		 */
-		if ((job->failed_process != PROCESS_INVALID)
-		    && (job->exit_status != -1)) {
-			NIH_MUST (environ_set (&env, NULL, &len, TRUE,
-					       "PROCESS=%s",
-					       process_name (job->failed_process)));
-
-			/* If the job was terminated by a signal, that
-			 * will be stored in the higher byte and we
-			 * set EXIT_SIGNAL instead of EXIT_STATUS.
-			 */
-			if (job->exit_status & ~0xff) {
-				const char *sig;
-
-				sig = nih_signal_to_name (job->exit_status >> 8);
-				if (sig) {
-					NIH_MUST (environ_set (&env, NULL, &len, TRUE,
-							       "EXIT_SIGNAL=%s", sig));
-				} else {
-					NIH_MUST (environ_set (&env, NULL, &len, TRUE,
-							       "EXIT_SIGNAL=%d", job->exit_status >> 8));
-				}
-			} else {
-				NIH_MUST (environ_set (&env, NULL, &len, TRUE,
-						       "EXIT_STATUS=%d", job->exit_status));
-			}
-		} else if (job->failed_process != PROCESS_INVALID) {
-			NIH_MUST (environ_set (&env, NULL, &len, TRUE,
-					       "PROCESS=%s",
-					       process_name (job->failed_process)));
-		} else {
-			NIH_MUST (environ_add (&env, NULL, &len, TRUE,
-					       "PROCESS=respawn"));
-		}
-	} else if (stop) {
-		NIH_MUST (environ_add (&env, NULL, &len, TRUE, "RESULT=ok"));
-	}
-
-	/* Add any exported variables from the job environment */
-	for (e = job->class->export; e && *e; e++) {
-		char * const *str;
-
-		str = environ_lookup (job->env, *e, strlen (*e));
-		if (str)
-			NIH_MUST (environ_add (&env, NULL, &len, FALSE, *str));
-	}
-
+	env = NIH_MUST (job_emit_event_env (job, stop));
 	event = NIH_MUST (event_new (NULL, name, env));
 
 	if (block) {
