@@ -19,17 +19,37 @@ Feature highlights:
 The minimum build requirements are:
 
  * Linux 2.6.24
+ * GNU Autoconf 2.61
+ * GNU Automake 1.10
+ * GNU Libtool 2.2.4
+ * GNU Gettext 0.16.1
  * GCC 4.1
- * GNU C Library (glibc) 2.4
- * libnih 1.0.2
  * pkg-config 0.22
- * libnih-dbus 1.0.2
- * nih-dbus-tool 1.0.4 or 1.0.3 with 4143fac798530fd02ac7c98955b06ab58bbb7242
+ * GNU C Library (glibc) 2.4, or musl libc
  * D-Bus 1.2.16
+ * libnih 1.0.4 or 1.0.3 with
+ [one patch](https://github.com/keybuk/libnih/commit/4143fac798530fd02ac7c98955b06ab58bbb7242.patch)
 
-These should all be available or accessible from the current release
-of any modern Linux distribution.
+These should all be available from Debian, Ubuntu, or Void Linux.
 
-For detailed compilation and installation instructions see the INSTALL
-file.  If you've checked startup out from revision control and want to
-contribute, see the HACKING file.
+## building
+
+A typical build, suitable for session init usage:
+
+```
+$ autoreconf -fi
+$ mkdir build
+$ cd build
+$ ../configure --prefix=/usr --sysconfdir=/etc --disable-sysvcompat
+$ make
+```
+
+## installing
+
+To install `startup`, use the
+[checkinstall](https://www.linux.com/learn/easy-package-creation-checkinstall)
+tool to ensure that no file conflicts are present:
+
+```
+# checkinstall
+```
