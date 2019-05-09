@@ -1,10 +1,8 @@
 description "bridge-udev: emit device events"
-
-# From udev itself
 emits *-device-added
 emits *-device-removed
 emits *-device-changed
-# From http://www.kernel.org/pub/linux/utils/kernel/hotplug/libudev/libudev-udev-device.html
+# http://www.kernel.org/pub/linux/utils/kernel/hotplug/libudev/libudev-udev-device.html
 emits *-device-online
 emits *-device-offline
 # New in Linux 4.12+
@@ -16,5 +14,4 @@ stop on session-end
 
 expect readyfd
 respawn
-
 exec @startupbridgedir@/udev --user --readyfd

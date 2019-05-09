@@ -1,5 +1,4 @@
 description "bridge-dbus-system: emit system bus signal events"
-
 emits dbus
 
 start on started dbus
@@ -7,5 +6,4 @@ stop on stopping dbus
 
 expect readyfd
 respawn
-
 exec @startupbridgedir@/dbus --readyfd --system --user --bus-name system

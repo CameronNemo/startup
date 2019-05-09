@@ -1,11 +1,9 @@
 description "bridge-file: emit file events"
-
 emits file
 
-start on started dbus
+start on startup
 stop on session-end
 
 expect readyfd
 respawn
-
 exec @startupbridgedir@/file --readyfd --user

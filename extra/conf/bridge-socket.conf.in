@@ -1,11 +1,9 @@
 description "bridge-socket: emit socket events"
-
 emits socket
 
-start on net-device-up IFACE=lo
-stop on runlevel [!2345]
+start on stopped net-loopback RESULT='ok'
+stop on starting sys-down
 
 expect readyfd
 respawn
-
 exec @startupbridgedir@/socket --readyfd

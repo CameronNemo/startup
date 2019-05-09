@@ -1,5 +1,4 @@
 description "bridge-socket: emit socket events"
-
 emits socket
 
 start on startup
@@ -7,5 +6,4 @@ stop on session-end
 
 expect readyfd
 respawn
-
 exec @startupbridgedir@/socket --user --readyfd

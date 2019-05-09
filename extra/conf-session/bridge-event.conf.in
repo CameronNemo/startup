@@ -1,5 +1,4 @@
 description "bridge-event: emit system events in session"
-
 emits :sys:*
 
 start on started dbus
@@ -7,5 +6,4 @@ stop on stopped dbus
 
 expect readyfd
 respawn
-
 exec @startupbridgedir@/event --readyfd

@@ -19,10 +19,14 @@ bridgedir = $(startupbridgedir)
 
 dist_sessions_DATA = \
 	conf-session/bridge-event.conf \
+	conf-session/bridge-event.override \
 	conf-session/bridge-file.conf \
-	conf-session/re-exec.conf \
+	conf-session/bridge-file.override \
 	conf-session/bridge-dbus-session.conf \
-	conf-session/bridge-dbus-system.conf
+	conf-session/bridge-dbus-session.override \
+	conf-session/bridge-dbus-system.conf \
+	conf-session/bridge-dbus-system.override \
+	conf-session/re-exec.conf
 
 bridge_PROGRAMS = \
 	event \
@@ -31,7 +35,9 @@ bridge_PROGRAMS = \
 
 dist_init_DATA = \
 	conf/bridge-file.conf \
-	conf/bridge-dbus.conf
+	conf/bridge-file.override \
+	conf/bridge-dbus.conf \
+	conf/bridge-dbus.override
 
 dist_man_MANS = \
 	man/startup-event-bridge.8 \
@@ -45,10 +51,12 @@ bridge_PROGRAMS += \
 	socket
 
 dist_sessions_DATA += \
-	conf-session/bridge-socket.conf
+	conf-session/bridge-socket.conf \
+	conf-session/bridge-socket.override
 
 dist_init_DATA += \
-	conf/bridge-socket.conf
+	conf/bridge-socket.conf \
+	conf/bridge-socket.override
 
 dist_man_MANS += \
 	man/startup-socket-bridge.8 \
@@ -68,7 +76,9 @@ else
 EXTRA_DIST += \
 	socket.c \
 	conf-session/bridge-socket.conf \
+	conf-session/bridge-socket.override \
 	conf/bridge-socket.conf \
+	conf/bridge-socket.override \
 	man/startup-socket-bridge.8 \
 	man/socket-event.7
 endif
@@ -131,7 +141,8 @@ endif
 
 if ENABLE_DCONF_BRIDGE
 dist_sessions_DATA += \
-	conf-session/bridge-dconf.conf
+	conf-session/bridge-dconf.conf \
+	conf-session/bridge-dconf.override
 
 dist_man_MANS += \
 	man/startup-dconf-bridge.8 \
@@ -160,16 +171,19 @@ else
 EXTRA_DIST += \
 	dconf.c \
 	conf-session/bridge-dconf.conf \
+	conf-session/bridge-dconf.override \
 	man/startup-dconf-bridge.8 \
 	man/dconf-event.7
 endif
 
 if ENABLE_UDEV_BRIDGE
 dist_sessions_DATA += \
-	conf-session/bridge-udev.conf
+	conf-session/bridge-udev.conf \
+	conf-session/bridge-udev.override
 
 dist_init_DATA += \
-	conf/bridge-udev.conf
+	conf/bridge-udev.conf \
+	conf/bridge-udev.override
 
 dist_man_MANS += \
 	man/startup-udev-bridge.8
@@ -197,7 +211,9 @@ EXTRA_DIST += \
 	udev.c \
 	man/startup-udev-bridge.8 \
 	conf-session/bridge-udev.conf \
-	conf/bridge-udev.conf
+	conf-session/bridge-udev.override \
+	conf/bridge-udev.conf \
+	conf/bridge-udev.override
 endif
 
 com_ubuntu_Upstart_OUTPUTS = \
