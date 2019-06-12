@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+initdir = $(datadir)/startup
+
 AM_CFLAGS = \
 	$(NIH_CFLAGS) \
 	$(NIH_DBUS_CFLAGS) \
@@ -13,6 +15,10 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/test -iquote $(top_srcdir)/test
 
 EXTRA_DIST = util.supp
+
+dist_init_DATA = \
+	conf/initctl-notify-dbus.conf \
+	conf/initctl-notify-disk.conf
 
 dist_man_MANS = \
 	man/initctl.8
