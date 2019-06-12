@@ -9,8 +9,8 @@ emits *-device-offline
 emits *-device-bind
 emits *-device-unbind
 
-start on starting udevd
-stop on stopped udevd
+start on starting udev
+stop on stopped udev
 
 expect readyfd
 respawn
