@@ -29,6 +29,15 @@ autotools:
                         runuser -u gitlab-ci-startup -g gitlab-ci-startup -- sh -e -x << EOS
                         autoreconf -fi
                         ./configure
+                        export CFLAGS=-coverage
+                        export LDFLAGS=-lgcov
                         make
                         make check
+                        for dir in util init; do
+                                cd "${dir}"
+                                find . -maxdepth 1 -name '*.c' ! -name 'org.*.c' ! -name 'com.*.c' -print0 | xargs -0 -ISRC gcov SRC
+                                cd ..
+                        done
                         EOS
+                - xbps-fetch -o codecov.bash https://codecov.io/bash
+                - bash ./codecov.bash
