@@ -204,12 +204,13 @@ if ENABLE_SYSVCOMPAT
 	done
 endif
 
-uninstall-hook:
+_MAN_LINKS = start stop restart reload status
 if ENABLE_SYSVCOMPAT
-	for symlink in start stop restart reload status halt poweroff; do \
-else
-	for symlink in start stop restart reload status; do
+_MAN_LINKS += halt poweroff
 endif
+
+uninstall-hook:
+	for symlink in $(_MAN_LINKS); do \
 	  file=`echo $$symlink | sed '$(transform)'`.8; \
           echo " rm -f '$(DESTDIR)$(man8dir)/$$file'"; \
 	  rm -f "$(DESTDIR)$(man8dir)/$$file"; \
