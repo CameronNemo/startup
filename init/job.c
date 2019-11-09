@@ -1071,7 +1071,8 @@ job_emit_event_env (Job *job, int stop)
 			                       "EXIT_SIGNAL=%s", sig));
 		} else {
 			NIH_MUST (environ_set (&env, NULL, &len, TRUE,
-			                       "EXIT_SIGNAL=%d", job->exit_status >> 8));
+			                       "EXIT_SIGNAL=%d",
+					       job->exit_status >> 8));
 		}
 		return env;
 	}

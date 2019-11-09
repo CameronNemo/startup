@@ -146,8 +146,6 @@ int check_cgroup_sandbox(void)
 void
 test_checks (void)
 {
-	int ret;
-
 	TEST_GROUP ("test environment");
 
 	/*
@@ -165,6 +163,8 @@ test_checks (void)
 
 
 #ifdef ENABLE_CGROUPS
+	int ret = 0;
+
 	if (file_exists ("/sys/fs/cgroup/cgmanager/sock")) {
 		TEST_FEATURE ("checking for cgmanager");
 		ret = connect_to_cgmanager ();
