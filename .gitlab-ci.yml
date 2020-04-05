@@ -7,7 +7,8 @@ stages:
         - build-test
 
 before_script:
-        - xbps-install -Syu
+        - xbps-install -S
+        - xbps-install -yu xbps
         - xbps-install -yu
 
 cppcheck:
@@ -28,7 +29,9 @@ autotools:
                 - |
                         runuser -u gitlab-ci-startup -g gitlab-ci-startup -- sh -e -x << EOS
                         autoreconf -fi
-                        ./configure
+                        mkdir build
+                        cd build
+                        ../configure CFLAGS='-Wall -Werror'
                         make
-                        make check
+                        make check CFLAGS=''
                         EOS
