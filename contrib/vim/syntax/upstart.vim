@@ -57,7 +57,7 @@ syn keyword upstartOption score never
 " options for console
 syn keyword upstartOption output owner none log
 " options for expect
-syn keyword upstartOption stop fork daemon none
+syn keyword upstartOption stop fork daemon readyfd none
 " options for limit
 syn keyword upstartOption unlimited core cpu data fsize memlock msgqueue nice
 syn keyword upstartOption nofile nproc rss rtprio sigpending stack

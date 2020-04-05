@@ -1,2 +1,1 @@
-" Treat all /etc/init/*.conf files as upstart job files
-au BufNewFile,BufRead /etc/init/*.conf	set filetype=upstart
+au BufNewFile,BufRead /etc/startup/*.conf,/etc/startup/*.override,*/.config/startup/*.conf,*/.config/startup/*.override setf upstart
