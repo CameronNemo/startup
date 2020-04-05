@@ -1491,6 +1491,7 @@ job_process_handler (void           *data,
 	NihLogLevel  priority;
 	const char  *sig;
 
+	(void)data;
 	nih_assert (pid > 0);
 
 	/* Find the job that an event ocurred for, and identify which of the
@@ -2299,9 +2300,8 @@ job_process_readyfd_reader (Job *job, NihIo *io, const char *buf, size_t len)
 	nih_assert (job);
 	nih_assert (io);
 	nih_assert (buf);
-	nih_assert (len >= 0);
 
-	if ((job->state == JOB_SPAWNED) && (strchr (buf, '\n')))
+	if ((job->state == JOB_SPAWNED) && (memchr (buf, '\n', len)))
 		job_change_state (job, job_next_state (job));
 }
 
