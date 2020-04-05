@@ -379,7 +379,7 @@ time_t     job_class_max_kill_timeout (void)
 JobClass  *job_class_get_registered (const char *name)
 	__attribute__ ((warn_unused_result));
 
-void       job_class_event_block (void *parent, JobClass *old, JobClass *new);
+void       job_class_event_block (JobClass *old, JobClass *new);
 
 ssize_t
 job_class_get_index (const JobClass *class)

@@ -439,7 +439,7 @@ job_class_consider (JobClass *class)
 
 	if (registered != best) {
 		if (registered) {
-			job_class_event_block (NULL, registered, best);
+			job_class_event_block (registered, best);
 
 			if (! job_class_remove (registered)) {
 				/* Couldn't deregister, so undo */
@@ -501,7 +501,6 @@ job_class_reconsider (JobClass *class)
 /**
  * job_class_event_block:
  *
- * @parent: parent object for list,
  * @old: original JobClass currently registered in job_classes,
  * @new: new "best" JobClass that is not yet present in job_classes.
  *
@@ -517,7 +516,7 @@ job_class_reconsider (JobClass *class)
  * should replicate the EventOperator state of @old.
  **/
 void
-job_class_event_block (void *parent, JobClass *old, JobClass *new)
+job_class_event_block (JobClass *old, JobClass *new)
 {
 	EventOperator  *old_root;
 	EventOperator  *new_root;
@@ -1910,7 +1909,7 @@ job_class_serialise (JobClass *class)
 	json_object_object_add (json, "emits", json_emits);
 
 	json_processes = process_serialise_all (
-			(const Process const * const * const)class->process);
+			(const Process * const * const)class->process);
 	if (! json_processes)
 		goto error;
 	json_object_object_add (json, "process", json_processes);
@@ -2361,7 +2360,7 @@ job_class_deserialise_all (json_object *json)
 	if (! state_check_json_type (json_classes, array))
 		goto error;
 
-	for (int i = 0; i < json_object_array_length (json_classes); i++) {
+	for (size_t i = 0; i < json_object_array_length (json_classes); i++) {
 		json_object  *json_class;
 
 		json_class = json_object_array_get_idx (json_classes, i);
