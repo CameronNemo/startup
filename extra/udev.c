@@ -109,11 +109,8 @@ main (int   argc,
 {
 	char **              args;
 	DBusConnection *     connection;
-	char *               pidfile_path = NULL;
-	char *               pidfile = NULL;
 	char                *user_session_addr = NULL;
 	nih_local char **    user_session_path = NULL;
-	char *               path_element = NULL;
 	struct udev *        udev;
 	struct udev_monitor *udev_monitor;
 	int                  ret;

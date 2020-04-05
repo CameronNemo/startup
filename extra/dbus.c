@@ -159,11 +159,8 @@ main (int   argc,
 	DBusConnection      *dbus_connection;
 	DBusConnection      *connection;
 	int                  ret;
-	char                *pidfile_path = NULL;
-	char                *pidfile = NULL;
 	char                *user_session_addr = NULL;
 	nih_local char     **user_session_path = NULL;
-	char                *path_element = NULL;
 	DBusError            error;
 	char               **job_class_paths;
 

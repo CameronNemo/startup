@@ -423,11 +423,8 @@ main (int   argc,
 	char               **args;
 	char               **job_class_paths;
 	DBusConnection      *connection;
-	char                *pidfile_path = NULL;
-	char                *pidfile = NULL;
 	char                *user_session_addr = NULL;
 	nih_local char     **user_session_path = NULL;
-	char                *path_element = NULL;
 	int                  ret;
 
 	nih_main_init (argv[0]);
