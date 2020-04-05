@@ -43,6 +43,7 @@
 #include <limits.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <syslog.h>
 #include <unistd.h>
@@ -536,12 +537,12 @@ main (int   argc,
 		FILE *fd;
 
 		snprintf (filename, sizeof (filename),
-			  "/proc/%lld/oom_score_adj", initial_pid);
+			  "/proc/%jd/oom_score_adj", (intmax_t) initial_pid);
 		oom_value = JOB_DEFAULT_OOM_SCORE_ADJ;
 		fd = fopen (filename, "w");
 		if ((! fd) && (errno == ENOENT)) {
 			snprintf (filename, sizeof (filename),
-				  "/proc/%lld/oom_adj", initial_pid);
+				  "/proc/%jd/oom_adj", (intmax_t) initial_pid);
 			oom_value = (JOB_DEFAULT_OOM_SCORE_ADJ
 				     * ((JOB_DEFAULT_OOM_SCORE_ADJ < 0) ? 17 : 15)) / 1000;
 			fd = fopen (filename, "w");
@@ -829,7 +830,10 @@ logger_kmsg (NihLogLevel priority,
 	if (fd < 0)
 		return -1;
 
-	buffer = nih_sprintf (NULL, "<%c>%s[%lld]: %s\n", tag, program_name, initial_pid, message);
+	buffer = nih_sprintf (
+		NULL, "<%c>%s[%jd]: %s\n", tag,
+		program_name, (intmax_t) initial_pid, message
+	);
 	if (! buffer)
 		goto out;
 
@@ -944,6 +948,7 @@ static void
 term_handler (void      *data,
 	      NihSignal *signal)
 {
+	(void)data;
 	nih_assert (args_copy[0] != NULL);
 	nih_assert (signal != NULL);
 
@@ -972,6 +977,8 @@ static void
 cad_handler (void      *data,
 	     NihSignal *signal)
 {
+	(void)data;
+	nih_assert (signal != NULL);
 	NIH_MUST (event_new (NULL, CTRLALTDEL_EVENT, NULL));
 }
 
@@ -988,6 +995,8 @@ static void
 kbd_handler (void      *data,
 	     NihSignal *signal)
 {
+	(void)data;
+	nih_assert (signal != NULL);
 	NIH_MUST (event_new (NULL, KBDREQUEST_EVENT, NULL));
 }
 
@@ -1004,6 +1013,8 @@ static void
 pwr_handler (void      *data,
 	     NihSignal *signal)
 {
+	(void)data;
+	nih_assert (signal != NULL);
 	NIH_MUST (event_new (NULL, PWRSTATUS_EVENT, NULL));
 }
 
@@ -1019,6 +1030,8 @@ static void
 hup_handler (void      *data,
 	     NihSignal *signal)
 {
+	(void)data;
+	nih_assert (signal != NULL);
 	nih_info (_("Reloading configuration"));
 	conf_reload ();
 }
@@ -1035,6 +1048,8 @@ static void
 usr1_handler (void      *data,
 	      NihSignal *signal)
 {
+	(void)data;
+	nih_assert (signal != NULL);
 	nih_assert (! user_mode);
 
 	if (disable_dbus)
