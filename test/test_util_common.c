@@ -963,8 +963,9 @@ test_common_cleanup (void)
 	if (saved_xdg_config_home) {
 		nih_assert (test_xdg_config_home[0]);
 
-		if (xdg_config_home)
+		if (xdg_config_home) {
 			TEST_EQ_STR (test_xdg_config_home, xdg_config_home);
+		}
 
 		if (stat (test_xdg_config_home, &statbuf)) {
 			nih_error ("A test has removed XDG_CONFIG_HOME '%s'", test_xdg_config_home);
