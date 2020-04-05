@@ -712,7 +712,7 @@ event_deserialise_all (json_object *json)
 	if (! state_check_json_type (json_events, array))
 		goto error;
 
-	for (int i = 0; i < json_object_array_length (json_events); i++) {
+	for (size_t i = 0; i < json_object_array_length (json_events); i++) {
 		json_object   *json_event;
 
 		json_event = json_object_array_get_idx (json_events, i);

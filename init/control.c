@@ -469,6 +469,7 @@ int
 control_reload_configuration (void           *data,
 			      NihDBusMessage *message)
 {
+	(void)data;
 	nih_assert (message != NULL);
 
 	if (! control_check_permission (message)) {
@@ -510,8 +511,8 @@ control_get_job_by_name (void            *data,
 			 char           **job)
 {
 	JobClass *class = NULL;
-	JobClass *global_class = NULL;
 
+	(void)data;
 	nih_assert (message != NULL);
 	nih_assert (name != NULL);
 	nih_assert (job != NULL);
@@ -565,6 +566,7 @@ control_get_all_jobs (void             *data,
 	char   **list;
 	size_t   len;
 
+	(void)data;
 	nih_assert (message != NULL);
 	nih_assert (jobs != NULL);
 
@@ -639,6 +641,7 @@ control_emit_event_with_file (void            *data,
 	Event    *event;
 	Blocked  *blocked;
 
+	(void)data;
 	nih_assert (message != NULL);
 	nih_assert (name != NULL);
 	nih_assert (env != NULL);
@@ -720,6 +723,7 @@ control_get_version (void *          data,
 		     NihDBusMessage *message,
 		     char **         version)
 {
+	(void)data;
 	nih_assert (message != NULL);
 	nih_assert (version != NULL);
 
@@ -751,6 +755,7 @@ control_get_log_priority (void *          data,
 {
 	const char *priority;
 
+	(void)data;
 	nih_assert (message != NULL);
 	nih_assert (log_priority != NULL);
 
@@ -804,6 +809,7 @@ control_set_log_priority (void *          data,
 			  NihDBusMessage *message,
 			  const char *    log_priority)
 {
+	(void)data;
 	nih_assert (message != NULL);
 	nih_assert (log_priority != NULL);
 
@@ -880,6 +886,7 @@ control_notify_disk_writeable (void   *data,
 {
 	int       ret;
 
+	(void)data;
 	nih_assert (message != NULL);
 
 	if (! control_check_permission (message)) {
@@ -918,6 +925,7 @@ control_notify_dbus_address (void            *data,
 			     NihDBusMessage  *message,
 			     const char      *address)
 {
+	(void)data;
 	nih_assert (message);
 	nih_assert (address);
 
@@ -977,6 +985,7 @@ control_notify_cgroup_manager_address (void            *data,
 				       NihDBusMessage  *message,
 				       const char      *address)
 {
+	(void)data;
 	nih_assert (message);
 	nih_assert (address);
 
@@ -1167,6 +1176,7 @@ control_get_state (void           *data,
 {
 	size_t    len;
 
+	(void)data;
 	nih_assert (message);
 	nih_assert (state);
 
@@ -1207,6 +1217,7 @@ int
 control_restart (void           *data,
 		 NihDBusMessage *message)
 {
+	(void)data;
 	nih_assert (message != NULL);
 
 	if (! control_check_permission (message)) {
@@ -1297,6 +1308,7 @@ control_set_env_list (void            *data,
 	char            *instance = NULL;
 	char * const    *var;
 
+	(void)data;
 	nih_assert (message);
 	nih_assert (job_details);
 	nih_assert (vars);
@@ -1476,6 +1488,7 @@ control_unset_env_list (void            *data,
 	char            *instance = NULL;
 	char * const    *name;
 
+	(void)data;
 	nih_assert (message);
 	nih_assert (job_details);
 	nih_assert (names);
@@ -1603,6 +1616,7 @@ control_get_env (void             *data,
 	char        *job_name = NULL;
 	char        *instance = NULL;
 
+	(void)data;
 	nih_assert (message != NULL);
 	nih_assert (job_details);
 
@@ -1692,6 +1706,7 @@ control_list_env (void             *data,
 	char      *job_name = NULL;
 	char      *instance = NULL;
 
+	(void)data;
 	nih_assert (message);
 	nih_assert (job_details);
 	nih_assert (env);
@@ -1759,6 +1774,7 @@ control_reset_env (void           *data,
 	char       *job_name = NULL;
 	char       *instance = NULL;
 
+	(void)data;
 	nih_assert (message);
 	nih_assert (job_details);
 
@@ -1959,6 +1975,7 @@ int
 control_end_session (void             *data,
 		     NihDBusMessage   *message)
 {
+	(void)data;
 	nih_assert (message);
 
 	/* Not supported at the system level */

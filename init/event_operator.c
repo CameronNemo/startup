@@ -444,6 +444,7 @@ static int
 event_operator_filter (void          *data,
 		       EventOperator *oper)
 {
+	(void)data;
 	nih_assert (oper != NULL);
 
 	return oper->value != TRUE;
@@ -1100,7 +1101,7 @@ event_operator_deserialise_all (void *parent, json_object *json)
 	if (! state_check_json_type (json, array))
 		goto error;
 
-	for (int i = 0; i < json_object_array_length (json); i++) {
+	for (size_t i = 0; i < json_object_array_length (json); i++) {
 		json_object        *json_event_operator;
 		nih_local NihList  *left = NULL;
 		nih_local NihList  *right = NULL;
@@ -1142,12 +1143,8 @@ event_operator_deserialise_all (void *parent, json_object *json)
 			/* Attach them as children of the new operator */
 			nih_tree_add (&oper->node, &left_oper->node, NIH_TREE_LEFT);
 			nih_tree_add (&oper->node, &right_oper->node, NIH_TREE_RIGHT);
-
-			/* FALL THROUGH:
-			 *
-			 * This will re-add the operator to the stack.
-			 */
-
+			/* FALL THROUGH */
+			/* This will re-add the operator to the stack. */
 		case EVENT_MATCH:
 			item->data = oper;
 			nih_list_add_after (stack, &item->entry);

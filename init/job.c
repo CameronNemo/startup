@@ -2291,7 +2291,7 @@ job_deserialise_all (JobClass *parent, json_object *json)
 	if (! state_check_json_type (json_jobs, array))
 		goto error;
 
-	for (int i = 0; i < json_object_array_length (json_jobs); i++) {
+	for (size_t i = 0; i < json_object_array_length (json_jobs); i++) {
 		json_object    *json_job;
 
 		json_job = json_object_array_get_idx (json_jobs, i);

@@ -261,7 +261,6 @@ process_deserialise_all (json_object *json, const void *parent,
 			 Process **processes)
 {
 	json_object        *json_processes;
-	int                 i;
 
 	nih_assert (json);
 	nih_assert (parent);
@@ -273,7 +272,7 @@ process_deserialise_all (json_object *json, const void *parent,
 	if (! state_check_json_type (json_processes, array))
 		goto error;
 
-	for (i = 0; i < json_object_array_length (json_processes); i++) {
+	for (size_t i = 0; i < json_object_array_length (json_processes); i++) {
 		json_object *json_process;
 
 		nih_assert (i <= PROCESS_LAST);

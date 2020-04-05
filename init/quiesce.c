@@ -208,6 +208,7 @@ quiesce_wait_callback (void *data, NihTimer *timer)
 {
 	time_t now;
 
+	(void)data;
 	nih_assert (timer);
 	nih_assert (quiesce_phase_time);
 	nih_assert (quiesce_requester != QUIESCE_REQUESTER_INVALID);

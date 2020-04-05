@@ -771,6 +771,7 @@ conf_file_filter (ConfSource *source,
 		  const char *path,
 		  int         is_dir)
 {
+	(void)is_dir;
 	nih_assert (source != NULL);
 	nih_assert (path != NULL);
 
@@ -1507,7 +1508,7 @@ conf_source_deserialise_all (json_object *json)
 	if (! state_check_json_type (json_conf_sources, array))
 		goto error;
 
-	for (int i = 0; i < json_object_array_length (json_conf_sources); i++) {
+	for (size_t i = 0; i < json_object_array_length (json_conf_sources); i++) {
 		json_object  *json_source;
 
 		json_source = json_object_array_get_idx (json_conf_sources, i);
@@ -1738,7 +1739,7 @@ conf_file_deserialise_all (ConfSource *source, json_object *json)
 	if (! state_check_json_type (json_conf_files, array))
 		goto error;
 
-	for (int i = 0; i < json_object_array_length (json_conf_files); i++) {
+	for (size_t i = 0; i < json_object_array_length (json_conf_files); i++) {
 		json_object  *json_file;
 
 		json_file = json_object_array_get_idx (json_conf_files, i);

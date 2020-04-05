@@ -1090,7 +1090,7 @@ state_rlimit_deserialise_all (json_object *json, const void *parent,
 {
 	json_object    *json_limits;
 	struct rlimit  *rlimit;
-	int             i = 0;
+	size_t i = 0;
 
 	nih_assert (json);
 	nih_assert (parent);
@@ -1139,9 +1139,9 @@ state_rlimit_deserialise_all (json_object *json, const void *parent,
 
 error:
 	/* Clean up what we can */
-	for (; i >= 0; i--)
-		if ((*rlimits)[i])
-			nih_free ((*rlimits)[i]);
+	for (i += 1; i > 0; i--)
+		if ((*rlimits)[i-1])
+			nih_free ((*rlimits)[i-1]);
 
 	return -1;
 }
@@ -1270,7 +1270,7 @@ state_deserialise_resolve_deps (json_object *json)
 	nih_assert (json_events);
 	nih_assert (json_classes);
 
-	for (int i = 0; i < json_object_array_length (json_events); i++) {
+	for (size_t i = 0; i < json_object_array_length (json_events); i++) {
 		json_object  *json_event;
 		Event        *event = NULL;
 
@@ -1289,7 +1289,7 @@ state_deserialise_resolve_deps (json_object *json)
 			goto error;
 	}
 
-	for (int i = 0; i < json_object_array_length (json_classes); i++) {
+	for (size_t i = 0; i < json_object_array_length (json_classes); i++) {
 		json_object     *json_class;
 		json_object     *json_jobs;
 		JobClass        *class = NULL;
@@ -1315,7 +1315,7 @@ state_deserialise_resolve_deps (json_object *json)
 			goto error;
 
 		/* look for jobs in JSON with associated blocked entries */
-		for (int j = 0; j < json_object_array_length (json_jobs); j++) {
+		for (size_t j = 0; j < json_object_array_length (json_jobs); j++) {
 			json_object     *json_blocking;
 			json_object     *json_job;
 			Job             *job = NULL;
@@ -1750,20 +1750,15 @@ state_deserialise_blocking (void *parent, NihList *list, json_object *json)
 		return 0;
 	}
 
-	for (int i = 0; i < json_object_array_length (json_blocking); i++) {
+	for (size_t i = 0; i < json_object_array_length (json_blocking); i++) {
 		json_object * json_blocked;
 
 		json_blocked = json_object_array_get_idx (json_blocking, i);
 		if (! json_blocked)
 			goto error;
 
-		/* Don't error in this scenario to allow for possibility
-		 * that version of Upstart that performed the
-		 * serialisation did not correctly handle user and
-		 * chroot jobs.
-		 */
 		if (! state_deserialise_blocked (parent, json_blocked, list))
-			;
+			goto error;
 	}
 
 	return 0;

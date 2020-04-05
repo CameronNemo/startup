@@ -1195,6 +1195,8 @@ stanza_debug (JobClass           *class,
 		 size_t          *pos,
 		 size_t          *lineno)
 {
+	(void)len;
+	(void)lineno;
 	nih_assert (class != NULL);
 	nih_assert (stanza != NULL);
 	nih_assert (file != NULL);
@@ -1228,6 +1230,8 @@ stanza_manual (JobClass           *class,
 		 size_t          *pos,
 		 size_t          *lineno)
 {
+	(void)len;
+	(void)lineno;
 	nih_assert (class != NULL);
 	nih_assert (stanza != NULL);
 	nih_assert (file != NULL);
