@@ -5,7 +5,6 @@ AC_INIT([startup], [2.0.2], [https://gitlab.com/chinstrap/startup/issues])
 NIH_COPYRIGHT([[Copyright © 2006-2014 Canonical Ltd., 2011 Scott James Remnant]])
 AC_CONFIG_SRCDIR([init/main.c])
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_MACRO_DIR([macros])
 
 AC_GNU_SOURCE
 
