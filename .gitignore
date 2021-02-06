@@ -36,6 +36,7 @@ TAGS
 /mkinstalldirs
 /stamp-h1
 m4
+!/m4/as-ac-expand.m4
 /lib/logs
 /lib/libupstart*
 /lib/upstart
