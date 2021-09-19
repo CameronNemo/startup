@@ -1,3 +1,8 @@
+2.0.3  2021-09-19 "Blessed be to sun"
+	* Fix build for new autotools, cppcheck
+	* Add fish completions
+	* Small fixups to vim syntax highlighting
+
 2.0.2  2020-04-05 "C-c-c-cargo tanker!"
 	* Small fix to readyfd support
 	* Vim syntax highlighting now detects new config directories
