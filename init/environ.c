@@ -190,6 +190,7 @@ environ_remove (char        ***env,
 	}
 
 	/* Can't manipulate an empty array */
+	// cppcheck-suppress uninitvar
 	if (*len < 1)
 		return NULL;
 

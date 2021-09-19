@@ -105,7 +105,7 @@ int
 state_read (int fd)
 {
 	int             nfds;
-	int             ret;
+	int             ret = 0;
 	fd_set          readfds;
 	struct timeval  timeout;
 
@@ -162,7 +162,7 @@ int
 state_write (int fd, const char *state_data, size_t len)
 {
 	int             nfds;
-	int             ret;
+	int             ret = 0;
 	fd_set          writefds;
 	struct timeval  timeout;
 
