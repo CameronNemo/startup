@@ -33,9 +33,9 @@ complete -f -c initctl -n __fish_use_subcommand -a log-priority -d 'Change minim
 complete -f -c initctl -n __fish_use_subcommand -a show-config -d 'Show emits, start on and stop on defaults for a job'
 complete -f -c initctl -n __fish_use_subcommand -a check-config -d 'Check for unreachable jobs/event conditions'
 complete -f -c initctl -n __fish_use_subcommand -a usage -d 'Show job usage message if available'
-complete -f -c initctl -n __fish_use_subcommand -a notify-cgroup-manager-address -d 'Inform Upstart of D-Bus address cgroup manager is available on'
-complete -f -c initctl -n __fish_use_subcommand -a notify-dbus-address -d 'Inform Upstart of D-Bus address to connect to'
-complete -f -c initctl -n __fish_use_subcommand -a notify-disk-writeable -d 'Inform Upstart that disk is now writeable'
+complete -f -c initctl -n __fish_use_subcommand -a notify-cgroup-manager-address -d 'Inform daemon of D-Bus address cgroup manager is available on'
+complete -f -c initctl -n __fish_use_subcommand -a notify-dbus-address -d 'Inform daemon D-Bus address to connect to'
+complete -f -c initctl -n __fish_use_subcommand -a notify-disk-writeable -d 'Inform daemon that disk is now writeable'
 complete -f -c initctl -n __fish_use_subcommand -a list-sessions -d 'List all sessions'
 complete -f -c initctl -n __fish_use_subcommand -a re-exec -d 'Perform stateful re-exec'
 complete -f -c initctl -n __fish_use_subcommand -a help -d 'Display list of commands'
@@ -102,7 +102,7 @@ end
 function __fish_initctl_extract_events -d 'Extract emitted events from job configuration'
 	grep -E '^[[:space:]]*emits ' $argv/*.conf \
 	| cut -d : -f 2- \
-	| string replace 'emit ' '' \
+	| string replace 'emits ' '' \
 	| string replace ' ' \n \
 	| sort -u
 end
@@ -110,16 +110,27 @@ end
 function __fish_initctl_get_events -d 'Print all events that jobs in the current context emit'
 	switch (__fish_initctl_context)
 		case system
-			set -l dirs /etc/startup /etc/init /usr/share/start /usr/share/xdg/startup
-			for d in (string replace : ' ' $XDG_CONFIG_DIRS)
-				set -l dirs $dirs $d/startup $d/upstart
-			end
-			__fish_initctl_extract_events $dirs
+			__fish_initctl_extract_events /etc/startup /etc/init /usr/share/startup
 		case user session
+			set -l dirs
 			if set -q XDG_CONFIG_HOME
-				__fish_initctl_extract_events $XDG_CONFIG_HOME/startup $XDG_CONFIG_HOME/upstart
+				set -a dirs $XDG_CONFIG_HOME/startup
+				set -a dirs $XDG_CONFIG_HOME/upstart
 			else
-				__fish_initctl_extract_events $HOME/.config/startup $HOME/.config/upstart
+				set -a dirs $HOME/.config/startup
+				set -a dirs $HOME/.config/upstart
 			end
+			if set -q XDG_CONFIG_DIRS
+				for d in (string replace : ' ' $XDG_CONFIG_DIRS)
+					set -a dirs $d/startup
+					set -a dirs $d/upstart
+				end
+			else
+				set -a dirs /etc/xdg/startup
+				set -a dirs /etc/xdg/upstart
+			end
+			# never implemented XDG_DATA_DIRS in the startup daemon
+			set -a dirs /usr/share/xdg/startup
+			__fish_initctl_extract_events $dirs
 	end
 end
